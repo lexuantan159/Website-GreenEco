@@ -10,17 +10,17 @@ const Header = () => {
           <nav>
             <ul className="flex space-x-4">
               <li>
-                <a href="#" className="hover:text-gray-400">
+                <a href="/" className="hover:text-gray-400">
                   Home
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-gray-400">
+                <a href="/" className="hover:text-gray-400">
                   Our Products
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-gray-400">
+                <a href="/" className="hover:text-gray-400">
                   About Us
                 </a>
               </li>
