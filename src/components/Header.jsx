@@ -9,7 +9,9 @@ const Header = () => {
           <nav>
             <ul className="flex space-x-4">
               <li>
+
                 <a href="/" className="hover:text-gray-400 mb-6">
+
                   Home
                 </a>
               </li>
