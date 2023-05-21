@@ -13,7 +13,7 @@ function AboutPage() {
                     <div className="w-full mx-auto px-5 flex justify-center items-center">
                         <div className="mx-16 text-black text-center">
                             <div className="font-bold text-6xl mb-6">About Us</div>
-                            <p className="font-medium text-gray-500  mb-10 leading-7 tracking-tight ">
+                            <p className="font-medium text-gray-500  text-[16px] mb-10 leading-7 tracking-tight ">
                                 Our website sells eco-friendly products.
                                 <br /> We are committed to creating high quality and environmentally friendly products.
                             </p>
@@ -28,7 +28,7 @@ function AboutPage() {
                     />
                 </div>
 
-                <div className="py-5 m-auto mb-24 ">
+                <div className="py-5 m-auto mb-28">
                     <div className="m-auto h-full flex items-center justify-center text-center">
                         {statistics.map((stat) => (
                             <div className="px-16" key={stat.label}>
@@ -39,18 +39,19 @@ function AboutPage() {
                     </div>
                 </div>
                 <div className="mx-auto mb-32">
-                    <div className="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-4 w-[95%] lg:w-[75%] mx-auto">
+                    <div className="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-4 w-[95%] lg:w-[65%] mx-auto mb-20">
                         <div className="basis-1/2">
-                            <div className="w-full h-full object-cover min-h-[350px]">
+                            <div className=" full h-full object-cover min-h-[350px]">
                                 <img
-                                    src="https://assets.website-files.com/640f43d9a407812b6c8e6220/640f43d9a407810ab48e628b_barista_girl-p-800.webp"
+                                    className="rounded-3xl"
+                                    src="https://moitruongachau.com/vnt_upload/news/12_2018/sggptui_vyxw.jpg"
                                     alt=""
                                 />
                             </div>
                         </div>
                         <div className="basis-1/2 text-center lg:text-left lg:pl-6 mb-6">
                             <div className="text-4xl leading-10 mb-6 font-bold">Our Value</div>
-                            <div className="text-gray-500 leading-7 mb-6">
+                            <div className="text-gray-500 text-[16px] leading-7 mb-6">
                                 Website selling environmentally friendly products with economic and social value. The
                                 use of environmentally friendly products helps to reduce the impact on the environment
                                 and contributes to the protection of human health and living environment.
@@ -65,10 +66,10 @@ function AboutPage() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-4 w-[95%] lg:w-[65%] mx-auto mt-3">
+                    <div className="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-4 w-[95%] lg:w-[65%] mx-auto ">
                         <div className="basis-1/2 text-center lg:text-left lg:pl-6">
                             <div className="text-4xl leading-10 mb-6 font-bold">Open Everyday</div>
-                            <div className="text-gray-500 leading-7 mb-6">
+                            <div className="text-gray-500  text-[16px] leading-7 mb-6">
                                 Welcome to our website selling environmentally friendly products! We are open every day
                                 and ready to serve you, helping you choose the best products for your health and the
                                 environment.
@@ -77,7 +78,7 @@ function AboutPage() {
                                 <a
                                     href="/"
                                     alt=" "
-                                    className="text-coffee-400 hover:text-gray-600  relative after:absolute after:-bottom-2 after:left-0 after:bg-coffee-50 hover:after:bg-coffee-200 after:h-0.5 after:w-full after:transition-all after:ease-in-out after:duration-400"
+                                    className="text-coffee-400 hover:text-gray-600 relative after:absolute after:-bottom-2 after:left-0 after:bg-coffee-50 hover:after:bg-coffee-200 after:h-0.5 after:w-full after:transition-all after:ease-in-out after:duration-400"
                                 >
                                     Read the full Story
                                 </a>
@@ -99,7 +100,7 @@ function AboutPage() {
                     <div className="w-full mx-auto px-5 flex justify-center items-center">
                         <div className="mx-16 text-black text-center">
                             <div className="font-bold text-6xl mb-6">Meet Our Team</div>
-                            <p className="font-medium text-gray-500  mb-10 leading-7 tracking-tight ">
+                            <p className="font-medium  text-gray-500  mb-10 leading-7 tracking-tight ">
                                 Introducing our team at the environmentally friendly online store! We are a group of
                                 passionate individuals dedicated to promoting sustainable living and providing <br />
                                 you with the best eco-friendly products to support a healthier planet.
