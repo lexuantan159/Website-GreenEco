@@ -7,13 +7,11 @@ function App() {
     return (
         <>
             <Header />
-
             <Routes>
                 {router.map((route, index) => {
                     return <Route key={index} path={route.path} element={<route.component />}></Route>;
                 })}
             </Routes>
-
             <Footer />
         </>
     );
