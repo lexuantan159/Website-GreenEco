@@ -38,10 +38,10 @@ function AboutPage() {
                         ))}
                     </div>
                 </div>
-                <div className="mx-auto mb-32">
-                    <div className="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-4 w-[95%] lg:w-[65%] mx-auto mb-20">
+                <div className="mx-auto mb-40">
+                    <div className="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-4 w-[95%] lg:w-[65%] mx-auto mb-24">
                         <div className="basis-1/2">
-                            <div className=" full h-full object-cover min-h-[350px]">
+                            <div className=" w-full h-full object-cover min-h-[350px]">
                                 <img
                                     className="rounded-3xl"
                                     src="https://moitruongachau.com/vnt_upload/news/12_2018/sggptui_vyxw.jpg"
@@ -58,8 +58,8 @@ function AboutPage() {
                             </div>
                             <div className="">
                                 <a
-                                    href="/"
-                                    className="text-coffee-400 hover:text-gray-600 relative after:absolute after:-bottom-2 after:left-0 after:bg-coffee-50 hover:after:bg-coffee-200 after:h-0.5 after:w-full after:transition-all after:ease-in-out after:duration-400"
+                                    href="https://baotainguyenmoitruong.vn/san-pham-than-thien-voi-moi-truong-nhu-cau-nguoi-tieu-dung-tang-manh-307115.html"
+                                    className="text-coffee-400 hover:text-green-600 relative after:absolute after:-bottom-2 after:left-0 after:bg-coffee-50 hover:after:bg-coffee-200 after:h-0.5 after:w-full after:transition-all after:ease-in-out after:duration-400"
                                 >
                                     Read the full Story
                                 </a>
@@ -78,14 +78,15 @@ function AboutPage() {
                                 <a
                                     href="/"
                                     alt=" "
-                                    className="text-coffee-400 hover:text-gray-600 relative after:absolute after:-bottom-2 after:left-0 after:bg-coffee-50 hover:after:bg-coffee-200 after:h-0.5 after:w-full after:transition-all after:ease-in-out after:duration-400"
+                                    className="text-coffee-400 hover:text-green-600 relative after:absolute after:-bottom-2 after:left-0 after:bg-coffee-50 hover:after:bg-coffee-200 
+                                    after:h-0.5 after:w-full after:transition-all after:ease-in-out after:duration-400"
                                 >
                                     Read the full Story
                                 </a>
                             </div>
                         </div>
                         <div className="basis-1/2">
-                            <div className="w-full h-full object-cover min-h-[350px]">
+                            <div className="w-[480px] hl-ful object-cover min-h-[350px] ">
                                 <img
                                     className="rounded-3xl"
                                     src="https://btnmt.1cdn.vn/2020/07/16/29173d74f2130e4d5702.jpg"
