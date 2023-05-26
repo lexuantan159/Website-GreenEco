@@ -9,7 +9,7 @@ const Header = () => {
     console.log(router.pathname);
 
     return (
-        <div>
+        <div className='container mx-auto'>
             <header className="mx-auto max-w-5xl  h-[76px] flex justify-between sm:px-3 md:px-10 px-[10%] lg:px-0 lg:grid lg:grid-flow-col">
                 <div className="flex items-center">
                     <h1 className="text-2xl font-bold text-primaryColor">GreenEco</h1>
@@ -47,7 +47,7 @@ const Header = () => {
                             <div
                                 className={`${
                                     isOpen ? 'opacity-100' : 'opacity-0'
-                                } bg-gray-900 transition-opacity duration-300 absolute left-0 mt-2 w-40 rounded-lg`}
+                                } bg-gray-900 transition-opacity duration-300 absolute left-0 mt-2 z-10 w-40 rounded-lg`}
                             >
                                 <ul className="py-4">
                                     <li>
