@@ -2,7 +2,7 @@ import ContactPage from "../components/ContactPage/ContactPage";
 
 function Contact() {
   return ( 
-    <div className="">
+    <div >
       <ContactPage />
     </div>
    );
