@@ -51,7 +51,7 @@ const ShoppingCart = () => {
                 <div>${product.price}</div>
                 <div>
                   <input
-                    className="mx-auto"
+                    className="mx-auto w-[50px]"
                     type="number"
                     min="0"
                     value={product.quantity}
