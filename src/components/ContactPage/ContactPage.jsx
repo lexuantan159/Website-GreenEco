@@ -21,15 +21,24 @@ const ContactPage = () => {
     return (
         <section className="mt-4">
             <div className="container mx-auto min-h-[800px] mb-16">
-                <div className="h-[530px]  bg-[url('./img/BG_1.jpg')] bg-cover bg-no-repeat bg-bottom mb-20">
-                    <div className="w-full h-full flex justify-center items-end bg-green-500 bg-opacity-30">
-                        <div className="mx-16 text-white text-center mb-8">
-                            <div className="uppercase mb-6 ">Friendly products with the environment</div>
-                            <div className="font-bold text-5xl mb-6">Green Eco</div>
-                            <div className="font-medium text-lg mb-8">Protect the environment, protect our future.</div>
+              <div className="mx-auto mb-4">
+                    <div className="h-[530px] relative mb-20">
+                        <img
+                            src="https://myethicalchoice.com/wp-content/uploads/2021/01/eco-friendly-product-top.jpeg"
+                            alt="background"
+                            className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+                        />
+                        <div className="w-full h-full flex justify-center items-end bg-opacity-30 relative z-10">
+                            <div className="mx-16 text-black text-center mb-8">
+                                <div className="uppercase mb-2 ">Friendly products with the environment</div>
+                                <div className="font-bold text-5xl mb-6">Green Eco</div>
+                                <div className="font-medium text-lg mb-8">
+                                    Protect the environment, protect our future.
+                                </div>
+                            </div>
                         </div>
+                    </div> 
                     </div>
-                </div>
                 <div>
                     <div className='mx-auto text-center font-bold text-4xl mb-8'>Contact Us</div>
                 </div>
