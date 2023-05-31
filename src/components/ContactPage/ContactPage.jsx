@@ -21,30 +21,21 @@ const ContactPage = () => {
     return (
         <section className="mt-4">
             <div className="container mx-auto min-h-[800px] mb-16">
-              <div className="mx-auto mb-4">
-                    <div className="h-[530px] relative mb-20">
-                        <img
-                            src="https://myethicalchoice.com/wp-content/uploads/2021/01/eco-friendly-product-top.jpeg"
-                            alt="background"
-                            className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
-                        />
-                        <div className="w-full h-full flex justify-center items-end bg-opacity-30 relative z-10">
-                            <div className="mx-16 text-black text-center mb-8">
-                                <div className="uppercase mb-2 ">Friendly products with the environment</div>
-                                <div className="font-bold text-5xl mb-6">Green Eco</div>
-                                <div className="font-medium text-lg mb-8">
-                                    Protect the environment, protect our future.
-                                </div>
-                            </div>
+                <div className="h-[530px]  bg-[url('./img/BG_1.jpg')] bg-cover bg-no-repeat bg-bottom mb-20">
+                    <div className="w-full h-full flex justify-center items-end bg-green-500 bg-opacity-30">
+                        <div className="mx-16 text-white text-center mb-8">
+                            <div className="uppercase mb-6 ">Friendly products with the environment</div>
+                            <div className="font-bold text-5xl mb-6">Green Eco</div>
+                            <div className="font-medium text-lg mb-8">Protect the environment, protect our future.</div>
                         </div>
                     </div> 
                     </div>
                 <div>
-                    <div className='mx-auto text-center font-bold text-4xl mb-8'>Contact Us</div>
+                    <div className="mx-auto text-center font-bold text-4xl mb-8">Contact Us</div>
                 </div>
                 <form
                     onSubmit={handleSubmit}
-                    className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-20 mx-auto w-[800px]"
+                    className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-28 mx-auto w-[800px] border-spacing-1"
                 >
                     {error && (
                         <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
@@ -65,7 +56,7 @@ const ContactPage = () => {
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
-                    <div className="mb-4">
+                    <div className="">
                         <label className="block text-gray-700 font-bold mb-2" htmlFor="email">
                             Email
                         </label>
@@ -99,35 +90,38 @@ const ContactPage = () => {
                         </button>
                     </div>
                 </form>
-                <div class="">
-                    <div className="bg-white flex justify-between rounded px-8 pt-6 pb-8 mb-4 mx-auto w-[1000px]">
+                <div class=" ">
+                    <div className="bg-white flex justify-between rounded px-8 pt-6 pb-8 mb-28 mx-auto w-[1000px] shadow-2xl">
                         <div className="">
                             <div className=" text-[36px] text-[#7fad39] text-center">
                                 <FontAwesomeIcon icon={faLocationDot} />
                             </div>
                             <h4 className="text-center font-bold my-4 text-[24px]">Address</h4>
-                            <p className='text-[#666666] text-[16px] font-medium text-center'> 40/20 Nguyễn Huy Tưởng</p>
+                            <p className="text-[#666666] text-[16px] font-medium text-center">
+                                {' '}
+                                40/20 Nguyễn Huy Tưởng
+                            </p>
                         </div>
                         <div className="">
                             <div className="text-[36px] text-[#7fad39] text-center">
                                 <FontAwesomeIcon icon={faPhone} />
                             </div>
-                            <h4 className='text-center font-bold my-4 text-[24px]'>Phone</h4>
-                            <p className='text-[#666666] text-[16px] font-medium text-center'> +84 397 881 543</p>
+                            <h4 className="text-center font-bold my-4 text-[24px]">Phone</h4>
+                            <p className="text-[#666666] text-[16px] font-medium text-center"> +84 397 881 543</p>
                         </div>
                         <div className="">
                             <div className=" text-[36px] text-[#7fad39] text-center">
                                 <FontAwesomeIcon icon={faClock} />
                             </div>
                             <h4 className="text-center font-bold my-4 text-[24px]">Open Time</h4>
-                            <p className='text-[#666666] text-[16px] font-medium text-center'>10:00 am to 23:00 pm</p>
+                            <p className="text-[#666666] text-[16px] font-medium text-center">10:00 am to 23:00 pm</p>
                         </div>
                         <div className="">
                             <div className="text-[36px] text-[#7fad39] text-center">
                                 <FontAwesomeIcon icon={faEnvelope} />
                             </div>
-                            <h4 className='text-center font-bold my-4 text-[24px]'>Email</h4>
-                            <p className='text-[#666666] text-[16px] font-medium text-center'> hello@colorlib.com</p>
+                            <h4 className="text-center font-bold my-4 text-[24px]">Email</h4>
+                            <p className="text-[#666666] text-[16px] font-medium text-center"> hello@colorlib.com</p>
                         </div>
                     </div>
                 </div>

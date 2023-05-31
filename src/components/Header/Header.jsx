@@ -51,7 +51,7 @@ const Header = () => {
                             >
                                 <ul className="py-4">
                                     <li>
-                                        <a href="/" className="pl-3 mb-2 text-white hover:text-primaryColor font-thin">
+                                        <a href="/cart" className="pl-3 mb-2 text-white hover:text-primaryColor font-thin">
                                             Shopping Cart
                                         </a>
                                     </li>
