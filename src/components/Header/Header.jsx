@@ -37,7 +37,7 @@ const Header = () => {
                         </a>
                     </li>
                     <li>
-                        <p
+                        <div
                             className="relative pr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear"
                             href="/page"
                             onMouseEnter={() => setIsOpen(true)}
@@ -62,7 +62,7 @@ const Header = () => {
                                     </li>
                                 </ul>
                             </div>
-                        </p>
+                        </div>
                     </li>
                     <li>
                         <a
