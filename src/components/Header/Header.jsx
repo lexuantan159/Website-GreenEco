@@ -6,7 +6,6 @@ import { Link, useLocation } from 'react-router-dom';
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useLocation();
-    console.log(router.pathname);
 
     return (
         <div className='container mx-auto'>
