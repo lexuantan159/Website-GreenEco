@@ -7,4 +7,4 @@ export { default as Signup } from './Signup.jsx';
 export { default as ShoppingCart} from './ShoppingCart.jsx';
 export { default as Checkout} from './Checkout.jsx';
 export { default as ProductDetail } from './ProductDetail.jsx';
-
+export { default as UserIn4 } from './UserIn4.jsx';
