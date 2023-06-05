@@ -184,25 +184,25 @@ const CheckoutPage = () => {
 
                 {/* total ship + product */}
                 <div className="mb-2 text-black text-sm text-right">
-  <table className="float-right">
-    <tbody>
-      <tr>
-        <td>Total amount:</td>
-        <td>5000000vnd</td>
-      </tr>
-      <tr>
-        <td>Transport Fee:</td>
-        <td>1500000</td>
-      </tr>
-      <tr>
-        <td>Total Payment:</td>
-        <td>
-          <h1 className="text-primaryColor inline-block">217381294871</h1>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+                    <table className="float-right">
+                        <tbody>
+                            <tr>
+                                <td>Total amount:</td>
+                                <td>5000000vnd</td>
+                            </tr>
+                            <tr>
+                                <td>Transport Fee:</td>
+                                <td>1500000</td>
+                            </tr>
+                            <tr>
+                                <td>Total Payment:</td>
+                                <td>
+                                    <h1 className="text-primaryColor inline-block">217381294871</h1>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 {/* pay money */}
                 <div className="flex justify-between items-center mt-40">
