@@ -14,4 +14,9 @@ export const get = async (endPoints, option = {}) => {
     return response.data;
 };
 
+export const getUser = async (endPoints, option = {}) => {
+    const response = await request.get(endPoints, option);
+    return response;
+};
+
 export default request;

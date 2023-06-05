@@ -39,19 +39,23 @@ const FormLogin = () => {
         if (email !== '' || password !== '') {
             const fetchAuth = async () => {
                 const authentication = await authServices.authentication(email, password);
-                if (authentication.response.status === 200) {
-                    const accessToken = authentication.accessToken;
-                    setAuth({ email, password, accessToken });
-                    const roles = await authServices.authorization(accessToken);
-                    if (roles.response.status === 200) {
-                        if (roles === 'Admin') navigate('/admin');
-                        else if (roles === 'User') navigate('/');
+
+                if ( authentication.statusCode === 200) {
+                    const accessToken = authentication.response.accessToken;
+                    
+                    const authorization = await authServices.authorization(accessToken);
+                    const fullName = authorization.fullName;
+                    setAuth({ email, password, accessToken, fullName });
+
+                    if (authorization.statusCode === 200) {
+                        if (authorization.roles === 'Admin') navigate('/admin');
+                        else if (authorization.roles === 'User') navigate('/');
                         else notify('Login failed');
                     } else {
-                        notify(roles.response.data.message);
+                        notify(authorization.error.response.data.message);
                     }
                 } else {
-                    notify(authentication.response.data.message);
+                    notify(authentication.error.response.data.message);
                 }
             };
 
