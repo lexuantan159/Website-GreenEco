@@ -56,7 +56,7 @@ const Header = () => {
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/" className="pl-3 text-white hover:text-primaryColor font-thin">
+                                        <a href="/checkout" className="pl-3 text-white hover:text-primaryColor font-thin">
                                             Checkout
                                         </a>
                                     </li>
