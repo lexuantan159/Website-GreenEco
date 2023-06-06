@@ -9,7 +9,7 @@ import * as authServices from '../../services/authServices';
 
 const FormLogin = () => {
     const navigate = useNavigate();
-    const { auth, setAuth } = useContext(AuthContext);
+    const { setAuth } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [hiddenPass, setHiddenPass] = useState(true);
@@ -137,7 +137,7 @@ const FormLogin = () => {
                                 </div>
                                 <button
                                     onClick={handleLogin}
-                                    className="py-3 bg-primaryColor w-full mb-3 rounded-lg text-xl font-bold text-white"
+                                    className="py-3 bg-primaryColor w-full mb-3 rounded-lg text-xl font-bold text-white  opacity-100 active:opacity-80"
                                 >
                                     Log In
                                 </button>
