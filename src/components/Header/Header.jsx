@@ -1,15 +1,24 @@
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faGear } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import AuthContext from '../../context/authProvider';
 
 const Header = () => {
+    const { auth } = useContext(AuthContext);
+    const [hasUser, setHasUser] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const router = useLocation();
-    console.log(router.pathname);
+
+
+    useEffect(() => {
+        auth.accessToken === undefined ? setHasUser(false) : setHasUser(true);
+        // console.log(auth.fullName);
+        // console.log(auth.accessToken);
+    });
 
     return (
-        <div className='container mx-auto'>
+        <div className="container mx-auto">
             <header className="mx-auto max-w-5xl  h-[76px] flex justify-between sm:px-3 md:px-10 px-[10%] lg:px-0 lg:grid lg:grid-flow-col">
                 <div className="flex items-center">
                     <h1 className="text-2xl font-bold text-primaryColor">GreenEco</h1>
@@ -87,16 +96,29 @@ const Header = () => {
                 </ul>
 
                 <div className="h-full flex items-center">
-                    <div className="hidden lg:block">
-                        <Link to="/login">
-                            <button className="text-lg font-bold mr-3 hover:text-primaryColor">Log In</button>
+                    {hasUser ? (
+                        <Link to="/user">
+                            <div className="hidden lg:flex lg:justify-center lg:items-center">
+                                <h3 className="text-[#252525] text-sm mr-2 font-bold">{auth.fullName || "Name User"}</h3>
+                                <img
+                                    className="h-[36px] w-[36px] rounded-[50%] border-4 border-[#ccc]"
+                                    src="https://english4u.com.vn/Uploads/images/bai-viet-ve-mot-nguoi-noi-tieng-bang-tieng-anh2.jpg"
+                                    alt="ImageUser"
+                                />
+                            </div>
                         </Link>
-                        <Link to="/signup">
-                            <button className="text-lg text-white font-bold p-3 bg-primaryColor rounded">
-                                Sign UP
-                            </button>
-                        </Link>
-                    </div>
+                    ) : (
+                        <div className="hidden lg:block">
+                            <Link to="/login">
+                                <button className="text-lg font-bold mr-3 hover:text-primaryColor">Log In</button>
+                            </Link>
+                            <Link to="/signup">
+                                <button className="text-lg text-white font-bold p-3 bg-primaryColor rounded">
+                                    Sign UP
+                                </button>
+                            </Link>
+                        </div>
+                    )}
 
                     <FontAwesomeIcon icon={faBars} className="block lg:hidden text-2xl" />
                 </div>
