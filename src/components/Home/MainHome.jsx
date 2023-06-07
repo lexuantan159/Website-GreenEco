@@ -4,17 +4,21 @@ import ProductsSlide from '../ProductsSlide/ProductsSlide';
 
 const MainHome = () => {
     const [products, setProducts] = useState([]);
-
+    const titleProductsSlide = "Top Products";
+    
     useEffect(() => {
         if(products.length === 0) {
             const fetchProducts = async () => {
                 const response = await productsService.getProducts();
-                setProducts(response.productData);
+                const listProducts = response.productData;
+
+                setProducts(() => listProducts);
             };
-    
+            
             fetchProducts();
         }
     });
+    console.log(products);
 
     return (
         <div className="container mx-auto px-6 md:px-4 lg:px-20">
@@ -40,7 +44,9 @@ const MainHome = () => {
                 </div>
             </div>
 
-            <ProductsSlide title = "Top Products" products = {products} numOfProducts={6} />
+            {
+                products.length > 0 && <ProductsSlide title = {titleProductsSlide} products = {products} numOfProducts={6} />
+            }
 
             <div className="my-20">
                 <div className="">
