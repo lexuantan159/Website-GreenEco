@@ -67,7 +67,6 @@ const ProductsSlide = ({ title, products , numOfProducts = 6 }) => {
             </div>
             <Slider {...settings}>
                 {listProducts(products).map((product) => {
-                    console.log(product);
                     return (
                         <div key={product.id} className="inline-block">
                             <div className="w-auto mx-3">
