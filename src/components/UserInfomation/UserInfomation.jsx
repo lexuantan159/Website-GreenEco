@@ -1,7 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext,useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faB, faPen, faUser } from '@fortawesome/free-solid-svg-icons';
 import ChangePassword from '../ChangePassword/ChangePassword';
+
+//server
+import * as userService from '../../services/userServices';
+import AuthContext from '../../context/authProvider';
+
+
 import hinhnam1 from '../../img/hinhnam1.jpg';
 import hinhnam2 from '../../img/hinhnam2.jpg';
 import hinhnam3 from '../../img/hinhnam3.jpg';
@@ -17,16 +23,18 @@ import nutocngan from '../../img/nutocngan.jpg';
 
 const UserInfomation = () => {
     const [activeButton, setActiveButton] = useState(null);
-    const [email, setEmail] = useState('Taolaquang2402@gmail.com');
-    const [fullname, setFullname] = useState('Thiên Quang');
-    const [address, setAddress] = useState('hòa khánh nam, Liên Chiểu, Đà Nắng');
-    const [phoneNumber, setPhoneNumber] = useState('(+84)397881543');
+    const [email, setEmail] = useState('');
+    const [fullname, setFullname] = useState('');
+    const [address, setAddress] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
 
     // const [showPassword, setShowPassword] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
     const [showImageList, setShowImageList] = useState(false);
 
+    const { auth } = useContext(AuthContext);// truy cập vào server để lấy access token trên header
     const [isEditing, setIsEditing] = useState(false);
+    const [hasUser, setHasUser] = useState(false);
 
     const handleButtonClick = (buttonId) => {
         setActiveButton(buttonId);
@@ -40,9 +48,7 @@ const UserInfomation = () => {
         setIsEditing(false);
     };
 
-    // const handleTogglePassword = () => {
-    //     setShowPassword(!showPassword);
-    // };
+   
     const imageList = [
         { id: 1, url: hinhnam1 },
         { id: 2, url: hinhnam2 },
@@ -66,14 +72,44 @@ const UserInfomation = () => {
         setShowImageList(!showImageList);
     };
 
+   
     useEffect(() => {
+        // auth.accessToken === undefined ? setHasUser(false) : setHasUser(true);
+        //  console.log(auth.fullName);
+        //  console.log(auth.accessToken);
+        //  console.log(auth.password);
+       console.log(auth.id);
+        
+        const fetchUserData = async () => {
+            try {
+                if (auth.accessToken) {
+                    // Gửi token trong header của yêu cầu
+                    const userData = await userService.getUser(auth.accessToken);
+
+                    // Cập nhật các biến với dữ liệu lấy từ API
+                    setEmail(userData.email);
+                    setFullname(userData.fullname);
+                    setAddress(userData.address);
+                    setPhoneNumber(userData.phoneNumber);
+                } else {
+                    setHasUser(false);
+                }
+            } catch (error) {
+                console.error('Failed to fetch user data:', error);
+            }
+        };
+
+        fetchUserData();
+
         setIsEditing(false); // Reset form and isEditing when activeButton changes
-    }, [activeButton]);
+    }, [activeButton, auth.accessToken]);
+
 
     return (
         <div className="w-4/5 mx-auto my-4 flex">
             <div className="w-1/4 h-80 justify-center">
-                {/* ____________logo___________________________ */}
+
+                {/* Tên và hình đại diện của user */}
                 <div className="flex items-center my-3 ml-16">
                     <div
                         className="w-12 h-12 bg-gray-300 rounded-full"
@@ -130,7 +166,7 @@ const UserInfomation = () => {
                     </button>
                 </div>
             </div>
-            <div className="h-80 w-1/2 mt-4 mb-12">
+            <div className="h-auto w-1/2 mt-4 mb-12">
                 {/* ------------------------------Header colum 2------------------------------------------ */}
                 <div>
                     {activeButton === 1 && (
@@ -301,7 +337,7 @@ const UserInfomation = () => {
                             </>
                         )}
                     </div>
-
+                    {/* Change Password */}
                     <div className="ml-20">
                         {activeButton === 3 && (
                             <>

@@ -13,7 +13,10 @@ export const get = async (endPoints, option = {}) => {
     const response = await request.get(endPoints, option);
     return response.data;
 };
-
+export const put = async (endPoints, option = {}) => {
+    const response = await request.put(endPoints, option);
+    return response.data;
+};
 export const getUser = async (endPoints, option = {}) => {
     const response = await request.get(endPoints, option);
     return response;

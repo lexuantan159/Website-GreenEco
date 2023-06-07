@@ -97,7 +97,7 @@ const Header = () => {
 
                 <div className="h-full flex items-center">
                     {hasUser ? (
-                        <Link to="/user">
+                        <Link to="/userinformation">
                             <div className="hidden lg:flex lg:justify-center lg:items-center">
                                 <h3 className="text-[#252525] text-sm mr-2 font-bold">{auth.fullName || "Name User"}</h3>
                                 <img
