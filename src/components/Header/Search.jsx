@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Navigation = () => {
+const Search = () => {
   return (
     <div>
         
-    </div>
+    </div>  
   )
 }
 
-export default Navigation
+export default Search

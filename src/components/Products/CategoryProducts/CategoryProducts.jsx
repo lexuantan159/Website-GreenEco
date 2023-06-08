@@ -1,11 +1,10 @@
 import React from 'react';
 
-const CategoryProducts = ( { category , onCategoryChange}) => {
-
+const CategoryProducts = ({ category, onCategoryChange }) => {
     return (
         <div className="mt-16">
             <div className="">
-                <h1 className="text-[#252525] text-4xl text-center font-bold mb-2">Featured Products</h1>
+                <h1 className="text-[#252525] text-4xl text-center font-bold mb-2">Our Products</h1>
             </div>
             <ul className="flex justify-center">
                 <li className="px-3 ">
