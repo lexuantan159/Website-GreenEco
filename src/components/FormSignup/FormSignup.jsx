@@ -1,6 +1,7 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ToastContainer, toast } from 'react-toastify';
+import { Spinner } from '@material-tailwind/react';
 import 'react-toastify/dist/ReactToastify.css';
 import React, { useContext, useEffect, useState } from 'react';
 import * as registerServices from '../../services/registerServices';
@@ -17,8 +18,8 @@ const FormSignup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
-    const [toggleSubmit, setToggleSubmit] = useState(false);
     const [submit, setSubmit] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const notify = (message) =>
@@ -33,43 +34,63 @@ const FormSignup = () => {
             theme: 'light',
         });
 
+    const replaceEmail = (email) => {
+        const username = email
+            .split('@')[0]
+            .toLowerCase()
+            .replace(/[^a-z0-9]/gi, '');
+        return email.replace(/^[^@]+/, username);
+    };
+
     useEffect(() => {
         if (submit) {
             const fetchRegister = async () => {
                 const fullName = firstName + ' ' + lastName;
                 const register = await registerServices.register(fullName, email, password);
-                if (register.statusCode === 200) {
+                if (register.statusCode === 201) {
                     const authentication = await authServices.authentication(email, password);
                     if (authentication.statusCode === 200) {
                         const accessToken = authentication.response.accessToken;
                         setAuth({ email, password, accessToken, fullName });
+                        setLoading(false);
                         navigate('/');
-                    } else notify(authentication.error.response.data.message);
-                } else notify(register.error.response.data.message);
+                    } else {
+                        notify(authentication.error.response.data.message);
+                        setLoading(false);
+                        setSubmit(false);
+                    }
+                } else {
+                    notify(register.error.response.data.message);
+                    setLoading(false);
+                    setSubmit(false);
+                }
             };
             fetchRegister();
         }
-    }, [toggleSubmit]);
+    }, [email, firstName, lastName, navigate, password, setAuth, submit]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleCheckInput = () => {
         const emailRegex = /\S+@\S+\.\S+/;
         const isEmailValid = emailRegex.test(email);
-
         if (isEmailValid && email.endsWith('@gmail.com')) {
             // email is valid and ends with "@gmail.com"
             if (rePassword === password) {
+                setLoading(true);
                 setSubmit(true);
-                setToggleSubmit(!toggleSubmit);
             } else {
-                setEmail(false);
                 notify('Password does not match');
+                setSubmit(false);
             }
         } else {
             // email is not valid or does not end with "@gmail.com"
             notify('Email is not valid with "@gmail.com"');
             setSubmit(false);
         }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handleCheckInput();
     };
 
     return (
@@ -117,7 +138,7 @@ const FormSignup = () => {
                                         className="px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                         type="email"
                                         placeholder="youraccount@gmail.com"
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={(e) => setEmail(replaceEmail(e.target.value))}
                                         value={email}
                                         required
                                     />
@@ -179,7 +200,13 @@ const FormSignup = () => {
                                     </div>
                                 </div>
                                 <button className="py-2 bg-primaryColor w-full mb-3 rounded-lg text-xl font-bold text-white opacity-100 active:opacity-80">
-                                    Sign Up
+                                    {loading ? (
+                                        <div className="flex items-center justify-center">
+                                            <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
+                                        </div>
+                                    ) : (
+                                        <span>Sign Up</span>
+                                    )}
                                 </button>
                             </form>
 

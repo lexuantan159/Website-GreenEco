@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import FormLogin from '../components/FormLogin/FormLogin'
 
 const Login = () => {
+
+  useEffect( () => {
+    document.title = 'Log In';
+  })
   return (
     <div>
       <FormLogin/>

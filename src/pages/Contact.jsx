@@ -1,11 +1,16 @@
-import ContactPage from "../components/ContactPage/ContactPage";
+import ContactPage from '../components/ContactPage/ContactPage';
 
-function Contact() {
-  return ( 
-    <div >
-      <ContactPage />
-    </div>
-   );
-}
+import React, { useEffect } from 'react';
+
+const Contact = () => {
+    useEffect(() => {
+        document.title = 'Contact';
+    });
+    return (
+        <div>
+            <ContactPage/>
+        </div>
+    );
+};
 
 export default Contact;
