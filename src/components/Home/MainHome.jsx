@@ -4,22 +4,23 @@ import ProductsSlide from '../ProductsSlide/ProductsSlide';
 
 const MainHome = () => {
     const [products, setProducts] = useState([]);
-    const titleProductsSlide = "Top Products";
-    
-    useEffect(() => {
-        document.title = "Home";
+    const titleProductsSlide = 'Top Products';
 
-        if(products.length === 0) {
+    useEffect(() => {
+        document.title = 'Home';
+
+        if (products.length === 0) {
             const fetchProducts = async () => {
                 const response = await productsService.getProducts();
                 const listProducts = response.productData;
-
-                setProducts(() => listProducts);
+                listProducts !== undefined && setProducts(() => listProducts)
+                
             };
-            
+
             fetchProducts();
         }
     });
+
 
     return (
         <div className="container mx-auto px-6 md:px-4 lg:px-20">
@@ -45,9 +46,7 @@ const MainHome = () => {
                 </div>
             </div>
 
-            {
-                products.length > 0 && <ProductsSlide title = {titleProductsSlide} products = {products} numOfProducts={6} />
-            }
+            {products.length > 0 && <ProductsSlide title={titleProductsSlide} products={products} numOfProducts={6} />}
 
             <div className="my-20">
                 <div className="">
@@ -72,8 +71,6 @@ const MainHome = () => {
                             </p>
                         </div>
                     </div>
-
-                   
 
                     <div className="w-full px-3 mb-4">
                         <div className="w-full h-[360px]">
