@@ -7,6 +7,8 @@ const MainHome = () => {
     const titleProductsSlide = "Top Products";
     
     useEffect(() => {
+        document.title = "Home";
+
         if(products.length === 0) {
             const fetchProducts = async () => {
                 const response = await productsService.getProducts();
@@ -18,7 +20,6 @@ const MainHome = () => {
             fetchProducts();
         }
     });
-    console.log(products);
 
     return (
         <div className="container mx-auto px-6 md:px-4 lg:px-20">
