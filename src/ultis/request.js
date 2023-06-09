@@ -19,7 +19,14 @@ export const get = async (endPoints, option = {}) => {
     const response = await request.get(endPoints, option);
     return response;
 };
+export const put = async (endPoints, body = {}, header = {} ) => {
+    const response = await request.put(endPoints, body, header);
+    return response;
+};
 
-
+export const getUser = async (endPoints, option = {}) => {
+    const response = await request.get(endPoints, option);
+    return response;
+};
 
 export default request;
