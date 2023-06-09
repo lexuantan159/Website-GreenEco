@@ -21,7 +21,7 @@ const ContactPage = () => {
     return (
         <section className="">
             <div className="container mb-32 mx-auto px-6 md:px-4 lg:px-0">
-                <div className="">
+                <div className="relative">
                     <img
                         className="h-[530px] w-full object-cover rounded-xl"
                         src="https://myethicalchoice.com/wp-content/uploads/2021/01/eco-friendly-product-top.jpeg?fbclid=IwAR1tUYFO9a9LU2xEqKgstvjzLxtJx_r5vYPpRToxJSv2_aRFOya7Dtt0EZg"
@@ -56,7 +56,7 @@ const ContactPage = () => {
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="name"
                         type="text"
-                        placeholder="Họ và tên của bạn"
+                        placeholder="Full name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
@@ -69,7 +69,7 @@ const ContactPage = () => {
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
                         id="email"
                         type="email"
-                        placeholder="Email của bạn"
+                        placeholder="Your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -81,7 +81,7 @@ const ContactPage = () => {
                     <textarea
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="message"
-                        placeholder="Nội dung tin nhắn"
+                        placeholder="Message content"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                     ></textarea>
@@ -102,7 +102,7 @@ const ContactPage = () => {
                             <FontAwesomeIcon icon={faLocationDot} />
                         </div>
                         <h4 className="text-center font-bold my-4 text-[24px]">Address</h4>
-                        <p className="text-[#666666] text-[16px] font-medium text-center"> 40/20 Nguyễn Huy Tưởng</p>
+                        <p className="text-[#666666] text-[16px] font-medium text-center"> 40/20 Nguyen Huy Tuong</p>
                     </div>
                     <div className="">
                         <div className="text-[36px] text-[#7fad39] text-center">
