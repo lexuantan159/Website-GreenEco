@@ -10,13 +10,13 @@ export const register = async (fullName, email, password) => {
             password: password,
         });
         return {
-            response: response,
-            statusCode: 200,
+            response: response.data,
+            statusCode: response.status,
         };
     } catch (error) {
         return {
             error,
-            statusCode: 400,
+            statusCode: error.status,
         };
     }
 };

@@ -6,13 +6,13 @@ export const authentication = async (email, password) => {
     try {
         const response = await request.post(LOGIN_ENDPOINT, { email: email, password: password });
         return {
-            response: response,
-            statusCode: 200,
+            response: response.data,
+            statusCode: response.status,
         };
     } catch (error) {
         return {
             error,
-            statusCode: 400,
+            statusCode: error.status,
         };
     }
 };
@@ -25,14 +25,14 @@ export const authorization = async (accessToken) => {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
         return {
-            fullName: responseRoles.userData.fullname,
-            roles: responseRoles.userData.Role.value,
-            statusCode: 200,
+            fullName: responseRoles.data.userData.fullname,
+            roles: responseRoles.data.userData.Role.value,
+            statusCode: responseRoles.status,
         };
     } catch (error) {
         return {
             error,
-            statusCode: 400,
+            statusCode: error.status,
         };
     }
 };

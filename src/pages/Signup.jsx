@@ -1,10 +1,12 @@
-import React from 'react'
-import FormSignup from '../components/FormSignup/FormSignup'
+import React, { useEffect } from 'react';
+import FormSignup from '../components/FormSignup/FormSignup';
 
 const Signup = () => {
-  return (
-   <FormSignup/>
-  )
-}
 
-export default Signup
+    useEffect( () => {
+        document.title = 'Sign Up';
+      })
+    return <FormSignup />;
+};
+
+export default Signup;

@@ -1,12 +1,16 @@
-import React from 'react';
 import AboutPage from '../components/AboutPage/AboutPage';
 
+import React, { useEffect } from 'react';
+
 const About = () => {
-  return (
-    <div>
-      <AboutPage />
-    </div>
-  )
-}
+    useEffect(() => {
+        document.title = 'About';
+    });
+    return (
+        <div>
+            <AboutPage />
+        </div>
+    );
+};
 
 export default About;

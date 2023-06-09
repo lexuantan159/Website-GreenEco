@@ -6,13 +6,12 @@ const request = axios.create({
 
 export const post = async (endPoints, option = {}) => {
     const response = await request.post(endPoints, option);
-    console.log(response);
-    return response.data;
+    return response;
 };
 
 export const get = async (endPoints, option = {}) => {
     const response = await request.get(endPoints, option);
-    return response.data;
+    return response;
 };
 
 
