@@ -37,3 +37,42 @@ export const authorization = async (accessToken) => {
     }
 };
 
+const FORGOT_ENDPOINT = 'auth/forgot-password';
+
+export const forgotPassword = async (email) => {
+    try {
+        const response = await request.post(FORGOT_ENDPOINT, {
+            email: email
+        });
+        return {
+            response: response.data,
+            statusCode: response.status
+        };
+    } catch (error) {
+        return {
+            error: error.response.data,
+            statusCode: error.status,
+        };
+    }
+};
+
+const RESET_ENDPOINT = 'auth/reset-password';
+
+export const resetPassword = async (otp, password) => {
+    try {
+        const response = await request.post(RESET_ENDPOINT, {
+            otp: otp,
+            password: password
+        });
+        return {
+            response: response.data,
+            statusCode: response.status
+        };
+    } catch (error) {
+        return {
+            error: error.response.data,
+            statusCode: error.status,
+        };
+    }
+};
+

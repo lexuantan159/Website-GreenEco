@@ -8,7 +8,7 @@ function App() {
     return (
         <>
             <Routes>
-                <Route element={<Layout hideHeaderPaths={['/login' , '/signup']} />}>
+                <Route element={<Layout hideHeaderPaths={['/login' , '/signup', '/forgot-password', '/reset-password']} />}>
                     {router.map((route, index) => {
                         return <Route key={index} path={route.path} element={<route.component />}></Route>;
                     })}
