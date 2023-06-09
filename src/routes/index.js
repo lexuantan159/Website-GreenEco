@@ -1,4 +1,4 @@
-import { Home, Contact, Login, Signup, About, Products, ShoppingCart ,Checkout,ProductDetail} from '../pages/index';
+import { Home, Contact, Login, Signup, About, Products, ShoppingCart ,Checkout,ProductDetail, ForgotPassword, ResetPassword } from '../pages/index';
 
 const router = [
     { path: '/', component: Home },
@@ -10,6 +10,8 @@ const router = [
     { path: '/cart', component: ShoppingCart },
     { path: '/checkout', component: Checkout },
     { path: '/products/:id', component: ProductDetail },
+    { path: '/forgot-password', component: ForgotPassword },
+    { path: '/reset-password', component: ResetPassword },
 
 ];
 

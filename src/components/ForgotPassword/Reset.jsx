@@ -1,31 +1,27 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ToastContainer, toast } from 'react-toastify';
 import { Spinner } from '@material-tailwind/react';
-import 'react-toastify/dist/ReactToastify.css';
-import React, { useEffect, useState, useContext } from 'react';
-import AuthContext from '../../context/authProvider';
-import { useLocation, useNavigate } from 'react-router-dom';
-import * as authServices from '../../services/authServices';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+import { ToastContainer, toast } from 'react-toastify';
+import * as authServices from '../../services/authServices.js';
 
-const FormLogin = () => {
-    const navigate = useNavigate();
-    const { setAuth } = useContext(AuthContext);
+const Reset = () => {
+    const [otp, setOtp] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [hiddenPass, setHiddenPass] = useState(true);
+    const [rePassword, setRePassword] = useState('');
     const [submit, setSubmit] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [hiddenPass, setHiddenPass] = useState(true);
+    const [hiddenRePass, setHiddenRePass] = useState(true);
     const location = useLocation();
-
-    const handleHiddenPassword = () => {
-        hiddenPass ? setHiddenPass(false) : setHiddenPass(true);
-    };
+    const navigate = useNavigate();
 
     const notify = (message) =>
         toast(message, {
             position: 'top-center',
-            autoClose: 1500,
+            autoClose: 3500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -33,7 +29,6 @@ const FormLogin = () => {
             progress: undefined,
             theme: 'light',
         });
-
     useEffect(() => {
         if (location.state?.toastMessage !== '') {
             notify(location.state?.toastMessage);
@@ -43,57 +38,38 @@ const FormLogin = () => {
 
     useEffect(() => {
         if (submit) {
-            const fetchAuth = async () => {
-                const authentication = await authServices.authentication(email, password);
-
-                if (authentication.statusCode === 200) {
-                    const accessToken = authentication.response.accessToken;
-
-                    const authorization = await authServices.authorization(accessToken);
-                    const fullName = authorization.fullName;
-                    setAuth({ email, password, accessToken, fullName });
-
-                    if (authorization.statusCode === 200) {
-                        if (authorization.roles === 'Admin') navigate('/admin');
-                        else if (authorization.roles === 'User') navigate('/');
-                        else notify('Login failed');
-                    } else {
-                        notify(authorization.error.response.data.message);
-                        setLoading(false);
-                        setSubmit(false);
-                    }
+            const fetchReset = async () => {
+                const resetPassword = await authServices.resetPassword(otp, password);
+                if (resetPassword.statusCode === 200) {
+                    setLoading(false);
+                    navigate('/login', { state: { toastMessage: resetPassword.response.message } });
                 } else {
-                    notify(authentication.error.response.data.message);
+                    notify(resetPassword.error.message);
                     setLoading(false);
                     setSubmit(false);
                 }
             };
-
-            fetchAuth();
+            fetchReset();
         }
-    }, [email, navigate, password, setAuth, submit]);
+    }, [submit]);
 
-    const handleCheckInput = () => {
-        const emailRegex = /\S+@\S+\.\S+/;
-        const isEmailValid = emailRegex.test(email);
-
-        if (isEmailValid && email.endsWith('@gmail.com')) {
-            // email is valid and ends with "@gmail.com"
-            setSubmit(true);
-            setLoading(true);
-        } else {
-            // email is not valid or does not end with "@gmail.com"
-            setSubmit(false);
-            setLoading(false);
-            notify('Email is not valid with "@gmail.com"');
-        }
-    };
-
-    const handleLogin = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        handleCheckInput();
+        // Validation input
+        if (otp.length !== 6) {
+            notify('OTP code must have exactly 6 numbers');
+            setSubmit(false);
+        } else if (password.length < 6) {
+            notify('Password must be at least 6 characters');
+            setSubmit(false);
+        } else if (rePassword !== password) {
+            notify('Password does not match');
+            setSubmit(false);
+        } else {
+            setLoading(true);
+            setSubmit(true);
+        }
     };
-
     return (
         <>
             <ToastContainer />
@@ -101,76 +77,87 @@ const FormLogin = () => {
                 <div className="bg-white w-full sm:w-[90%] md:w-[80%] lg:w-[75%] lg:grid lg:grid-cols-10 shadow-xl m-auto my-auto rounded-[20px] pb-4 lg:pb-0">
                     <div className="text-center lg:col-span-4">
                         <div className="w-[70%] m-auto">
-                            <h1 className="text-primaryColor text-3xl font-bold py-10">Log In To GreenEco</h1>
-                            <form action="" onSubmit={(e) => handleLogin(e)}>
+                            <h1 className="text-primaryColor text-3xl font-bold py-10">Reset Password</h1>
+                            <form action="" onSubmit={(e) => handleSubmit(e)}>
                                 <div className="flex flex-col mb-6">
                                     <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                        Email Address
+                                        OTP
                                     </label>
                                     <input
-                                        id="emailInput"
                                         className="px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                         required
-                                        type="email"
-                                        autoComplete="email"
-                                        placeholder="youraccount@gmail.com"
-                                        onChange={(event) => setEmail(event.target.value)}
-                                        value={email}
+                                        type="text"
+                                        placeholder="Your OTP"
+                                        onChange={(event) => setOtp(event.target.value)}
+                                        value={otp}
                                     />
                                 </div>
-                                <div className="flex flex-col ">
+                                <div className="flex flex-col mb-6">
                                     <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                        Password
+                                        New Password
                                     </label>
                                     <div className="relative">
                                         <input
-                                            id="passwordInput"
                                             className="w-full px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                             type={hiddenPass ? 'password' : 'text'}
                                             required
-                                            placeholder="yourpassword"
+                                            placeholder="Your new password"
                                             onChange={(event) => setPassword(event.target.value)}
                                             value={password}
                                         />
                                         {hiddenPass ? (
                                             <FontAwesomeIcon
-                                                onClick={handleHiddenPassword}
+                                                onClick={() => setHiddenPass(false)}
                                                 className="absolute top-5 right-6"
                                                 icon={faEyeSlash}
                                             />
                                         ) : (
                                             <FontAwesomeIcon
-                                                onClick={handleHiddenPassword}
+                                                onClick={() => setHiddenPass(true)}
                                                 className="absolute top-5 right-6"
                                                 icon={faEye}
                                             />
                                         )}
                                     </div>
                                 </div>
-                                <div className=" text-right mt-2 mb-9 ">
-                                    <a href="/forgot-password" className="text-lg text-primaryColor">
-                                        Forgot Password?
-                                    </a>
+                                <div className="flex flex-col ">
+                                    <label className="font-medium text-left text-lg mb-2 " htmlFor="">
+                                        Confirm Password
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            className="w-full px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
+                                            type={hiddenRePass ? 'password' : 'text'}
+                                            required
+                                            placeholder="Your confirm password"
+                                            onChange={(e) => setRePassword(e.target.value)}
+                                            value={rePassword}
+                                        />
+                                        {hiddenRePass ? (
+                                            <FontAwesomeIcon
+                                                onClick={() => setHiddenRePass(false)}
+                                                className="absolute top-5 right-6"
+                                                icon={faEyeSlash}
+                                            />
+                                        ) : (
+                                            <FontAwesomeIcon
+                                                onClick={() => setHiddenRePass(true)}
+                                                className="absolute top-5 right-6"
+                                                icon={faEye}
+                                            />
+                                        )}
+                                    </div>
                                 </div>
-                                <button className="py-3 bg-primaryColor w-full mb-3 rounded-lg text-xl font-bold text-white  opacity-100 active:opacity-80">
+                                <button className="py-3 bg-primaryColor w-full mt-8 mb-12 rounded-lg text-xl font-bold text-white  opacity-100 active:opacity-80">
                                     {loading ? (
                                         <div className="flex items-center justify-center">
                                             <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
                                         </div>
                                     ) : (
-                                        <span>Log In</span>
+                                        <span>Reset</span>
                                     )}
                                 </button>
                             </form>
-
-                            <div className="mt-2 mb-9">
-                                <p className="">
-                                    Don’t have account?
-                                    <a href="/signup" className="text-lg text-primaryColor">
-                                        Sign Up
-                                    </a>
-                                </p>
-                            </div>
                         </div>
                     </div>
                     <div className="hidden lg:block h-full w-full col-span-6">
@@ -186,4 +173,4 @@ const FormLogin = () => {
     );
 };
 
-export default FormLogin;
+export default Reset;
