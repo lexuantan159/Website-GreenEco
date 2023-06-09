@@ -1,4 +1,4 @@
-import React, { useContext, useState,useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,38 +20,41 @@ const ChangePassword = () => {
 
     const handleChangePassword = async (event) => {
         event.preventDefault(); // Ngăn chặn trình duyệt tải lại trang
-    
+     
         if (oldPassword === '' || newPassword === '' || confirmPassword === '') {
             setErrorMessage('Please fill in all fields');
             return;
-        } else if (oldPassword !== auth.password) {
+        }
+        if (oldPassword !== auth.password) {
             setErrorMessage('The old password was entered incorrectly. Please try again');
             return;
-        } else if (newPassword !== confirmPassword) {
+        }
+        if (newPassword !== confirmPassword) {
             setErrorMessage('New password and confirm password do not match. Please try again.');
             return;
-        } else {
-            try {
-                const response = await updateUserPassword(auth.accessToken, oldPassword, newPassword);
-    
-                if (response.statusCode === 200) {
-                    toast.success(response.message);
-                    // Perform any additional actions on success
-                    console.log(oldPassword);
-                    console.log(newPassword);
-                } else {
-                    setErrorMessage(response.error.message);
-                    // Perform any additional actions on error
+        }
+        try {
+            const response = await updateUserPassword(auth.accessToken, oldPassword, newPassword);
+      
+            if (response.statusCode === 200) {
+                toast.success(response.data.message);
+                // Perform any additional actions on success
+            } else {
+                console.log(response.statusCode + "Status code");
+                if(response.statusCode === 401){
+                    console.log("AAAA");
                 }
-            } catch (error) {
-                setErrorMessage('An error occurred. Please try again.');
-                // Perform any additional error handling
+                setErrorMessage(response.error.message +"|||" + response.error.statusCode );
+                // Perform any additional actions on error
             }
+        } catch (error) {
+            setErrorMessage('An error occurred. Please try again.');
+            // Perform any additional error handling
         }
     };
     useEffect(() => {
-        console.log(auth.accessToken);
-      }, []);
+        //console.log(auth.accessToken);
+    }, []);
 
     return (
         <form>
@@ -67,7 +70,7 @@ const ChangePassword = () => {
                         required
                         placeholder="Input Old PassWord"
                         onChange={(event) => setOldPassword(event.target.value)}
-                        value={oldPassword} 
+                        value={oldPassword}
                     />
                     {hiddenPass ? (
                         <FontAwesomeIcon

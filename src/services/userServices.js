@@ -22,24 +22,29 @@ export const getUser = async (accessToken) => {
         };
     }
 };
+
 const EDID_USERS = 'user/edit-profile';
 export const updateUserPassword = async (accessToken, oldPassword, newPassword) => {
   try {
+    console.log(accessToken);
+    console.log(typeof oldPassword);
+    console.log(typeof newPassword);
+
     const response = await request.put(EDID_USERS, {
       headers: { Authorization: `Bearer ${accessToken}` },
       data: {
-        oldPassword,
-        newPassword,
+        oldPassword : oldPassword,
+        newPassword : newPassword,
       },
     });
-    console.log(response); 
+
     return {
-      message: response.message,
+      message: response.userData.message,
       statusCode: 200,
     };
   } catch (error) {
     return {
-      error,
+      error : error,
       statusCode: 400,
     };
   }

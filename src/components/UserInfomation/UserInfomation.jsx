@@ -1,4 +1,4 @@
-import React, { useContext,useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faB, faPen, faUser } from '@fortawesome/free-solid-svg-icons';
 import ChangePassword from '../ChangePassword/ChangePassword';
@@ -6,7 +6,6 @@ import ChangePassword from '../ChangePassword/ChangePassword';
 //server
 import * as userService from '../../services/userServices';
 import AuthContext from '../../context/authProvider';
-
 
 import hinhnam1 from '../../img/hinhnam1.jpg';
 import hinhnam2 from '../../img/hinhnam2.jpg';
@@ -32,7 +31,7 @@ const UserInfomation = () => {
     const [selectedImage, setSelectedImage] = useState('');
     const [showImageList, setShowImageList] = useState(false);
 
-    const { auth } = useContext(AuthContext);// truy cập vào server để lấy access token trên header
+    const { auth } = useContext(AuthContext); // truy cập vào server để lấy access token trên header
     const [isEditing, setIsEditing] = useState(false);
     const [hasUser, setHasUser] = useState(false);
 
@@ -48,7 +47,6 @@ const UserInfomation = () => {
         setIsEditing(false);
     };
 
-   
     const imageList = [
         { id: 1, url: hinhnam1 },
         { id: 2, url: hinhnam2 },
@@ -72,14 +70,7 @@ const UserInfomation = () => {
         setShowImageList(!showImageList);
     };
 
-   
     useEffect(() => {
-        // auth.accessToken === undefined ? setHasUser(false) : setHasUser(true);
-        //  console.log(auth.fullName);
-        //  console.log(auth.accessToken);
-        //  console.log(auth.password);
-       console.log(auth.id);
-        
         const fetchUserData = async () => {
             try {
                 if (auth.accessToken) {
@@ -104,11 +95,9 @@ const UserInfomation = () => {
         setIsEditing(false); // Reset form and isEditing when activeButton changes
     }, [activeButton, auth.accessToken]);
 
-
     return (
         <div className="w-4/5 mx-auto my-4 flex">
             <div className="w-1/4 h-80 justify-center">
-
                 {/* Tên và hình đại diện của user */}
                 <div className="flex items-center my-3 ml-16">
                     <div
@@ -203,7 +192,6 @@ const UserInfomation = () => {
                 </div>
                 {/* --------------------------Body colum 2 ------------------------------------------ */}
                 <div>
-                
                     <div className="ml-20 mt-12">
                         {activeButton === 1 && (
                             <>
@@ -341,7 +329,7 @@ const UserInfomation = () => {
                     <div className="ml-20">
                         {activeButton === 3 && (
                             <>
-                            <ChangePassword/>                              
+                                <ChangePassword />
                             </>
                         )}
                     </div>
