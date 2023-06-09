@@ -39,7 +39,7 @@ const FormLogin = () => {
             notify(location.state?.toastMessage);
             navigate(location.pathname, { replace: true, state: {} });
         }
-    }, [location, navigate]);
+    }, []);
 
     useEffect(() => {
         if (submit) {

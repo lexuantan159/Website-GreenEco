@@ -34,7 +34,7 @@ const Reset = () => {
             notify(location.state?.toastMessage);
             navigate(location.pathname, { replace: true, state: {} });
         }
-    }, [location, navigate]);
+    }, []);
 
     useEffect(() => {
         if (submit) {
@@ -98,7 +98,6 @@ const Reset = () => {
                                     </label>
                                     <div className="relative">
                                         <input
-                                            id="passwordInput"
                                             className="w-full px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                             type={hiddenPass ? 'password' : 'text'}
                                             required
@@ -127,7 +126,6 @@ const Reset = () => {
                                     </label>
                                     <div className="relative">
                                         <input
-                                            id="passwordInput"
                                             className="w-full px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                             type={hiddenRePass ? 'password' : 'text'}
                                             required
