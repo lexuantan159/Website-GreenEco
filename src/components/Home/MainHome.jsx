@@ -1,27 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import * as productsService from '../../services/productsServices';
+import React, { useContext, useEffect, useState } from 'react';
 import ProductsSlide from '../ProductsSlide/ProductsSlide';
+import { Spinner } from '@material-tailwind/react';
+import ProductsContext from '../../context/productsProvider';
 
 const MainHome = () => {
-    const [products, setProducts] = useState([]);
-    const titleProductsSlide = "Top Products";
-    
-    useEffect(() => {
-        if(products.length === 0) {
-            const fetchProducts = async () => {
-                const response = await productsService.getProducts();
-                const listProducts = response.productData;
+    const [loading, setLoading] = useState(true);
+    const titleProductsSlide = 'Top Products';
+    const { productsList } = useContext(ProductsContext);
 
-                setProducts(() => listProducts);
-            };
-            
-            fetchProducts();
-        }
-    });
-    console.log(products);
+    useEffect(() => {
+        productsList.length === 0 ?  setLoading(true):setLoading(false) 
+    },[]);
 
     return (
-        <div className="container mx-auto px-6 md:px-4 lg:px-20">
+        <div className="container mb-32 mx-auto px-6 md:px-4 lg:px-0">
             <div className="relative h-[560px] mt-10 mb-16">
                 <img
                     className="h-full w-full object-cover rounded-xl"
@@ -44,9 +36,13 @@ const MainHome = () => {
                 </div>
             </div>
 
-            {
-                products.length > 0 && <ProductsSlide title = {titleProductsSlide} products = {products} numOfProducts={6} />
-            }
+            {loading ? (
+                <Spinner className="h-12 w-12 mt-10 mx-auto" />
+            ) : (
+                productsList.length > 0 && (
+                    <ProductsSlide title={titleProductsSlide} products={productsList} numOfProducts={6} />
+                )
+            )}
 
             <div className="my-20">
                 <div className="">
@@ -71,8 +67,6 @@ const MainHome = () => {
                             </p>
                         </div>
                     </div>
-
-                   
 
                     <div className="w-full px-3 mb-4">
                         <div className="w-full h-[360px]">

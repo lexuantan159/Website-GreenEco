@@ -1,5 +1,4 @@
 import * as request from '../ultis/request';
-import axios from 'axios';
 
 const ROLE_USERS = 'user/';
 export const getUser = async (accessToken) => {
@@ -8,11 +7,11 @@ export const getUser = async (accessToken) => {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
         return {
-            fullname : response.userData.fullname,
-            address : response.userData.address,
-            email : response.userData.email,
-            phone : response.userData.phone,
-            password : response.userData.password,
+            fullname: response.userData.fullname,
+            address: response.userData.address,
+            email: response.userData.email,
+            phone: response.userData.phone,
+            password: response.userData.password,
             statusCode: 200,
         };
     } catch (error) {
@@ -25,27 +24,26 @@ export const getUser = async (accessToken) => {
 
 const EDID_USERS = 'user/edit-profile';
 export const updateUserPassword = async (accessToken, oldPassword, newPassword) => {
-  try {
-    console.log(accessToken);
-    console.log(typeof oldPassword);
-    console.log(typeof newPassword);
+    try {
+        const response = await request.put(
+            EDID_USERS,
+            {
+                oldPassword: oldPassword,
+                newPassword: newPassword,
+            },
+            {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            },
+        );
 
-    const response = await request.put(EDID_USERS, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-      data: {
-        oldPassword : oldPassword,
-        newPassword : newPassword,
-      },
-    });
-
-    return {
-      message: response.userData.message,
-      statusCode: 200,
-    };
-  } catch (error) {
-    return {
-      error : error,
-      statusCode: 400,
-    };
-  }
+        return {
+            message: response.data.message,
+            statusCode: response.status,
+        };
+    } catch (error) {
+        return {
+            errorMessage: error.response.data.message,
+            statusCode: error.status,
+        };
+    }
 };

@@ -74,14 +74,13 @@ const UserInfomation = () => {
         const fetchUserData = async () => {
             try {
                 if (auth.accessToken) {
-                    // Gửi token trong header của yêu cầu
-                    const userData = await userService.getUser(auth.accessToken);
+                    
 
                     // Cập nhật các biến với dữ liệu lấy từ API
-                    setEmail(userData.email);
-                    setFullname(userData.fullname);
-                    setAddress(userData.address);
-                    setPhoneNumber(userData.phoneNumber);
+                    setEmail(auth.email);
+                    setFullname(auth.fullName);
+                    setAddress(auth.address);
+                    setPhoneNumber(auth.phoneNumber);
                 } else {
                     setHasUser(false);
                 }

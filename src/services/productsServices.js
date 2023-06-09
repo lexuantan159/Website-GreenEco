@@ -6,8 +6,14 @@ const PRODUCTS_ENDPOINT = 'product/products';
 export const getProducts = async () => {
     try {
         const products = await request.get(PRODUCTS_ENDPOINT);
-        return products;
+        return {
+            products: products.data.productData,
+            statusCode: products.status
+        }
     } catch (e) {
-        return e;
+        return {
+            error: e.response.data.message,
+            status: e.status 
+        }
     }
 }

@@ -21,36 +21,35 @@ const ChangePassword = () => {
     const handleChangePassword = async (event) => {
         event.preventDefault(); // Ngăn chặn trình duyệt tải lại trang
      
-        if (oldPassword === '' || newPassword === '' || confirmPassword === '') {
-            setErrorMessage('Please fill in all fields');
-            return;
-        }
-        if (oldPassword !== auth.password) {
-            setErrorMessage('The old password was entered incorrectly. Please try again');
-            return;
-        }
-        if (newPassword !== confirmPassword) {
-            setErrorMessage('New password and confirm password do not match. Please try again.');
-            return;
-        }
-        try {
+        // if (oldPassword === '' || newPassword === '' || confirmPassword === '') {
+        //     setErrorMessage('Please fill in all fields');
+        //     return;
+        // }
+        // if (oldPassword !== auth.password) {
+        //     setErrorMessage('The old password was entered incorrectly. Please try again');
+        //     return;
+        // }
+        // if (newPassword !== confirmPassword) {
+        //     setErrorMessage('New password and confirm password do not match. Please try again.');
+        //     return;
+        // }
+        // try {
             const response = await updateUserPassword(auth.accessToken, oldPassword, newPassword);
-      
+           
+            
             if (response.statusCode === 200) {
-                toast.success(response.data.message);
+               console.log(response.message);
                 // Perform any additional actions on success
             } else {
-                console.log(response.statusCode + "Status code");
-                if(response.statusCode === 401){
-                    console.log("AAAA");
-                }
-                setErrorMessage(response.error.message +"|||" + response.error.statusCode );
-                // Perform any additional actions on error
+                console.log(response.errorMessage);
             }
-        } catch (error) {
-            setErrorMessage('An error occurred. Please try again.');
-            // Perform any additional error handling
-        }
+        //         setErrorMessage(response.error.message +"|||" + response.error.statusCode );
+        //         // Perform any additional actions on error
+        //     }
+        // } catch (error) {
+        //     setErrorMessage('An error occurred. Please try again.');
+        //     // Perform any additional error handling
+        // }
     };
     useEffect(() => {
         //console.log(auth.accessToken);
@@ -154,4 +153,5 @@ const ChangePassword = () => {
         </form>
     );
 };
+
 export default ChangePassword;

@@ -6,13 +6,13 @@ export const authentication = async (email, password) => {
     try {
         const response = await request.post(LOGIN_ENDPOINT, { email: email, password: password });
         return {
-            response: response,
-            statusCode: 200,
+            response: response.data,
+            statusCode: response.status,
         };
     } catch (error) {
         return {
             error,
-            statusCode: 400,
+            statusCode: error.status,
         };
     }
 };
@@ -25,14 +25,53 @@ export const authorization = async (accessToken) => {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
         return {
-            fullName: responseRoles.userData.fullname,
-            roles: responseRoles.userData.Role.value,
-            statusCode: 200,
+            fullName: responseRoles.data.userData.fullname,
+            roles: responseRoles.data.userData.Role.value,
+            statusCode: responseRoles.status,
         };
     } catch (error) {
         return {
             error,
-            statusCode: 400,
+            statusCode: error.status,
+        };
+    }
+};
+
+const FORGOT_ENDPOINT = 'auth/forgot-password';
+
+export const forgotPassword = async (email) => {
+    try {
+        const response = await request.post(FORGOT_ENDPOINT, {
+            email: email
+        });
+        return {
+            response: response.data,
+            statusCode: response.status
+        };
+    } catch (error) {
+        return {
+            error: error.response.data,
+            statusCode: error.status,
+        };
+    }
+};
+
+const RESET_ENDPOINT = 'auth/reset-password';
+
+export const resetPassword = async (otp, password) => {
+    try {
+        const response = await request.post(RESET_ENDPOINT, {
+            otp: otp,
+            password: password
+        });
+        return {
+            response: response.data,
+            statusCode: response.status
+        };
+    } catch (error) {
+        return {
+            error: error.response.data,
+            statusCode: error.status,
         };
     }
 };
