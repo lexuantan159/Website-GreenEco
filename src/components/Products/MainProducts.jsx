@@ -1,45 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CategoryProducts from './CategoryProducts/CategoryProducts';
 import Item from './Item.jsx/Item';
-import * as productsService from '../../services/productsServices';
 import { Spinner } from '@material-tailwind/react';
+import ProductsContext from '../../context/productsProvider';
 
 const MainProducts = () => {
+    const { productsList } = useContext(ProductsContext);
     const [category, setCategory] = useState('All');
-    const [products, setProducts] = useState([]);
     const [productsCategory, setProductsCategory] = useState([]);
     const [loadings, setLoadings] = useState(true);
 
-    const handleDivideProducts = (category, products) => {
-        return category === 'All' ? products : products.filter((product) => product.category === category);
+    const handleDivideProducts = (category) => {
+        return category === 'All' ? productsList : productsList.filter((product) => product.category === category);
     };
 
     const handleChangeCategory = (category) => {
         setCategory(category);
-        const productsList = handleDivideProducts(category, products);
+        const productsList = handleDivideProducts(category);
         setProductsCategory(productsList);
     };
 
     useEffect(() => {
-        if (products.length === 0) {
-            const fetchProducts = async () => {
-                const getProducts = await productsService.getProducts();
-                if (getProducts.statusCode === 200) {
-                    const products = getProducts.products;
-                    setProducts(products);
-                    setProductsCategory(products);
-                    setLoadings(false);
-                } else {
-                    setLoadings(true);
-                    console.log(getProducts.error);
-                }
-            };
-            fetchProducts();
+        if (productsList.length === 0) {
+            setLoadings(true);
+        } else {
+            loadings && setProductsCategory(productsList);
+            loadings && setLoadings(false);
         }
     });
 
     return (
-        <div className="max-w-[1024px] mx-auto px-7 mb-24">
+        <div className="max-w-[1100px] mb-32 mx-auto px-6 md:px-4 lg:px-0">
             <CategoryProducts category={category} onCategoryChange={handleChangeCategory} />
 
             {loadings ? (

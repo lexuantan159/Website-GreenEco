@@ -1,35 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import * as productsService from '../../services/productsServices';
+import React, { useContext, useEffect, useState } from 'react';
 import ProductsSlide from '../ProductsSlide/ProductsSlide';
 import { Spinner } from '@material-tailwind/react';
+import ProductsContext from '../../context/productsProvider';
 
 const MainHome = () => {
-    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const titleProductsSlide = 'Top Products';
+    const { productsList } = useContext(ProductsContext);
 
     useEffect(() => {
-        document.title = 'Home';
-
-        if (products.length === 0) {
-            const fetchProducts = async () => {
-                const response = await productsService.getProducts();
-                const listProducts = response.products;
-                console.log(listProducts);
-                if(response.statusCode === 200) {
-                    setProducts(() => listProducts) 
-                    setLoading(false)
-                } else {
-                    console.log(response.error);
-                }
-            };
-
-            fetchProducts();
-        }
-    });
+        productsList.length === 0 ?  setLoading(true):setLoading(false) 
+    },[]);
 
     return (
-        <div className="container mx-auto px-6 md:px-4 lg:px-20">
+        <div className="container mb-32 mx-auto px-6 md:px-4 lg:px-0">
             <div className="relative h-[560px] mt-10 mb-16">
                 <img
                     className="h-full w-full object-cover rounded-xl"
@@ -55,8 +39,8 @@ const MainHome = () => {
             {loading ? (
                 <Spinner className="h-12 w-12 mt-10 mx-auto" />
             ) : (
-                products.length > 0 && (
-                    <ProductsSlide title={titleProductsSlide} products={products} numOfProducts={6} />
+                productsList.length > 0 && (
+                    <ProductsSlide title={titleProductsSlide} products={productsList} numOfProducts={6} />
                 )
             )}
 

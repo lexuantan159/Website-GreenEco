@@ -6,14 +6,17 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from './context/authProvider';
 import { ThemeProvider } from '@material-tailwind/react';
+import { ProductsProvider } from './context/productsProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Router>
         <AuthProvider>
-            <ThemeProvider>
-                <App />
-            </ThemeProvider>
+            <ProductsProvider>
+                <ThemeProvider>
+                    <App />
+                </ThemeProvider>
+            </ProductsProvider>
         </AuthProvider>
     </Router>,
 );

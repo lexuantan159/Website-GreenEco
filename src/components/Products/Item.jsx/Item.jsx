@@ -4,10 +4,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Item = ({ product }) => {
+
+    const truncatedString = (str, num) => {
+        if (str?.length > num) {
+          return str.slice(0, num) + "...";
+        } else {
+          return str;
+        }
+      };
+
     return (
         <div className="w-full mb-7 shadow rounded">
             <div className="relative w-full h-[265px] group">
-                <Link to="/about">
+                <Link to={`/products/${product.id}`} >
                     <img className="w-full h-full object-cover rounded-t" src={product.imageUrl} alt={product.title} />
                     <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center w-full rounded-t bg-black/25 text-center opacity-0 group-hover:opacity-100 transition-all"></div>
                 </Link>
@@ -22,8 +31,8 @@ const Item = ({ product }) => {
             </div>
 
             <div className="text-center mt-3 mb-3">
-                <h4 className="text-lg font-medium px-2">{product.title}</h4>
-                <p className="text-lg font-bold">{product.price}$</p>
+                <h4 className="text-lg font-medium px-2">{truncatedString(product.title, 23)}</h4>
+                <p className="text-lg font-bold text-primaryColor">{product.price}$</p>
             </div>
         </div>
     );
