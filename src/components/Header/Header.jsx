@@ -10,7 +10,6 @@ const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useLocation();
 
-
     useEffect(() => {
         auth.accessToken === undefined ? setHasUser(false) : setHasUser(true);
         // console.log(auth.fullName);
@@ -36,14 +35,15 @@ const Header = () => {
                         </a>
                     </li>
                     <li>
-                        <a
-                            className={`pr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
-                                router.pathname === '/products' ? 'text-primaryColor' : 'text-black'
-                            }`}
-                            href="/products"
-                        >
-                            Our Products
-                        </a>
+                        <Link to="/products">
+                            <p
+                                className={`pr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
+                                    router.pathname === '/products' ? 'text-primaryColor' : 'text-black'
+                                }`}
+                            >
+                                Our Products
+                            </p>
+                        </Link>
                     </li>
                     <li>
                         <div
@@ -60,12 +60,18 @@ const Header = () => {
                             >
                                 <ul className="py-4">
                                     <li>
-                                        <a href="/cart" className="pl-3 mb-2 text-white hover:text-primaryColor font-thin">
+                                        <a
+                                            href="/cart"
+                                            className="pl-3 mb-2 text-white hover:text-primaryColor font-thin"
+                                        >
                                             Shopping Cart
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/checkout" className="pl-3 text-white hover:text-primaryColor font-thin">
+                                        <a
+                                            href="/checkout"
+                                            className="pl-3 text-white hover:text-primaryColor font-thin"
+                                        >
                                             Checkout
                                         </a>
                                     </li>
@@ -99,7 +105,9 @@ const Header = () => {
                     {hasUser ? (
                         <Link to="/user">
                             <div className="hidden lg:flex lg:justify-center lg:items-center">
-                                <h3 className="text-[#252525] text-sm mr-2 font-bold">{auth.fullName || "Name User"}</h3>
+                                <h3 className="text-[#252525] text-sm mr-2 font-bold">
+                                    {auth.fullName || 'Name User'}
+                                </h3>
                                 <img
                                     className="h-[36px] w-[36px] rounded-[50%] border-4 border-[#ccc]"
                                     src="https://english4u.com.vn/Uploads/images/bai-viet-ve-mot-nguoi-noi-tieng-bang-tieng-anh2.jpg"
