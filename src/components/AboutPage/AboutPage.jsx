@@ -8,7 +8,7 @@ const statistics = [
 function AboutPage() {
     return (
         <div className="">
-            <div className="mx-auto py-32">
+            <div className="mx-auto py-20">
                 <div className="w-full h-full flex justify-center items-center">
                     <div className="w-full mx-auto px-5 flex justify-center items-center">
                         <div className="mx-16 text-black text-center">
@@ -32,7 +32,7 @@ function AboutPage() {
                     <div className="m-auto h-full flex items-center justify-center text-center">
                         {statistics.map((stat) => (
                             <div className="px-16" key={stat.label}>
-                                <div className="text-greenColor text-6xl font-bold mb-2">{stat.value}</div>
+                                <div className="text-primaryColor text-6xl font-bold mb-2">{stat.value}</div>
                                 <div className="text-textColor text-lg font-bold">{stat.label}</div>
                             </div>
                         ))}
