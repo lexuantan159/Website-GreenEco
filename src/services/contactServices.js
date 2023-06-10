@@ -7,7 +7,6 @@ export const contact = async (name, email, message) => {
     console.log(data);
     try {
         const response = await request.post(CONTACT_ENDPOINT, { name:name, email: email, message:message});
-        console.log(response);
         return {
             response: response.data,
             statusCode: 200,

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ToastContainer, toast } from 'react-toastify';
 import { faClock, faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
 import * as contactServices from '../../services/contactServices';
+import { Spinner } from '@material-tailwind/react';
 
 const ContactPage = () => {
     const [name, setName] = useState('');
@@ -10,6 +11,7 @@ const ContactPage = () => {
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [submit, setSubmit] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const notify = (message) =>
         toast(message, {
@@ -26,21 +28,31 @@ const ContactPage = () => {
         if (submit) {
             const fetchContact = async () => {
                 const contact = await contactServices.contact(name, email, message);
-                contact.statusCode === 200
-                    ? notify(contact.response.message)
-                    : notify(contact.error.response.data.message);
+                if (contact.statusCode === 200) {
+                    setLoading(false);
+                    setSubmit(false);
+                    notify(contact.response.message);
+                } else {
+                    notify(contact.error.response.data.message);
+                    setLoading(false);
+                    setSubmit(false);
+                }
             };
             fetchContact();
         }
-    },[]);
+    }, [submit]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const emailRegex = /\S+@\S+.\S+/;
         const isEmailValid = emailRegex.test(email);
         if (isEmailValid && email.endsWith('@gmail.com')) {
-            setSubmit(!submit);
+            setSubmit(true);
+            setLoading(true);
         } else {
             // email is not valid or does not end with "@gmail.com"
+            setSubmit(false);
+            setLoading(false);
             notify('Email is not valid with "@gmail.com"');
         }
     };
@@ -75,12 +87,6 @@ const ContactPage = () => {
                     onSubmit={(e) => handleSubmit(e)}
                     className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-28 mx-auto w-[400px] lg:w-[800px] border-spacing-1"
                 >
-                    {error && (
-                        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
-                            <p>{error}</p>
-                        </div>
-                    )}
-
                     <div className="mb-4">
                         <label className="block text-gray-700 font-bold mb-2" htmlFor="name">
                             Name
@@ -125,7 +131,13 @@ const ContactPage = () => {
                             type="submit"
                             onClick={handleSubmit}
                         >
-                            Submit
+                            {loading ? (
+                                <div className="flex items-center justify-center">
+                                    <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
+                                </div>
+                            ) : (
+                                <span>Submit</span>
+                            )}
                         </button>
                     </div>
                 </form>
