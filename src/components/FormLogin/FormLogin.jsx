@@ -1,6 +1,7 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ToastContainer, toast } from 'react-toastify';
+import { Spinner } from '@material-tailwind/react';
 import 'react-toastify/dist/ReactToastify.css';
 import React, { useEffect, useState, useContext } from 'react';
 import AuthContext from '../../context/authProvider';
@@ -13,7 +14,8 @@ const FormLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [hiddenPass, setHiddenPass] = useState(true);
-    const [toggleSubmit, setToggleSubmit] = useState(false);
+    const [submit, setSubmit] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleHiddenPassword = () => {
         hiddenPass ? setHiddenPass(false) : setHiddenPass(true);
@@ -32,17 +34,13 @@ const FormLogin = () => {
         });
 
     useEffect(() => {
-        document.title = 'Log In';
-    });
-
-    useEffect(() => {
-        if (email !== '' || password !== '') {
+        if (submit) {
             const fetchAuth = async () => {
                 const authentication = await authServices.authentication(email, password);
 
-                if ( authentication.statusCode === 200) {
+                if (authentication.statusCode === 200) {
                     const accessToken = authentication.response.accessToken;
-                    
+
                     const authorization = await authServices.authorization(accessToken);
                     const fullName = authorization.fullName;
                     setAuth({ email, password, accessToken, fullName });
@@ -53,28 +51,39 @@ const FormLogin = () => {
                         else notify('Login failed');
                     } else {
                         notify(authorization.error.response.data.message);
+                        setLoading(false);
+                        setSubmit(false);
                     }
                 } else {
                     notify(authentication.error.response.data.message);
+                    setLoading(false);
+                    setSubmit(false);
                 }
             };
 
             fetchAuth();
         }
-    }, [toggleSubmit]);
+    }, [email, navigate, password, setAuth, submit]);
 
-    const handleLogin = (e) => {
-        e.preventDefault();
+    const handleCheckInput = () => {
         const emailRegex = /\S+@\S+\.\S+/;
         const isEmailValid = emailRegex.test(email);
 
         if (isEmailValid && email.endsWith('@gmail.com')) {
             // email is valid and ends with "@gmail.com"
-            setToggleSubmit(!toggleSubmit);
+            setSubmit(true);
+            setLoading(true);
         } else {
             // email is not valid or does not end with "@gmail.com"
+            setSubmit(false);
+            setLoading(false);
             notify('Email is not valid with "@gmail.com"');
         }
+    };
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        handleCheckInput();
     };
 
     return (
@@ -135,11 +144,14 @@ const FormLogin = () => {
                                         Forgot Password?
                                     </a>
                                 </div>
-                                <button
-                                    onClick={handleLogin}
-                                    className="py-3 bg-primaryColor w-full mb-3 rounded-lg text-xl font-bold text-white  opacity-100 active:opacity-80"
-                                >
-                                    Log In
+                                <button className="py-3 bg-primaryColor w-full mb-3 rounded-lg text-xl font-bold text-white  opacity-100 active:opacity-80">
+                                    {loading ? (
+                                        <div className="flex items-center justify-center">
+                                            <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
+                                        </div>
+                                    ) : (
+                                        <span>Log In</span>
+                                    )}
                                 </button>
                             </form>
 

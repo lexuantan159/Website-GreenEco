@@ -5,12 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from './context/authProvider';
+import { ThemeProvider } from '@material-tailwind/react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Router>
         <AuthProvider>
-            <App />
+            <ThemeProvider>
+                <App />
+            </ThemeProvider>
         </AuthProvider>
     </Router>,
 );

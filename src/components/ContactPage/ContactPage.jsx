@@ -8,7 +8,7 @@ const ContactPage = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
-    const [error, setrror] = useState('');
+    const [error, setError] = useState('');
     const [submit, setSubmit] = useState(false);
 
     const notify = (message) =>
@@ -32,7 +32,7 @@ const ContactPage = () => {
             };
             fetchContact();
         }
-    });
+    },[]);
     const handleSubmit = (e) => {
         e.preventDefault();
         const emailRegex = /\S+@\S+.\S+/;

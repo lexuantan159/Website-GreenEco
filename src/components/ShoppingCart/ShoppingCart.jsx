@@ -66,7 +66,7 @@ const ShoppingCart = () => {
                 </div>
             </div>
 
-            <div className="flex shadow-md my-10 mx-auto mt-10 w-[70%]">
+            <div className="flex shadow-md my-10 mx-auto mt-10 w-[80%]">
                 <div className="w-3/4 bg-white px-10 py-10">
                     <div className="flex justify-between border-b pb-8">
                         <h1 className="font-bold text-2xl">Selected Products</h1>

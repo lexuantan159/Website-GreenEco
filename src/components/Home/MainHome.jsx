@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import * as productsService from '../../services/productsServices';
 import ProductsSlide from '../ProductsSlide/ProductsSlide';
+import { Spinner } from '@material-tailwind/react';
 
 const MainHome = () => {
     const [products, setProducts] = useState([]);
-    const titleProductsSlide = "Top Products";
-    
+    const [loading, setLoading] = useState(true);
+    const titleProductsSlide = 'Top Products';
+
     useEffect(() => {
-        if(products.length === 0) {
+        document.title = 'Home';
+
+        if (products.length === 0) {
             const fetchProducts = async () => {
                 const response = await productsService.getProducts();
-                const listProducts = response.productData;
-
-                setProducts(() => listProducts);
+                const listProducts = response.products;
+                console.log(listProducts);
+                if(response.statusCode === 200) {
+                    setProducts(() => listProducts) 
+                    setLoading(false)
+                } else {
+                    console.log(response.error);
+                }
             };
-            
+
             fetchProducts();
         }
     });
-    console.log(products);
 
     return (
         <div className="container mx-auto px-6 md:px-4 lg:px-20">
@@ -44,9 +52,13 @@ const MainHome = () => {
                 </div>
             </div>
 
-            {
-                products.length > 0 && <ProductsSlide title = {titleProductsSlide} products = {products} numOfProducts={6} />
-            }
+            {loading ? (
+                <Spinner className="h-12 w-12 mt-10 mx-auto" />
+            ) : (
+                products.length > 0 && (
+                    <ProductsSlide title={titleProductsSlide} products={products} numOfProducts={6} />
+                )
+            )}
 
             <div className="my-20">
                 <div className="">
@@ -71,8 +83,6 @@ const MainHome = () => {
                             </p>
                         </div>
                     </div>
-
-                   
 
                     <div className="w-full px-3 mb-4">
                         <div className="w-full h-[360px]">
