@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ToastContainer, toast } from 'react-toastify';
+
 
 import AuthContext from '../../context/authProvider';
 import { updateUserPassword } from '../../services/userServices';
@@ -20,41 +20,25 @@ const ChangePassword = () => {
 
     const handleChangePassword = async (event) => {
         event.preventDefault(); // Ngăn chặn trình duyệt tải lại trang
-     
-        // if (oldPassword === '' || newPassword === '' || confirmPassword === '') {
-        //     setErrorMessage('Please fill in all fields');
-        //     return;
-        // }
-        // if (oldPassword !== auth.password) {
-        //     setErrorMessage('The old password was entered incorrectly. Please try again');
-        //     return;
-        // }
-        // if (newPassword !== confirmPassword) {
-        //     setErrorMessage('New password and confirm password do not match. Please try again.');
-        //     return;
-        // }
-        // try {
-            const response = await updateUserPassword(auth.accessToken, oldPassword, newPassword);
-           
-            
-            if (response.statusCode === 200) {
-               console.log(response.message);
-                // Perform any additional actions on success
-            } else {
-                console.log(response.errorMessage);
-            }
-        //         setErrorMessage(response.error.message +"|||" + response.error.statusCode );
-        //         // Perform any additional actions on error
-        //     }
-        // } catch (error) {
-        //     setErrorMessage('An error occurred. Please try again.');
-        //     // Perform any additional error handling
-        // }
-    };
-    useEffect(() => {
-        //console.log(auth.accessToken);
-    }, []);
 
+        if (oldPassword !== newPassword) {
+            setErrorMessage('The old password was entered incorrectly. Please try again');
+            return;
+        } else if (oldPassword === newPassword) {
+            setErrorMessage('The old password and the new password are the same');
+            return;
+        } else if (newPassword !== confirmPassword) {
+            setErrorMessage('New password and confirm password do not match. Please try again.');
+            return;
+        } else {
+            const response = await updateUserPassword(auth.accessToken, oldPassword, newPassword);
+            if (response.statusCode === 200) {
+                setErrorMessage(response.message);
+            } else {
+                setErrorMessage(response.errorMessage);
+            }
+        }
+    };
     return (
         <form>
             <div className="flex flex-col ">
@@ -64,7 +48,7 @@ const ChangePassword = () => {
                 <div className="relative">
                     <input
                         id="passwordInput"
-                        className="w-full px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
+                        className="w-11/12 px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                         type={hiddenPass ? 'password' : 'text'}
                         required
                         placeholder="Input Old PassWord"
@@ -74,13 +58,13 @@ const ChangePassword = () => {
                     {hiddenPass ? (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-6"
+                            className="absolute top-5 right-14"
                             icon={faEyeSlash}
                         />
                     ) : (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-6"
+                            className="absolute top-5 right-14"
                             icon={faEye}
                         />
                     )}
@@ -92,7 +76,7 @@ const ChangePassword = () => {
                 <div className="relative">
                     <input
                         id="passwordInput"
-                        className="w-full px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
+                        className="w-11/12 px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                         type={hiddenPass ? 'password' : 'text'}
                         required
                         placeholder="Input New PassWord"
@@ -102,13 +86,13 @@ const ChangePassword = () => {
                     {hiddenPass ? (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-6"
+                            className="absolute top-5 right-14"
                             icon={faEyeSlash}
                         />
                     ) : (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-6"
+                            className="absolute top-5 right-14"
                             icon={faEye}
                         />
                     )}
@@ -120,7 +104,7 @@ const ChangePassword = () => {
                 <div className="relative">
                     <input
                         id="passwordInput"
-                        className="w-full px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
+                        className="w-11/12 px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                         type={hiddenPass ? 'password' : 'text'}
                         required
                         placeholder="Input Confirm PassWord"
@@ -130,13 +114,13 @@ const ChangePassword = () => {
                     {hiddenPass ? (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-6"
+                            className="absolute top-5 right-14"
                             icon={faEyeSlash}
                         />
                     ) : (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-6"
+                            className="absolute top-5 right-14"
                             icon={faEye}
                         />
                     )}
@@ -144,7 +128,7 @@ const ChangePassword = () => {
             </div>
             {errorMessage && <div className="text-red-500 mt-4">{errorMessage}</div>}
             <button
-                className="border p-3 ml-96 rounded-lg bg-primaryColor text-white mt-4 "
+                className="border px-4 py-2 ml-96 rounded-lg bg-primaryColor text-white mt-4 "
                 type="submit"
                 onClick={handleChangePassword}
             >

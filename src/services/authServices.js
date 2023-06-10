@@ -26,6 +26,8 @@ export const authorization = async (accessToken) => {
         });
         return {
             fullName: responseRoles.data.userData.fullname,
+            address : responseRoles.data.userData.address,
+            phone : responseRoles.data.userData.phone,          
             roles: responseRoles.data.userData.Role.value,
             statusCode: responseRoles.status,
         };
