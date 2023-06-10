@@ -48,10 +48,15 @@ const FormLogin = () => {
 
                 if (authentication.statusCode === 200) {
                     const accessToken = authentication.response.accessToken;
-
                     const authorization = await authServices.authorization(accessToken);
                     const fullName = authorization.fullName;
-                    setAuth({ email, password, accessToken, fullName });
+                    const phoneNumber = authorization.phone;
+                    const address = authorization.address;
+                
+                    setAuth({ email, password, accessToken, fullName , phoneNumber ,address });
+
+                  
+
 
                     if (authorization.statusCode === 200) {
                         if (authorization.roles === 'Admin') navigate('/admin');
