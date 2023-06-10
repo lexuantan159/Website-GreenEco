@@ -146,6 +146,10 @@ const UserInfomation = () => {
         fetchData();
       }, [auth]);
 
+      //responsive
+      
+      
+
     return (
         <>
             <ToastContainer />

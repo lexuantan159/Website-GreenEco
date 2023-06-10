@@ -3,18 +3,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import AuthContext from '../../context/authProvider';
+import * as userServer from '../../services/userServices'
 
 const Header = () => {
     const { auth } = useContext(AuthContext);
+    const [fullName , setFullname] = useState('');
     const [hasUser, setHasUser] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const router = useLocation();
 
 
     useEffect(() => {
-        auth.accessToken === undefined ? setHasUser(false) : setHasUser(true);
-        // console.log(auth.fullName);
-        // console.log(auth.accessToken);
+        const fetchData = async () => {
+            if (auth.accessToken) {
+              const response = await userServer.getUser(auth.accessToken);        
+                setFullname(response.fullname);
+              setHasUser(true);
+            } else {
+              setHasUser(false);
+            }
+          };
+        
+          fetchData();
+      
+        
     });
 
     return (
@@ -99,7 +111,7 @@ const Header = () => {
                     {hasUser ? (
                         <Link to="/userinformation">
                             <div className="hidden lg:flex lg:justify-center lg:items-center">
-                                <h3 className="text-[#252525] text-sm mr-2 font-bold">{auth.fullName || "Name User"}</h3>
+                                <h3 className="text-[#252525] text-sm mr-2 font-bold">{fullName || "Name User"}</h3>
                                 <img
                                     className="h-[36px] w-[36px] rounded-[50%] border-4 border-[#ccc]"
                                     src="https://english4u.com.vn/Uploads/images/bai-viet-ve-mot-nguoi-noi-tieng-bang-tieng-anh2.jpg"
