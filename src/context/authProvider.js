@@ -4,20 +4,18 @@ const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({});
-    console.log(auth);
 
-    window.addEventListener('beforeunload', () => {
-        const myDataString = JSON.stringify(auth);
-        localStorage.setItem('auth', myDataString);
-    });
 
     useEffect(() => {
         const myDataString = localStorage.getItem('auth');
-        if (myDataString) {
+        console.log(myDataString);
+        if ( myDataString !== null ) {
             const myDataObject = JSON.parse(myDataString);
             setAuth(myDataObject);
+        }else {
+            setAuth({});
         }
-    }, []);
+    },[]);
 
     return <AuthContext.Provider value={{ auth, setAuth }}>{children}</AuthContext.Provider>;
 };

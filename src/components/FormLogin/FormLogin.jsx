@@ -10,7 +10,7 @@ import * as authServices from '../../services/authServices';
 
 const FormLogin = () => {
     const navigate = useNavigate();
-    const { setAuth } = useContext(AuthContext);
+    const { auth, setAuth } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [hiddenPass, setHiddenPass] = useState(true);
@@ -52,6 +52,7 @@ const FormLogin = () => {
                     const authorization = await authServices.authorization(accessToken);
                     const fullName = authorization.fullName;
                     setAuth({ email, password, accessToken, fullName });
+                    localStorage.setItem('auth',JSON.stringify({ email, password, accessToken, fullName }));
 
                     if (authorization.statusCode === 200) {
                         if (authorization.roles === 'Admin') navigate('/admin');
