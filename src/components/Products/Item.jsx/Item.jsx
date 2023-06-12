@@ -3,30 +3,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Item = ({ product }) => {
-
+const Item = ({ product, onAddProduct }) => {
     const truncatedString = (str, num) => {
         if (str?.length > num) {
-          return str.slice(0, num) + "...";
+            return str.slice(0, num) + '...';
         } else {
-          return str;
+            return str;
         }
-      };
+    };
 
     return (
         <div className="w-full mb-7 shadow rounded">
             <div className="relative w-full h-[265px] group">
-                <Link to={`/products/${product.id}`} >
+                <Link to={`/products/${product.id}`}>
                     <img className="w-full h-full object-cover rounded-t" src={product.imageUrl} alt={product.title} />
                     <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center w-full rounded-t bg-black/25 text-center opacity-0 group-hover:opacity-100 transition-all"></div>
                 </Link>
                 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-center">
-                    <Link to="/">
-                        <FontAwesomeIcon
-                            className="p-3 text-lg text-textColor font-bold bg-white rounded-[50%] hover:rotate-[360deg] hover:bg-primaryColor hover:text-white opacity-0 group-hover:opacity-100 translate-y-8  group-hover:translate-y-0 transition-all"
-                            icon={faCartPlus}
-                        />
-                    </Link>
+                    <FontAwesomeIcon
+                        className="p-3 text-lg text-textColor font-bold bg-white rounded-[50%] hover:rotate-[360deg] hover:bg-primaryColor hover:text-white opacity-0 group-hover:opacity-100 translate-y-8  group-hover:translate-y-0 transition-all"
+                        icon={faCartPlus}
+                        onClick={() => onAddProduct(product.id)}
+                    />
                 </div>
             </div>
 

@@ -39,21 +39,20 @@ const ProductDetailForm = () => {
             setProduct(productsList.filter((product) => product.id === param.id)[0]);
             setLoading(false);
         }
-    });
+    }, [param.id, productsList]);
 
     const addProduct = async (token, id, quantity) => {
+        notify('Add product successfully');
         const response = await addProductServices.addProduct(token, id, quantity);
-        console.log(response);
-        response.statusCode  === 200 ? notify(response.message)  : notify(response.error);
-
+        response.statusCode !== 200 && notify(response.error);
     };
 
     const handleAddProducts = () => {
-        if (auth.accessToken !== undefined) {
-            addProduct(auth.accessToken,product.id, count);
-        } else {
-            notify('Login Before Add Product')
-        }
+        if (count > 0) {
+            auth.accessToken !== undefined
+                ? addProduct(auth.accessToken, product.id, count)
+                : notify('Login Before Add Product');
+        } else notify('Quantity Not Available');
     };
 
     const decrement = () => {
@@ -202,7 +201,14 @@ const ProductDetailForm = () => {
                         </div>
                     )}
                 </div>
-                <div><ProductsSlide title="Related Products" products={productsList} numOfProducts={6} category={product.category} /></div>
+                <div>
+                    <ProductsSlide
+                        title="Related Products"
+                        products={productsList}
+                        numOfProducts={6}
+                        category={product.category}
+                    />
+                </div>
             </div>
         </>
     );
