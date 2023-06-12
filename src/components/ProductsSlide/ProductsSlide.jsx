@@ -1,30 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Link } from 'react-router-dom';
 
-const ProductsSlide = ({ title, products , numOfProducts = 6 }) => {
-
-
-    const listProducts = (passProducts) => {
+const ProductsSlide = ({ title, products, numOfProducts = 6, category = 'All' }) => {
+    const randomProducts = (products, numOfProducts) => {
         var randomProducts = [];
         var flag = 0;
         while (flag <= numOfProducts) {
-            var randomNumber = Math.floor(Math.random() * passProducts.length);
-            if (!randomProducts.includes(passProducts[randomNumber])) {
-                randomProducts.push(passProducts[randomNumber]);
+            var randomNumber = Math.floor(Math.random() * products.length);
+            if (!randomProducts.includes(products[randomNumber])) {
+                randomProducts.push(products[randomNumber]);
             }
             flag++;
         }
         return randomProducts;
     };
 
+    const listProducts = (passProducts) => {
+        const products = category=== "All"? passProducts: passProducts.filter((product) => product.category === category);
+        console.log(products);
+        if (products.length < 6){
+            console.log(products);
+            return products;
+        } 
+        else {
+            console.log(randomProducts(products, numOfProducts));
+            return randomProducts(products, numOfProducts);
+        }
+    };
+
+    const lowProducts = (passProducts, numOfProducts) => {
+        const products = category=== "All"? passProducts: passProducts.filter((product) => product.category === category);
+        if (products.length < numOfProducts)return 3;
+        return 4;
+    }
 
     var settings = {
         dots: true,
         infinite: true,
         speed: 200,
-        slidesToShow: 4,
+        slidesToShow: lowProducts(products, numOfProducts),
         slidesToScroll: 1,
         initialSlide: 0,
         autoplay: true,
@@ -70,7 +87,7 @@ const ProductsSlide = ({ title, products , numOfProducts = 6 }) => {
                     return (
                         <div key={product.id} className="inline-block">
                             <div className="w-auto mx-3">
-                                <a href="/products">
+                                <Link to={`/products/${product.id}`}>
                                     <div className="w-full h-[300px]">
                                         <img
                                             className="w-full h-full object-cover rounded"
@@ -78,7 +95,7 @@ const ProductsSlide = ({ title, products , numOfProducts = 6 }) => {
                                             alt={product.title}
                                         />
                                     </div>
-                                </a>
+                                </Link>
                                 <div className="text-center mt-2">
                                     <h3 className=" text-xl font-bold">{product.title}</h3>
                                     <p className="text-[#252525] text-lg font-bold ">{product.price}$</p>
