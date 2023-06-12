@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const myDataString = localStorage.getItem('auth');
-        console.log(myDataString);
         if ( myDataString !== null ) {
             const myDataObject = JSON.parse(myDataString);
             setAuth(myDataObject);

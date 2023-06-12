@@ -3,6 +3,7 @@ import CategoryProducts from './CategoryProducts/CategoryProducts';
 import Item from './Item.jsx/Item';
 import { Spinner } from '@material-tailwind/react';
 import ProductsContext from '../../context/productsProvider';
+import Search from './Search/Search';
 
 const MainProducts = () => {
     const { productsList } = useContext(ProductsContext);
@@ -21,18 +22,19 @@ const MainProducts = () => {
     };
 
     useEffect(() => {
+        console.log(1);
         if (productsList.length === 0) {
             setLoadings(true);
         } else {
             loadings && setProductsCategory(productsList);
             loadings && setLoadings(false);
         }
-    });
+    }, [loadings, productsCategory, productsList]);
 
     return (
         <div className="max-w-[1100px] mb-32 mx-auto px-6 md:px-4 lg:px-0">
             <CategoryProducts category={category} onCategoryChange={handleChangeCategory} />
-
+            <Search/>
             {loadings ? (
                 <Spinner className="h-12 w-12 mt-10 mx-auto" />
             ) : (

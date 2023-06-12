@@ -11,7 +11,6 @@ const Header = () => {
     const router = useLocation();
 
     useEffect(() => {
-        console.log(auth);
         if (Object.keys(auth).length === 0) {
             setHasUser(false);
         } else {
@@ -20,7 +19,6 @@ const Header = () => {
     }, [auth]);
 
     const handleLogOut = () => {
-        console.log(auth);
         setAuth({});
         localStorage.removeItem('auth');
         setHasUser(false);
@@ -148,6 +146,7 @@ const Header = () => {
                     </div>
                 </div>
             </header>
+
         </div>
     );
 };

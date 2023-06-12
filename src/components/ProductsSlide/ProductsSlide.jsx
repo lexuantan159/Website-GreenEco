@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -20,13 +20,10 @@ const ProductsSlide = ({ title, products, numOfProducts = 6, category = 'All' })
 
     const listProducts = (passProducts) => {
         const products = category=== "All"? passProducts: passProducts.filter((product) => product.category === category);
-        console.log(products);
         if (products.length < 6){
-            console.log(products);
             return products;
         } 
         else {
-            console.log(randomProducts(products, numOfProducts));
             return randomProducts(products, numOfProducts);
         }
     };
