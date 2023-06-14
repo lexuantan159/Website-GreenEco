@@ -10,9 +10,7 @@ const router = [
     { path: '/signup', component: Signup },
     { path: '/cart', component: ShoppingCart },
     { path: '/checkout', component: Checkout },
-{ path: '/userinformation', component: UserIn4 },
-   
-
+    { path: '/userinformation', component: UserIn4 },
     { path: '/products/:id', component: ProductDetail },
     { path: '/forgot-password', component: ForgotPassword },
     { path: '/reset-password', component: ResetPassword },

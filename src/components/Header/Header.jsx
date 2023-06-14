@@ -7,6 +7,7 @@ import AuthContext from '../../context/authProvider';
 const Header = () => {
     const navigate = useNavigate();
     const { auth, setAuth } = useContext(AuthContext);
+
     const [hasUser, setHasUser] = useState(false);
     const router = useLocation();
 
