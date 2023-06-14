@@ -54,7 +54,7 @@ export const updateUserProfile = async (accessToken, email, fullname,phoneNumber
             {
                 email: email,
                 fullname: fullname,
-                phoneNumber: phoneNumber,
+                phone: phoneNumber,
             },
             {
                 headers: { Authorization: `Bearer ${accessToken}` },

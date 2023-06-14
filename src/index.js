@@ -7,15 +7,18 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from './context/authProvider';
 import { ThemeProvider } from '@material-tailwind/react';
 import { ProductsProvider } from './context/productsProvider';
+import { UsersProvider } from './context/usersProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Router>
         <AuthProvider>
             <ProductsProvider>
-                <ThemeProvider>
-                    <App />
-                </ThemeProvider>
+                <UsersProvider>
+                    <ThemeProvider>
+                        <App />
+                    </ThemeProvider>
+                </UsersProvider>
             </ProductsProvider>
         </AuthProvider>
     </Router>,
