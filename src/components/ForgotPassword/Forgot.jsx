@@ -12,8 +12,9 @@ const Forgot = () => {
     const [submit, setSubmit] = useState(false);
     const location = useLocation();
 
-    const notify = (message) =>
-        toast(message, {
+    const notify = (message, type) => {
+        const toastType = type === "success" ? toast.success : toast.error
+        return toastType(message, {
             position: 'top-center',
             autoClose: 1500,
             hideProgressBar: false,
@@ -21,8 +22,9 @@ const Forgot = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light',
+            theme: 'colored',
         });
+    }
 
     const toLowerEmail = (email) => {
         const username = email

@@ -18,17 +18,19 @@ const Reset = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const notify = (message) =>
-        toast(message, {
+    const notify = (message, type) => {
+        const toastType = type === "success" ? toast.success : toast.error
+        return toastType(message, {
             position: 'top-center',
-            autoClose: 3500,
+            autoClose: 1500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light',
+            theme: 'colored',
         });
+    }
     useEffect(() => {
         if (location.state?.toastMessage !== '') {
             notify(location.state?.toastMessage);

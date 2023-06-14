@@ -9,7 +9,6 @@ export const post = async (endPoints, option = {}) => {
     return response;
 };
 
-
 export const postProduct = async (endPoints, body = {}, header = {}) => {
     const response = await request.post(endPoints, body, header);
     return response;

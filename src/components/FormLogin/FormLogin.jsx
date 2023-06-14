@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ToastContainer, toast } from 'react-toastify';
@@ -52,14 +53,12 @@ const FormLogin = () => {
                     const fullName = authorization.fullName;
                     const phoneNumber = authorization.phone;
                     const address = authorization.address;
+                    const role = authorization.roles
                 
-                    setAuth({ email, password, accessToken, fullName , phoneNumber ,address });
-
-                  
-
+                    setAuth({ email, password, accessToken, fullName , phoneNumber ,address, role });
 
                     if (authorization.statusCode === 200) {
-                        if (authorization.roles === 'Admin') navigate('/admin');
+                        if (authorization.roles === 'Admin') navigate('/dashboard');
                         else if (authorization.roles === 'User') navigate('/');
                         else notify('Login failed');
                     } else {

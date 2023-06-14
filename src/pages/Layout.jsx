@@ -5,12 +5,11 @@ import Footer from '../components/Footer/Footer';
 
 const Layout = ({ hideHeaderPaths = [] }) => {
     const { pathname } = useLocation();
-
     return (
       <>
-        {!hideHeaderPaths.includes(pathname) && <Header />}
+        {!hideHeaderPaths.includes("/" + pathname.split("/")[1]) && <Header />}
         <Outlet />
-        {!hideHeaderPaths.includes(pathname) && <Footer />}
+        {!hideHeaderPaths.includes("/" + pathname.split("/")[1]) && <Footer />}
       </>
     );
 }
