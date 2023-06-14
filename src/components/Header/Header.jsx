@@ -1,134 +1,149 @@
-import { faBars, faGear } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/authProvider';
 
 const Header = () => {
-    const { auth } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const { auth, setAuth } = useContext(AuthContext);
     const [hasUser, setHasUser] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
     const router = useLocation();
 
     useEffect(() => {
-        auth.accessToken === undefined ? setHasUser(false) : setHasUser(true);
-        // console.log(auth.fullName);
-        // console.log(auth.accessToken);
-    });
+        if (Object.keys(auth).length === 0) {
+            setHasUser(false);
+        } else {
+            setHasUser(true);
+        }
+    }, [auth]);
+
+    const handleLogOut = () => {
+        setAuth({});
+        localStorage.removeItem('auth');
+        setHasUser(false);
+        navigate('/');
+    };
 
     return (
-        <div className="container mx-auto">
-            <header className="mx-auto max-w-5xl  h-[76px] flex justify-between sm:px-3 md:px-10 px-[10%] lg:px-0 lg:grid lg:grid-flow-col">
-                <div className="flex items-center">
-                    <h1 className="text-2xl font-bold text-primaryColor">GreenEco</h1>
-                </div>
+        <div className="">
+            <header className="">
+                <div className="container mx-auto h-[76px]  flex justify-between sm:px-3 md:px-10 px-[10%] lg:px-10 lg:grid lg:grid-flow-col">
+                    <div className="flex items-center">
+                        <h1 className="text-2xl font-bold text-primaryColor">GreenEco</h1>
+                    </div>
 
-                <ul className=" px-3 lg:flex lg:items-center ">
-                    <li>
-                        <a
-                            className={`pr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
-                                router.pathname === '/' ? 'text-primaryColor' : 'text-black'
-                            }`}
-                            href="/"
-                        >
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <Link to="/products">
-                            <p
-                                className={`pr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
-                                    router.pathname === '/products' ? 'text-primaryColor' : 'text-black'
-                                }`}
-                            >
-                                Our Products
-                            </p>
-                        </Link>
-                    </li>
-                    <li>
-                        <div
-                            className="relative pr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear"
-                            href="/page"
-                            onMouseEnter={() => setIsOpen(true)}
-                            onMouseLeave={() => setIsOpen(false)}
-                        >
-                            Page
-                            <div
-                                className={`${
-                                    isOpen ? 'opacity-100' : 'opacity-0'
-                                } bg-gray-900 transition-opacity duration-300 absolute left-0 mt-2 z-10 w-40 rounded-lg`}
-                            >
-                                <ul className="py-4">
-                                    <li>
-                                        <a
-                                            href="/cart"
-                                            className="pl-3 mb-2 text-white hover:text-primaryColor font-thin"
-                                        >
-                                            Shopping Cart
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a
-                                            href="/checkout"
-                                            className="pl-3 text-white hover:text-primaryColor font-thin"
-                                        >
-                                            Checkout
-                                        </a>
-                                    </li>
-                                </ul>
+                    <ul className="px-3 lg:flex lg:items-center bg-white">
+                        <li className="block ">
+                            <Link to="/">
+                                <p
+                                    className={`mr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
+                                        router.pathname === '/' ? 'text-primaryColor' : 'text-black'
+                                    }`}
+                                >
+                                    Home
+                                </p>
+                            </Link>
+                        </li>
+                        <li className="block ">
+                            <Link to="/products">
+                                <p
+                                    className={`mr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
+                                        router.pathname === '/products' ? 'text-primaryColor' : 'text-black'
+                                    }`}
+                                >
+                                    Our Products
+                                </p>
+                            </Link>
+                        </li>
+                        <li className="block ">
+                            <div className="relative mr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear group">
+                                Page
+                                <div className="absolute top-6 hidden bg-transparent w-[45px] h-[12px] group-hover:block"></div>
+                                <div className="hidden bg-gray-900 transition-all duration-300 absolute left-0 mt-2 z-10 w-40 rounded-lg group-hover:block group-hover:opacity-100 opacity-0 ">
+                                    <ul className="py-4">
+                                        <li className="py-1">
+                                            <Link to="/cart">
+                                                <p className="pl-3 mb-2 text-white hover:text-primaryColor font-thin">
+                                                    Shopping Cart
+                                                </p>
+                                            </Link>
+                                        </li>
+                                        <li className="py-1">
+                                            <Link to="/checkout">
+                                                <p className="pl-3 text-white hover:text-primaryColor font-thin">
+                                                    Checkout
+                                                </p>
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li>
-                        <a
-                            className={`pr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
-                                router.pathname === '/about' ? 'text-primaryColor' : 'text-black'
-                            }`}
-                            href="/about"
-                        >
-                            About
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            className={`pr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
-                                router.pathname === '/contact' ? 'text-primaryColor' : 'text-black'
-                            }`}
-                            href="/contact"
-                        >
-                            Contact
-                        </a>
-                    </li>
-                </ul>
+                        </li>
+                        <li className="block ">
+                            <Link to="/about">
+                                <p
+                                    className={`mr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
+                                        router.pathname === '/about' ? 'text-primaryColor' : 'text-black'
+                                    }`}
+                                >
+                                    About
+                                </p>
+                            </Link>
+                        </li>
+                        <li className=" ">
+                            <Link to="/contact">
+                                <p
+                                    className={`mr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
+                                        router.pathname === '/contact' ? 'text-primaryColor' : 'text-black'
+                                    }`}
+                                >
+                                    Contact
+                                </p>
+                            </Link>
+                        </li>
+                    </ul>
 
-                <div className="h-full flex items-center">
-                    {hasUser ? (
-                        <Link to="/user">
-                            <div className="hidden lg:flex lg:justify-center lg:items-center">
-                                <h3 className="text-[#252525] text-sm mr-2 font-bold">
+                    <div className="h-full flex items-center">
+                        {hasUser ? (
+                            <button className="relative flex justify-center items-center group">
+                                <p className="text-lg text-textColor font-medium mr-3">
                                     {auth.fullName || 'Name User'}
-                                </h3>
-                                <img
-                                    className="h-[36px] w-[36px] rounded-[50%] border-4 border-[#ccc]"
-                                    src="https://english4u.com.vn/Uploads/images/bai-viet-ve-mot-nguoi-noi-tieng-bang-tieng-anh2.jpg"
-                                    alt="ImageUser"
+                                </p>
+                                <FontAwesomeIcon
+                                    className="rotate-90 group-hover:rotate-0 transition-all"
+                                    icon={faCaretDown}
                                 />
-                            </div>
-                        </Link>
-                    ) : (
-                        <div className="hidden lg:block">
-                            <Link to="/login">
-                                <button className="text-lg font-bold mr-3 hover:text-primaryColor">Log In</button>
-                            </Link>
-                            <Link to="/signup">
-                                <button className="text-lg text-white font-bold p-3 bg-primaryColor rounded">
-                                    Sign UP
-                                </button>
-                            </Link>
-                        </div>
-                    )}
+                                <div className="absolute top-7 left-0 right-0 hidden group-hover:block transition-all bg-white shadow rounded py-2 z-10">
+                                    <ul className="">
+                                        <li
+                                            onClick={() => navigate('/userinformation')}
+                                            className="my-1 text-textColor font-medium "
+                                        >
+                                            Profiles
+                                        </li>
 
-                    <FontAwesomeIcon icon={faBars} className="block lg:hidden text-2xl" />
+                                        <li onClick={handleLogOut} className="my-1 text-textColor font-medium ">
+                                            Log Out
+                                        </li>
+                                    </ul>
+                                </div>
+                            </button>
+                        ) : (
+                            <div className="">
+                                <Link to="/login">
+                                    <button className="text-lg font-bold mr-3 hover:text-primaryColor">Log In</button>
+                                </Link>
+                                <Link to="/signup">
+                                    <button className="text-lg text-white font-bold p-3 bg-primaryColor active:opacity-80 rounded">
+                                        Sign UP
+                                    </button>
+                                </Link>
+                            </div>
+                        )}
+
+                        <FontAwesomeIcon icon={faBars} className="block lg:hidden text-2xl" />
+                    </div>
                 </div>
             </header>
         </div>

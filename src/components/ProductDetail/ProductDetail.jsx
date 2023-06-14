@@ -1,20 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
-// import ProductsSlide from '../ProductsSlide/ProductsSlide';
+import ProductsSlide from '../ProductsSlide/ProductsSlide';
 import { useParams } from 'react-router-dom';
 import ProductsContext from '../../context/productsProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import { Spinner } from '@material-tailwind/react';
 import AuthContext from '../../context/authProvider';
 import * as addProductServices from '../../services/addProductServices';
+import * as feedbackServices from '../../services/feedbackServices';
 
 const ProductDetailForm = () => {
+    const inputRef = useRef();
     const { productsList } = useContext(ProductsContext);
     const { auth } = useContext(AuthContext);
     const [count, setCount] = useState(0);
     const [activeTab, setActiveTab] = useState('description');
-    const [feedbackText, setFeedbackText] = useState('');
     const [feedbackList, setFeedbackList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [product, setProduct] = useState({});
@@ -33,27 +34,47 @@ const ProductDetailForm = () => {
         });
 
     useEffect(() => {
+        if (param.id !== undefined) {
+            const feedback = async () => {
+                const feedback = await feedbackServices.getFeedback(param.id);
+                const listFeedback = feedback.statusCode === 200 && feedback.response;
+                if (listFeedback.length > 0) {
+                    setFeedbackList(
+                        listFeedback.map((feedback) => {
+                            return {
+                                name: feedback.User.fullname,
+                                comment: feedback.comment,
+                            };
+                        }),
+                    );
+                } else {
+                    setFeedbackList([]);
+                }
+            };
+
+            feedback();
+        }
+
         if (productsList.length === 0) {
             setLoading(true);
         } else {
             setProduct(productsList.filter((product) => product.id === param.id)[0]);
             setLoading(false);
         }
-    });
+    }, [param.id, productsList]);
 
     const addProduct = async (token, id, quantity) => {
+        notify('Add product successfully');
         const response = await addProductServices.addProduct(token, id, quantity);
-        console.log(response);
-        response.statusCode  === 200 ? notify(response.message)  : notify(response.error);
-
+        response.statusCode !== 200 && notify(response.error);
     };
 
     const handleAddProducts = () => {
-        if (auth.accessToken !== undefined) {
-            addProduct(auth.accessToken,product.id, count);
-        } else {
-            notify('Login Before Add Product')
-        }
+        if (count > 0) {
+            auth.accessToken !== undefined
+                ? addProduct(auth.accessToken, product.id, count)
+                : notify('Login Before Add Product');
+        } else notify('Quantity Not Available');
     };
 
     const decrement = () => {
@@ -62,11 +83,20 @@ const ProductDetailForm = () => {
         }
     };
 
+    const postFeedback = async (token, comment, productId) => {
+        setFeedbackList([...feedbackList, { name: auth.fullName, comment: comment }]);
+        const feedback = await feedbackServices.postFeedback(token, comment, productId);
+    };
+
     const handleFeedbackSave = () => {
-        if (feedbackText) {
-            setFeedbackList([...feedbackList, feedbackText]);
-            setFeedbackText('');
+        if (inputRef.current.value.trim() === '') {
+            notify('Feedback Value Not Available');
+        } else {
+            auth.accessToken !== undefined
+                ? postFeedback(auth.accessToken, inputRef.current.value.trim(), param.id)
+                : notify('Login Before Add Product');
         }
+        inputRef.current.value = '';
     };
 
     return (
@@ -100,14 +130,14 @@ const ProductDetailForm = () => {
 
                             <div className="flex items-center mb-2 mt-16">
                                 <button
-                                    className="bg-primaryColor hover:bg-blue-300 text-white font-bold py-2 px-4 rounded-l"
+                                    className="bg-primaryColor active:opacity-80 text-white font-bold py-2 px-4 rounded-l"
                                     onClick={decrement}
                                 >
                                     <FontAwesomeIcon icon={faMinus} />
                                 </button>
                                 <button className="bg-gray-300  text-gray-800 font-bold py-2 px-4 mx-2">{count}</button>
                                 <button
-                                    className="bg-primaryColor hover:bg-blue-300 text-white font-bold py-2 px-4  rounded-r"
+                                    className="bg-primaryColor active:opacity-80 text-white font-bold py-2 px-4  rounded-r"
                                     onClick={() => setCount(count + 1)}
                                 >
                                     <FontAwesomeIcon icon={faPlus} />
@@ -175,34 +205,49 @@ const ProductDetailForm = () => {
                             <p className="text-center text-lg font-medium">{product.description}</p>
                         </div>
                     ) : (
-                        <div>
-                            {feedbackList.map((feedback, index) => (
-                                <div key={index} className="block m-7">
-                                    <span className="font-bold text-lg block">ThienQuang</span>
-                                    <span className="ml-7">{feedback}</span>
-                                </div>
-                            ))}
-
+                        <div className="my-5">
                             <div className="flex justify-center px-9">
                                 <input
                                     type="text"
-                                    value={feedbackText}
-                                    onChange={(e) => setFeedbackText(e.target.value)}
-                                    className="p-2 mr-2 border border-gray-300 rounded w-96 "
+                                    ref={inputRef}
+                                    className="p-2 mr-2 border border-gray-300 focus:border-primaryColor outline-none rounded w-96 "
                                     placeholder="Enter your feedback"
+                                    required
                                 />
 
                                 <button
-                                    className="bg-primaryColor hover:bg-blue-300 text-white font-bold py-2 px-4 rounded w-24"
+                                    className="bg-primaryColor active:opacity-80 text-white font-bold py-2 px-4 rounded w-24"
                                     onClick={handleFeedbackSave}
                                 >
                                     Save
                                 </button>
                             </div>
+
+                            <ul className="max-w-[481px] my-8 mx-auto">
+                                {feedbackList.length > 0
+                                    ? feedbackList.map((feedback, index) => {
+                                          return (
+                                              <li key={index} className="my-4">
+                                                  <p className="font-bold text-lg">{feedback.name}</p>
+                                                  <p className="font-bold text-lg">
+                                                      Comments: <span className="font-medium">{feedback.comment}</span>
+                                                  </p>
+                                              </li>
+                                          );
+                                      })
+                                    : null}
+                            </ul>
                         </div>
                     )}
                 </div>
-                <div>{/* <ProductsSlide title="Related Products" /> */}</div>
+                <div>
+                    <ProductsSlide
+                        title="Related Products"
+                        products={productsList}
+                        numOfProducts={6}
+                        category={product.category}
+                    />
+                </div>
             </div>
         </>
     );
