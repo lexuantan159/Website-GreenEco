@@ -1,5 +1,5 @@
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons';
-import { faBagShopping, faDoorOpen, faHomeAlt, faHouse, faShirt, faShop, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faBagShopping, faDoorOpen, faHouse, faShirt, faShop, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -12,11 +12,12 @@ const Sidebar = () => {
     const sidebar = [
         { name: 'Overview', icon: faHouse, to: '/dashboard' },
         { name: 'Products', icon: faShirt, to: '/dashboard/list-product' },
-        { name: 'Users', icon: faUsers, to: '/dashboard/list-user' },
-        { name: 'Orders', icon: faBagShopping, to: '/dashboard/orders' },
+        { name: 'Account', icon: faUsers, to: '/dashboard/list-user' },
+        { name: 'Orders', icon: faBagShopping, to: '/dashboard/list-order' },
     ];
     const handleLogOut = () => {
         setAuth({})
+        localStorage.removeItem('auth');
         navigate('/login')
     }
     return (
@@ -36,13 +37,13 @@ const Sidebar = () => {
                             icon={item.icon}
                             className={`${router.pathname === item.to && 'text-blue-gray-900 font-extrabold'}`}
                         />
-                        <Link
-                            to={item.to}
+                        <a
+                            href={item.to}
                             className={`pl-3 text-blue-gray-900 hover:text-black ${router.pathname === item.to &&
                                 'text-blue-gray-900 font-extrabold'}`}
                         >
                             {item.name}
-                        </Link>
+                        </a>
                     </li>
                 ))}
             </ul>
@@ -56,7 +57,7 @@ const Sidebar = () => {
                 <li>
                     <FontAwesomeIcon icon={faCircleUser} />
                     <Link to="/userinformation" className="pl-3  text-blue-gray-900 hover:text-black">
-                        Account
+                        My Profile
                     </Link>
                 </li>
                 <li>

@@ -29,6 +29,11 @@ export const put = async (endPoints, body = {}, header = {} ) => {
     return response;
 };
 
+export const reDelete = async (endPoints, option = {}) => {
+    const response = await request.delete(endPoints, option);
+    return response;
+};
+
 export const getUser = async (endPoints, option = {}) => {
     const response = await request.get(endPoints, option);
     return response;

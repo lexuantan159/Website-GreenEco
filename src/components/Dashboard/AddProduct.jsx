@@ -21,7 +21,7 @@ const AddProduct = () => {
     const formData = new FormData();
 
     const notify = (message, type) => {
-        const toastType = type === "success" ? toast.success : toast.error
+        const toastType = type === 'success' ? toast.success : toast.error;
         return toastType(message, {
             position: 'top-right',
             autoClose: 1500,
@@ -32,7 +32,7 @@ const AddProduct = () => {
             progress: undefined,
             theme: 'colored',
         });
-    }
+    };
 
     const handleAdd = (e) => {
         e.preventDefault();
@@ -54,16 +54,16 @@ const AddProduct = () => {
             formData.append('madeIn', madeIn);
             formData.append('certificate', certificate);
             formData.append('category', category);
-
+            
             const addProduct = await adminServices.addProduct(auth.accessToken, formData);
             // console.log(auth.accessToken);
             console.log(addProduct);
             if (addProduct.statusCode === 201) {
-                notify(addProduct.response.message, "success");
+                notify(addProduct.response.message, 'success');
                 setLoading(false);
                 setSubmit(false);
             } else {
-                notify(addProduct.error.data.message);
+                notify(addProduct.error.message);
                 setLoading(false);
                 setSubmit(false);
             }
@@ -195,6 +195,7 @@ const AddProduct = () => {
                                             type="file"
                                             className="w-[320px] px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
                                             placeholder="Enter certificate"
+                                            accept=".png, .jpg, .jpeg"
                                             files={image}
                                             onChange={(e) => setImage(e.target.files[0])}
                                         />
@@ -216,12 +217,12 @@ const AddProduct = () => {
                                     )}
                                 </button>
 
-                                <Link
-                                    to="/dashboard/list-product"
+                                <a
+                                    href="/dashboard/list-product"
                                     className="py-2 px-10 bg-gray-300 text-blue-gray-900 rounded-md w-32 mr-2 hover:bg-gray-400"
                                 >
                                     Cancel
-                                </Link>
+                                </a>
                             </div>
                         </form>
                     </div>

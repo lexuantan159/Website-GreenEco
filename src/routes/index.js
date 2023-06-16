@@ -1,6 +1,7 @@
 import AddProduct from '../components/Dashboard/AddProduct';
 import EditProduct from '../components/Dashboard/EditProduct';
 import EditUser from '../components/Dashboard/EditUser';
+import OrderList from '../components/Dashboard/OrderList';
 import ProductList from '../components/Dashboard/ProductList';
 import UserList from '../components/Dashboard/UserList';
 import { Home, Contact, Login, Signup, About, Products, ShoppingCart ,Checkout,ProductDetail, ForgotPassword, ResetPassword, UserIn4, DashboardAdmin } from '../pages/index';
@@ -24,6 +25,7 @@ const router = [
     { path: '/dashboard/add-product', component: AddProduct },
     { path: '/dashboard/edit-product/:id', component: EditProduct },
     { path: '/dashboard/list-user', component: UserList },
+    { path: '/dashboard/list-order', component: OrderList },
     { path: '/dashboard/edit-user/:id', component: EditUser },
 ];
 

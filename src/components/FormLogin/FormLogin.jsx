@@ -50,13 +50,14 @@ const FormLogin = () => {
                 if (authentication.statusCode === 200) {
                     const accessToken = authentication.response.accessToken;
                     const authorization = await authServices.authorization(accessToken);
+                    const id = authorization.id;
                     const fullName = authorization.fullName;
                     const phoneNumber = authorization.phone;
                     const address = authorization.address;
                     const role = authorization.roles
 
-                    setAuth({ email, password, accessToken, fullName , phoneNumber ,address, role });
-                    localStorage.setItem('auth',JSON.stringify({ email, password, accessToken, fullName , phoneNumber ,address, role }));
+                    setAuth({ id, email, password, accessToken, fullName , phoneNumber ,address, role });
+                    localStorage.setItem('auth',JSON.stringify({ id, email, password, accessToken, fullName, phoneNumber ,address, role }));
                 
                     if (authorization.statusCode === 200) {
                         if (authorization.roles === 'Admin') navigate('/dashboard');
