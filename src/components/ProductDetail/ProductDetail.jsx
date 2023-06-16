@@ -34,11 +34,14 @@ const ProductDetailForm = () => {
         });
 
     useEffect(() => {
+        // scroll top 
+        window.scrollTo(0, 0)
         if (param.id !== undefined) {
             const feedback = async () => {
                 const feedback = await feedbackServices.getFeedback(param.id);
                 const listFeedback = feedback.statusCode === 200 && feedback.response;
                 if (listFeedback.length > 0) {
+                    console.log(listFeedback)
                     setFeedbackList(
                         listFeedback.map((feedback) => {
                             return {
@@ -85,7 +88,7 @@ const ProductDetailForm = () => {
 
     const postFeedback = async (token, comment, productId) => {
         setFeedbackList([...feedbackList, { name: auth.fullName, comment: comment }]);
-        const feedback = await feedbackServices.postFeedback(token, comment, productId);
+        await feedbackServices.postFeedback(token, comment, productId);
     };
 
     const handleFeedbackSave = () => {
@@ -98,6 +101,10 @@ const ProductDetailForm = () => {
         }
         inputRef.current.value = '';
     };
+
+    // const handleDeleteFeedback = () => {
+    //     console.log(1);
+    // }
 
     return (
         <>
@@ -119,12 +126,12 @@ const ProductDetailForm = () => {
 
                             <div className="mb-2">
                                 <p className=" text-lg font-bold">
-                                    Price: $ <span className="font-medium">{product.price}</span>
+                                    Giá: <span className="font-medium">{product.price} vnđ</span>
                                 </p>
                             </div>
                             <div className="mb-2">
                                 <p className="text-lg font-bold">
-                                    Category: <span className="font-medium"> {product.category} </span>
+                                    Danh Mục: <span className="font-medium"> {product.category} </span>
                                 </p>
                             </div>
 
@@ -146,33 +153,33 @@ const ProductDetailForm = () => {
                                     onClick={handleAddProducts}
                                     className="bg-primaryColor active:opacity-80 text-white font-bold py-2 px-4 w-150 h-46 ml-4 rounded"
                                 >
-                                    Add To Card
+                                    Thêm Vào Giỏ
                                 </button>
                             </div>
                             <div className="mt-14">
                                 <div className="flex mb-2">
                                     <p className="text-lg font-bold">
-                                        Date of Manufacture:{' '}
+                                        Ngày Sẩn Xuất:{' '}
                                         <span className="font-medium"> {product.dateOfManufacture} </span>
                                     </p>
                                 </div>
 
                                 <div className="flex mb-2">
                                     <p className="text-lg font-bold">
-                                        Available: <span className="font-medium"> {product.available} </span>
+                                        Số Lượng: <span className="font-medium"> {product.available} </span>
                                         <span className="font-medium"> Pieces</span>
                                     </p>
                                 </div>
 
                                 <div className="flex mb-2">
                                     <p className="text-lg font-bold">
-                                        MadeIn: <span className="font-medium">{product.madeIn}</span>
+                                        Nơi Sản Xuất: <span className="font-medium">{product.madeIn}</span>
                                     </p>
                                 </div>
 
                                 <div className="flex mb-2">
                                     <p className="text-lg font-bold">
-                                        Certificate : <span className="font-medium"> {product.certificate} </span>
+                                        Chứng Chỉ: <span className="font-medium"> {product.certificate} </span>
                                     </p>
                                 </div>
                             </div>
@@ -188,7 +195,7 @@ const ProductDetailForm = () => {
                             }`}
                             onClick={() => setActiveTab('description')}
                         >
-                            Description
+                            Mô Tả
                         </p>
                         <span className="mx-4">|</span>
                         <p
@@ -197,7 +204,7 @@ const ProductDetailForm = () => {
                             }`}
                             onClick={() => setActiveTab('feedback')}
                         >
-                            Feedback
+                            Đánh Giá
                         </p>
                     </div>
                     {activeTab === 'description' ? (
@@ -219,19 +226,25 @@ const ProductDetailForm = () => {
                                     className="bg-primaryColor active:opacity-80 text-white font-bold py-2 px-4 rounded w-24"
                                     onClick={handleFeedbackSave}
                                 >
-                                    Save
+                                    Đánh Giá
                                 </button>
                             </div>
 
-                            <ul className="max-w-[481px] my-8 mx-auto">
+                            <ul className="max-w-[450px] lg:max-w-[800px] h-[350px] overflow-y-scroll  my-8 mx-auto shadow rounded">
                                 {feedbackList.length > 0
                                     ? feedbackList.map((feedback, index) => {
                                           return (
-                                              <li key={index} className="my-4">
-                                                  <p className="font-bold text-lg">{feedback.name}</p>
-                                                  <p className="font-bold text-lg">
-                                                      Comments: <span className="font-medium">{feedback.comment}</span>
-                                                  </p>
+                                              <li key={index} className="my-4 grid grid-cols-2 gap-8 items-center lg:gap-80">
+                                                  <div className='pl-4' >
+                                                      <p className="font-bold text-lg">{feedback.name}</p>
+                                                      <p className="font-bold text-lg">
+                                                          Nội Dung:{' '}
+                                                          <span className="font-medium">{feedback.comment}</span>
+                                                      </p>
+                                                  </div>
+                                                  {
+                                                    
+                                                  }
                                               </li>
                                           );
                                       })
@@ -242,7 +255,7 @@ const ProductDetailForm = () => {
                 </div>
                 <div>
                     <ProductsSlide
-                        title="Related Products"
+                        title="Sản Phẩm Liên Quan"
                         products={productsList}
                         numOfProducts={6}
                         category={product.category}

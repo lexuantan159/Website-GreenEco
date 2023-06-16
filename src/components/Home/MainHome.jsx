@@ -5,13 +5,13 @@ import ProductsContext from '../../context/productsProvider';
 
 const MainHome = () => {
     const [loading, setLoading] = useState(true);
-    const titleProductsSlide = 'Top Products';
+    const titleProductsSlide = 'Sản Phẩm Bán Chạy';
     const { productsList } = useContext(ProductsContext);
 
     useEffect(() => {
-        productsList.length === 0 ?  setLoading(true):setLoading(false) 
-    });
-    
+        productsList.length === 0 ? setLoading(true) : setLoading(false);
+    }, [productsList.length]);
+
     return (
         <div className="container mb-32 mx-auto px-6 md:px-4 lg:px-0">
             <div className="relative h-[560px] mt-10 mb-16">
@@ -21,17 +21,15 @@ const MainHome = () => {
                     alt="San pham lam bang go"
                 />
                 <div className="absolute left-[10%] top-[40%] w-[40%]">
-                    <p className="text-primaryColor text-xl font-bold leading-4 mb-2">
-                        Environmental Protection Products
-                    </p>
+                    <p className="text-primaryColor text-xl font-bold leading-4 mb-2">Sản Phẩm Bảo Vệ Môi Trường</p>
                     <h1 className="text-[#252525] text-4xl font-bold leading-[52px] mb-5">
-                        100% Natural, Environmental Protection
+                        100% Tự Nhiên, Bảo Vệ Môi Trường
                     </h1>
                     <a
                         href="/products"
                         className="inline-block bg-primaryColor text-white text-lg font-bold px-5 py-3 rounded"
                     >
-                        SHOP NOW
+                        Cửa Hàng
                     </a>
                 </div>
             </div>
@@ -46,7 +44,7 @@ const MainHome = () => {
 
             <div className="my-20">
                 <div className="">
-                    <h1 className="text-[#252525] text-4xl text-center font-bold mb-2">Criteria For</h1>
+                    <h1 className="text-[#252525] text-4xl text-center font-bold mb-2">Tiêu Chuẩn</h1>
                     <div className="block w-16 h-1 bg-primaryColor mb-10 mx-auto"></div>
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 text-center">
@@ -60,10 +58,10 @@ const MainHome = () => {
                         </div>
 
                         <div className="mt-3">
-                            <h2 className="text-[#252525] text-2xl font-bold my-3">Sustainable materials</h2>
+                            <h2 className="text-[#252525] text-2xl font-bold my-3">Vật liệu bền vững</h2>
                             <p className="text-[#252525] text-lg">
-                                Environmentally friendly products need to use sustainable materials sourced from
-                                renewable or recyclable resources.
+                                Các sản phẩm thân thiện với môi trường cần sử dụng các vật liệu bền vững có nguồn gốc từ
+                                các nguồn tái tạo hoặc tái chế.
                             </p>
                         </div>
                     </div>
@@ -78,12 +76,12 @@ const MainHome = () => {
                         </div>
                         <div className="mt-3">
                             <h2 className="text-[#252525] text-2xl font-bold my-3">
-                                Environmentally Friendly Production Processes
+                                Quy trình sản xuất thân thiện với môi trường
                             </h2>
                             <p className="text-[#252525] text-lg">
-                                Environmentally friendly products need to be produced using environmentally friendly
-                                processes and methods, including the use of renewable energy, reducing toxic waste and
-                                emissions, and reusing water.
+                                Các sản phẩm thân thiện với môi trường cần được sản xuất bằng cách sử dụng thân thiện
+                                với môi trường quy trình và phương pháp, bao gồm cả việc sử dụng năng lượng tái tạo,
+                                giảm chất thải độc hại và khí thải và tái sử dụng nước.
                             </p>
                         </div>
                     </div>
@@ -97,11 +95,11 @@ const MainHome = () => {
                             />
                         </div>
                         <div className="mt-3">
-                            <h2 className="text-[#252525] text-2xl font-bold my-3">Reusable Or Recyclable</h2>
+                            <h2 className="text-[#252525] text-2xl font-bold my-3">Tái sử dụng hoặc có thể tái chế</h2>
                             <p className="text-[#252525] text-lg">
-                                Environmentally friendly products need to be designed to be reusable or recyclable after
-                                use. This helps to minimize the amount of waste and resources used to produce new
-                                products.
+                                Các sản phẩm thân thiện với môi trường cần được thiết kế để có thể tái sử dụng hoặc tái
+                                chế sau khi sử dụng. Điều này giúp giảm thiểu lượng chất thải và tài nguyên được sử dụng
+                                để sản xuất sản phẩm mới.
                             </p>
                         </div>
                     </div>

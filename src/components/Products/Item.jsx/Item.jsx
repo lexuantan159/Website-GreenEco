@@ -12,6 +12,11 @@ const Item = ({ product, onAddProduct }) => {
         }
     };
 
+    const formattedNumber = (num) => {
+        return num.toLocaleString('en-US').replace(/,/g, '.');
+    }
+
+
     return (
         <div className="w-full mb-7 shadow rounded">
             <div className="relative w-full h-[265px] group">
@@ -30,7 +35,7 @@ const Item = ({ product, onAddProduct }) => {
 
             <div className="text-center mt-3 mb-3">
                 <h4 className="text-lg font-medium px-2">{truncatedString(product.title, 23)}</h4>
-                <p className="text-lg font-bold text-primaryColor">{product.price}$</p>
+                <p className="text-lg font-bold text-primaryColor">{formattedNumber(product.price)} VNĐ</p>
             </div>
         </div>
     );

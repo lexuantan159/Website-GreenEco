@@ -108,9 +108,11 @@ const UserInfomation = () => {
         setSelectedImage(imageUrl.url);
         setShowImageList(false);
     };
+    
     const toggleImageList = () => {
         setShowImageList(!showImageList);
     };
+
     const notify = (message) =>
         toast(message, {
             position: 'top-center',
@@ -122,6 +124,7 @@ const UserInfomation = () => {
             progress: undefined,
             theme: 'light',
         });
+        
     useEffect(() => {
         if (location.state?.toastMessage !== '') {
             notify(location.state?.toastMessage);
