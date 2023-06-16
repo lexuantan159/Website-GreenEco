@@ -3,21 +3,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/authProvider';
+import * as userServer from '../../services/userServices'
 
 const Header = () => {
     const navigate = useNavigate();
     const { auth, setAuth } = useContext(AuthContext);
-
+    const [fullname , setFullName] = useState("");
     const [hasUser, setHasUser] = useState(false);
     const router = useLocation();
 
     useEffect(() => {
         if (Object.keys(auth).length === 0) {
             setHasUser(false);
+          
         } else {
             setHasUser(true);
+           
         }
     }, [auth]);
+    useEffect(() => {
+          if (auth.accessToken) {
+            const fetchData = async () => {
+                if (auth.accessToken) {
+                    const response = await userServer.getUser(auth.accessToken);
+                    setFullName(response.fullname);
+                }
+            }
+            fetchData();
+          }      
+      }, [auth]);
 
     const handleLogOut = () => {
         setAuth({});
@@ -109,7 +123,7 @@ const Header = () => {
                         {hasUser ? (
                             <button className="relative flex justify-center items-center group">
                                 <p className="text-lg text-textColor font-medium mr-3">
-                                    {auth.fullName || 'Name User'}
+                                    {fullname || 'Name User'}
                                 </p>
                                 <FontAwesomeIcon
                                     className="rotate-90 group-hover:rotate-0 transition-all"

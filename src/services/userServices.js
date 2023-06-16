@@ -72,6 +72,31 @@ export const updateUserProfile = async (accessToken, email, fullname,phoneNumber
         };
     }
 };
+export const updateUserProfileCheckout = async (accessToken, address, fullname,phoneNumber) => {
+    try {
+        const response = await request.put(
+            EDID_USERS,
+            {
+                address: address,
+                fullname: fullname,
+                phone: phoneNumber,
+            },
+            {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            },
+        );
+
+        return {
+            message: response.data.message,
+            statusCode: response.status,
+        };
+    } catch (error) {
+        return {
+            errorMessage: error.response.data.message,
+            statusCode: error.status,
+        };
+    }
+};
 
 export const updateUserAddress = async (accessToken, address) => {
     try {
