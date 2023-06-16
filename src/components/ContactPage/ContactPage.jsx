@@ -9,7 +9,6 @@ const ContactPage = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
     const [submit, setSubmit] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -40,7 +39,7 @@ const ContactPage = () => {
             };
             fetchContact();
         }
-    }, [submit]);
+    }, [email, message, name, submit]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -74,14 +73,14 @@ const ContactPage = () => {
                                         Green Eco
                                     </div>
                                     <div className=" sm:text-sm md:text-sm lg:text-[18px] font-semibold mb-6 whitespace-nowrap italic ">
-                                        Friendly Products With The Environment
+                                        Sản Phẩm Thân Thiện Với Môi Trường
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="mx-auto text-center font-bold text-5xl mb-8 text-[#7fad39]">Contact Us</div>
+                <div className="mx-auto text-center font-bold text-5xl mb-8 text-[#7fad39]">Liên Hệ</div>
 
                 <form
                     onSubmit={(e) => handleSubmit(e)}
@@ -147,24 +146,24 @@ const ContactPage = () => {
                             <div className=" text-[36px] text-[#7fad39] text-center">
                                 <FontAwesomeIcon icon={faLocationDot} />
                             </div>
-                            <h4 className="text-center font-bold my-4 text-[24px]">Address</h4>
+                            <h4 className="text-center font-bold my-4 text-[24px]">Địa Chỉ</h4>
                             <p className="text-[#666666] text-[16px] font-medium text-center">
                                 {' '}
-                                40/20 Nguyen Huy Tuong
+                                254 Nguyễn Văn Linh
                             </p>
                         </div>
                         <div className="">
                             <div className="text-[36px] text-[#7fad39] text-center">
                                 <FontAwesomeIcon icon={faPhone} />
                             </div>
-                            <h4 className="text-center font-bold my-4 text-[24px]">Phone</h4>
+                            <h4 className="text-center font-bold my-4 text-[24px]">Số Điện Thoại</h4>
                             <p className="text-[#666666] text-[16px] font-medium text-center"> +84 397 881 543</p>
                         </div>
                         <div className="">
                             <div className=" text-[36px] text-[#7fad39] text-center">
                                 <FontAwesomeIcon icon={faClock} />
                             </div>
-                            <h4 className="text-center font-bold my-4 text-[24px]">Open Time</h4>
+                            <h4 className="text-center font-bold my-4 text-[24px]">Thời Gian Mở Cửa</h4>
                             <p className="text-[#666666] text-[16px] font-medium text-center">10:00 am to 23:00 pm</p>
                         </div>
                         <div className="">
@@ -172,7 +171,7 @@ const ContactPage = () => {
                                 <FontAwesomeIcon icon={faEnvelope} />
                             </div>
                             <h4 className="text-center font-bold my-4 text-[24px]">Email</h4>
-                            <p className="text-[#666666] text-[16px] font-medium text-center"> hello@colorlib.com</p>
+                            <p className="text-[#666666] text-[16px] font-medium text-center">GeenEco@gmail.com</p>
                         </div>
                     </div>
                 </div>

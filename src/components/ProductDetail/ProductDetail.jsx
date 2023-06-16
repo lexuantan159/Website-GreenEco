@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import ProductsSlide from '../ProductsSlide/ProductsSlide';
 import { useParams } from 'react-router-dom';
 import ProductsContext from '../../context/productsProvider';
@@ -102,9 +102,9 @@ const ProductDetailForm = () => {
         inputRef.current.value = '';
     };
 
-    const handleDeleteFeedback = () => {
-        console.log(1);
-    }
+    // const handleDeleteFeedback = () => {
+    //     console.log(1);
+    // }
 
     return (
         <>
@@ -126,12 +126,12 @@ const ProductDetailForm = () => {
 
                             <div className="mb-2">
                                 <p className=" text-lg font-bold">
-                                    Price: $ <span className="font-medium">{product.price}</span>
+                                    Giá: <span className="font-medium">{product.price} vnđ</span>
                                 </p>
                             </div>
                             <div className="mb-2">
                                 <p className="text-lg font-bold">
-                                    Category: <span className="font-medium"> {product.category} </span>
+                                    Danh Mục: <span className="font-medium"> {product.category} </span>
                                 </p>
                             </div>
 
@@ -153,33 +153,33 @@ const ProductDetailForm = () => {
                                     onClick={handleAddProducts}
                                     className="bg-primaryColor active:opacity-80 text-white font-bold py-2 px-4 w-150 h-46 ml-4 rounded"
                                 >
-                                    Add To Card
+                                    Thêm Vào Giỏ
                                 </button>
                             </div>
                             <div className="mt-14">
                                 <div className="flex mb-2">
                                     <p className="text-lg font-bold">
-                                        Date of Manufacture:{' '}
+                                        Ngày Sẩn Xuất:{' '}
                                         <span className="font-medium"> {product.dateOfManufacture} </span>
                                     </p>
                                 </div>
 
                                 <div className="flex mb-2">
                                     <p className="text-lg font-bold">
-                                        Available: <span className="font-medium"> {product.available} </span>
+                                        Số Lượng: <span className="font-medium"> {product.available} </span>
                                         <span className="font-medium"> Pieces</span>
                                     </p>
                                 </div>
 
                                 <div className="flex mb-2">
                                     <p className="text-lg font-bold">
-                                        MadeIn: <span className="font-medium">{product.madeIn}</span>
+                                        Nơi Sản Xuất: <span className="font-medium">{product.madeIn}</span>
                                     </p>
                                 </div>
 
                                 <div className="flex mb-2">
                                     <p className="text-lg font-bold">
-                                        Certificate : <span className="font-medium"> {product.certificate} </span>
+                                        Chứng Chỉ: <span className="font-medium"> {product.certificate} </span>
                                     </p>
                                 </div>
                             </div>
@@ -195,7 +195,7 @@ const ProductDetailForm = () => {
                             }`}
                             onClick={() => setActiveTab('description')}
                         >
-                            Description
+                            Mô Tả
                         </p>
                         <span className="mx-4">|</span>
                         <p
@@ -204,7 +204,7 @@ const ProductDetailForm = () => {
                             }`}
                             onClick={() => setActiveTab('feedback')}
                         >
-                            Feedback
+                            Đánh Giá
                         </p>
                     </div>
                     {activeTab === 'description' ? (
@@ -226,7 +226,7 @@ const ProductDetailForm = () => {
                                     className="bg-primaryColor active:opacity-80 text-white font-bold py-2 px-4 rounded w-24"
                                     onClick={handleFeedbackSave}
                                 >
-                                    Save
+                                    Đánh Giá
                                 </button>
                             </div>
 
@@ -238,7 +238,7 @@ const ProductDetailForm = () => {
                                                   <div className='pl-4' >
                                                       <p className="font-bold text-lg">{feedback.name}</p>
                                                       <p className="font-bold text-lg">
-                                                          Comments:{' '}
+                                                          Nội Dung:{' '}
                                                           <span className="font-medium">{feedback.comment}</span>
                                                       </p>
                                                   </div>
@@ -255,7 +255,7 @@ const ProductDetailForm = () => {
                 </div>
                 <div>
                     <ProductsSlide
-                        title="Related Products"
+                        title="Sản Phẩm Liên Quan"
                         products={productsList}
                         numOfProducts={6}
                         category={product.category}
