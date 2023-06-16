@@ -10,7 +10,7 @@ const MainHome = () => {
 
     useEffect(() => {
         productsList.length === 0 ?  setLoading(true):setLoading(false) 
-    });
+    }, [productsList.length]);
     
     return (
         <div className="container mb-32 mx-auto px-6 md:px-4 lg:px-0">

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faMinus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import ProductsSlide from '../ProductsSlide/ProductsSlide';
 import { useParams } from 'react-router-dom';
 import ProductsContext from '../../context/productsProvider';
@@ -34,11 +34,14 @@ const ProductDetailForm = () => {
         });
 
     useEffect(() => {
+        // scroll top 
+        window.scrollTo(0, 0)
         if (param.id !== undefined) {
             const feedback = async () => {
                 const feedback = await feedbackServices.getFeedback(param.id);
                 const listFeedback = feedback.statusCode === 200 && feedback.response;
                 if (listFeedback.length > 0) {
+                    console.log(listFeedback)
                     setFeedbackList(
                         listFeedback.map((feedback) => {
                             return {
@@ -85,7 +88,7 @@ const ProductDetailForm = () => {
 
     const postFeedback = async (token, comment, productId) => {
         setFeedbackList([...feedbackList, { name: auth.fullName, comment: comment }]);
-        const feedback = await feedbackServices.postFeedback(token, comment, productId);
+        await feedbackServices.postFeedback(token, comment, productId);
     };
 
     const handleFeedbackSave = () => {
@@ -98,6 +101,10 @@ const ProductDetailForm = () => {
         }
         inputRef.current.value = '';
     };
+
+    const handleDeleteFeedback = () => {
+        console.log(1);
+    }
 
     return (
         <>
@@ -223,15 +230,21 @@ const ProductDetailForm = () => {
                                 </button>
                             </div>
 
-                            <ul className="max-w-[481px] my-8 mx-auto">
+                            <ul className="max-w-[450px] lg:max-w-[800px] h-[350px] overflow-y-scroll  my-8 mx-auto shadow rounded">
                                 {feedbackList.length > 0
                                     ? feedbackList.map((feedback, index) => {
                                           return (
-                                              <li key={index} className="my-4">
-                                                  <p className="font-bold text-lg">{feedback.name}</p>
-                                                  <p className="font-bold text-lg">
-                                                      Comments: <span className="font-medium">{feedback.comment}</span>
-                                                  </p>
+                                              <li key={index} className="my-4 grid grid-cols-2 gap-8 items-center lg:gap-80">
+                                                  <div className='pl-4' >
+                                                      <p className="font-bold text-lg">{feedback.name}</p>
+                                                      <p className="font-bold text-lg">
+                                                          Comments:{' '}
+                                                          <span className="font-medium">{feedback.comment}</span>
+                                                      </p>
+                                                  </div>
+                                                  {
+                                                    
+                                                  }
                                               </li>
                                           );
                                       })
