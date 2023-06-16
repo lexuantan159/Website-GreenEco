@@ -4,6 +4,7 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import * as userServer from '../../services/userServices';
 import AuthContext from '../../context/authProvider';
 import { ToastContainer, toast } from 'react-toastify';
+import * as cartServer from '../../services/cartServer'
 
 const CheckoutPage = () => {
     const [fullname, setFullName] = useState('');
@@ -12,6 +13,13 @@ const CheckoutPage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [hasUser, setHasUser] = useState(false);
     const { auth } = useContext(AuthContext);
+
+    //khai báo biến dùng cho sản phẩm 
+    const [cartList , setCartList] = useState([]);
+    const [totalAmount , setTotalAmount] = useState('');
+    const TransportFee = 1;
+
+
 
     const handleSaveChanges = async (even) => {
         even.preventDefault();
@@ -61,27 +69,22 @@ const CheckoutPage = () => {
 
         fetchData();
     }, [auth]);
-    const products = [
-        {
-            id: 1,
-            name: 'Ống hút bằng tre',
-            description: 'Thân thiện với môi trường',
-            price: '100,000 VND',
-            quantity: 100,
-            total: '10,000,000 VND',
-            src: 'https://naturallyvietnam.com/wp-content/uploads/2020/05/ng-h%C3%BAt-tre-1.jpg',
-        },
-        // Add more products here
-        {
-            id: 2,
-            name: 'Ống hút gạo',
-            description: 'Thân thiện với môi trường',
-            price: '30,000 VND',
-            quantity: 10,
-            total: '300,000 VND',
-            src: 'https://naturallyvietnam.com/wp-content/uploads/2020/05/ng-h%C3%BAt-tre-1.jpg',
-        },
-    ];
+    useEffect(() => {
+        if (auth.accessToken !== undefined) {
+            const fetchCart = async () => {
+                const fetchCart = await cartServer.getCart(auth.accessToken);
+                if (fetchCart.statusCode === 200) {
+                    setCartList(fetchCart.products);
+                    console.log(cartList);
+                    setTotalAmount(fetchCart.totalAmount);
+                    console.log(fetchCart);
+                } else {
+                    console.log(fetchCart.error);
+                }
+            };
+            fetchCart();
+        }
+    }, [auth.accessToken]);
 
     return (
         <>
@@ -96,7 +99,7 @@ const CheckoutPage = () => {
                             className="h-10 w-10 mr-2"
                         />
                     </div>
-                    <h1 className="text-3xl font-semibold text-primaryColor">CheckOut</h1>
+                    <h1 className="text-3xl font-bold text-primaryColor">Thanh toán</h1>
                 </div>
                 {/* body checkout */}
                 <div className="max-w-2xl mx-auto text-primaryColor shadow-lg rounded-lg px-8 py-6 mt-8">
@@ -104,7 +107,7 @@ const CheckoutPage = () => {
                     <div>
                         <h2 className="text-2xl font-semibold mb-6">
                             <FontAwesomeIcon icon={faLocationDot} className="mr-2" />
-                            Delivery Address
+                            Thông tin giao hàng
                         </h2>
 
                         {/* edi information user */}
@@ -115,7 +118,7 @@ const CheckoutPage = () => {
                                     <div className="w-full md:w-1/2 px-4 mt-2">
                                         <div className="mb-5 flex items-center">
                                             <div>
-                                                <span className="text-primaryColor font-bold">Full Name : </span>
+                                                <span className="text-primaryColor font-bold">Tên dầy đủ : </span>
                                                 <input
                                                     type="text"
                                                     value={fullname}
@@ -127,7 +130,7 @@ const CheckoutPage = () => {
                                         </div>
                                         <div className="mb-9 flex items-center mt-8">
                                             <div>
-                                                <span className="text-primaryColor font-bold">Address : </span>
+                                                <span className="text-primaryColor font-bold">Địa chỉ : </span>
 
                                                 <input
                                                     type="text"
@@ -142,7 +145,7 @@ const CheckoutPage = () => {
                                     <div className="w-full md:w-1/2 px-4 mt-2">
                                         <div className="mb-5 flex items-center">
                                             <div>
-                                                <span className="text-primaryColor font-bold">Phone Number : </span>
+                                                <span className="text-primaryColor font-bold">Số điện thoại : </span>
                                                 <input
                                                     type="text"
                                                     value={phoneNumber}
@@ -158,13 +161,13 @@ const CheckoutPage = () => {
                                                     className="bg-primaryColor hover:bg-green-300 text-white font-semibold py-2 px-6 rounded-lg"
                                                     onClick={handleSaveChanges}
                                                 >
-                                                    Save
+                                                    Lưu
                                                 </button>
                                                 <button
                                                     className="ml-2 ml-4  text-red-500 hover:text-red-600 font-semibold"
                                                     onClick={handleCancelChanges}
                                                 >
-                                                    Cancel
+                                                    Hủy
                                                 </button>
                                             </div>
                                         </div>
@@ -175,17 +178,17 @@ const CheckoutPage = () => {
                             <div className="flex flex-col-2 ml-2 ">
                                 <div className="w-full md:w-1/2 px-4 mt-2">
                                     <div className="mb-5 flex items-center">
-                                        <h1 className="font-bold">Full Name:</h1>
+                                        <h1 className="font-bold">Tên đầy đủ:</h1>
                                         <h3 className="ml-2 text-black">{fullname}</h3>
                                     </div>
                                     <div className="mb-9 flex flex-wrap items-center mt-8">
-                                        <h1 className="font-bold">Address:</h1>
+                                        <h1 className="font-bold">Địa chỉ:</h1>
                                         <span className="ml-4 h-auto min-h-8 w-64 text-black">{address}</span>
                                     </div>
                                 </div>
                                 <div className="w-full md:w-1/2 px-4 mt-2">
                                     <div className="mb-5 flex items-center">
-                                        <h1 className="font-bold">Phone Number:</h1>
+                                        <h1 className="font-bold">Số điện thoại:</h1>
                                         <h3 className="ml-2 text-black">{phoneNumber}</h3>
                                     </div>
                                     <div className="flex ml-auto items-center justify-center mt-16">
@@ -193,7 +196,7 @@ const CheckoutPage = () => {
                                             className="text-white bg-primaryColor hover:bg-green-300 font-semibold py-2 px-6 mt-4 border rounded-lg cursor-pointer"
                                             onClick={() => setIsEditing(true)}
                                         >
-                                            <span className="mr-2">Change</span>
+                                            <span className="mr-2">Thay đổi</span>
                                         </div>
                                     </div>
                                 </div>
@@ -204,57 +207,57 @@ const CheckoutPage = () => {
                     {/* Body information Product */}
 
                     <div className="mb-4">
-                        <h3 className="text-2xl font-semibold mb-6">Product</h3>
+                        <h3 className="text-2xl  mb-6">Sản Phẩm</h3>
                         <table className="w-full">
                             <thead>
                                 <tr>
                                     <th className="py-2 px-4"></th>
                                     <th className="py-2 px-4"></th>
-                                    <th className="py-2 px-4 text-black">Price</th>
-                                    <th className="py-2 px-4 text-black">Quantity</th>
-                                    <th className="py-2 px-4 text-black">Total</th>
+                                    <th className="py-2 px-4 text-black">Giá</th>
+                                    <th className="py-2 px-4 text-black">Số lượng</th>
+                                    <th className="py-2 px-4 text-black">Tổng tiền</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {products.map((product) => (
+                                {cartList.map((product) => (
                                     <tr key={product.id}>
                                         <td className="py-2 px-4">
                                             <div className="flex items-center">
                                                 <img
-                                                    src={product.src}
-                                                    alt={product.name}
+                                                    src={product.imageUrl}
+                                                    alt={product.title}
                                                     className="w-12 h-12 rounded-lg mr-4"
                                                 />
                                                 <div>
-                                                    <p className="text-gray-700">{product.name}</p>
+                                                    <p className="text-gray-700">{product.title}</p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="py-2 px-4 text-black">{product.description}</td>
-                                        <td className="py-2 px-4 text-black">{product.price}</td>
-                                        <td className="py-2 px-4 text-black">{product.quantity}</td>
-                                        <td className="py-2 px-4 text-black">{product.total}</td>
+                                        <td className="py-2 px-4 text-black">{product.category}</td>
+                                        <td className="py-2 px-4 text-black">{product.price} vnd</td>
+                                        <td className="py-2 px-4 text-black">{product.CartItem.quantity}</td>
+                                        <td className="py-2 px-4 text-black">{product.CartItem.totalPrice}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
                     <div className="mb-2 text-black text-sm text-right">
-                        <h3>Total amount : 5000000vnd</h3>
+                        <h3>Tổng tiền : {totalAmount} : vnd</h3>
                     </div>
 
                     {/* body Payment methods */}
 
                     <div className="mb-4 mt-5">
-                        <h3 className="text-2xl font-semibold mb-6">Payment methods</h3>
+                        <h3 className="text-2xl font-semibold mb-6">Phương thức thanh toán</h3>
                         <select
                             id="paymentMethod"
                             className="w-full text-black px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={paymentMethod}
                             onChange={handlePaymentMethodChange}
                         >
-                            <option value="bankTransfer">Payment via bank account</option>
-                            <option value="cod">Payment on delivery (COD)</option>
+                            <option value="bankTransfer">Thanh toán qua ngân hàng</option>
+                            <option value="cod">Thanh toán khi nhận hàng (COD)</option>
                         </select>
                     </div>
 
@@ -263,17 +266,17 @@ const CheckoutPage = () => {
                         <table className="float-right">
                             <tbody>
                                 <tr>
-                                    <td>Total amount:</td>
-                                    <td>5000000vnd</td>
+                                    <td>Tổng tiền đơn hàng:</td>
+                                    <td>{totalAmount}</td>
                                 </tr>
                                 <tr>
-                                    <td>Transport Fee:</td>
-                                    <td>1500000</td>
+                                    <td>Tiền vận chuyển:</td>
+                                    <td>{TransportFee}</td>
                                 </tr>
                                 <tr>
-                                    <td>Total Payment:</td>
+                                    <td>Số tiền phải trả:</td>
                                     <td>
-                                        <h1 className="text-primaryColor inline-block">217381294871</h1>
+                                        <h1 className="text-primaryColor inline-block">{totalAmount+TransportFee}</h1>
                                     </td>
                                 </tr>
                             </tbody>
@@ -283,10 +286,10 @@ const CheckoutPage = () => {
                     {/* pay money */}
                     <div className="flex justify-between items-center mt-40">
                         <div className="text-black text-sm">
-                            <h3>Click on the link to display the terms GreenEco</h3>
+                            <h3>Nhấp vào liên kết để hiển thị các điều khoản GreenEco</h3>
                         </div>
                         <button className="bg-primaryColor hover:bg-blue-300 text-white font-semibold py-2 px-6 rounded-lg focus:outline-none">
-                            Place Order
+                           Đặt hàng
                         </button>
                     </div>
                 </div>
