@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { router } from '../routes'
 import LayoutAdmin from './LayoutAdmin'
 import AuthContext from '../context/authProvider'
 
 const DashboardAdmin = () => {
+  document.title = 'Dashboard';
   const {auth } = useContext(AuthContext)
   const navigate = useNavigate()
   if (auth.accessToken && auth.role === "User") {

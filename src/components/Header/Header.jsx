@@ -123,6 +123,14 @@ const Header = () => {
                                         >
                                             Profiles
                                         </li>
+                                        {auth.role === 'Admin' && (
+                                            <li
+                                                onClick={() => navigate('/dashboard')}
+                                                className="my-1 text-textColor font-medium "
+                                            >
+                                                Dashboard
+                                            </li>
+                                        )}
 
                                         <li onClick={handleLogOut} className="my-1 text-textColor font-medium ">
                                             Log Out
