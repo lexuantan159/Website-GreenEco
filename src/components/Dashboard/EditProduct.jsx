@@ -57,9 +57,10 @@ const EditProduct = () => {
     const handleEdit = (e) => {
         e.preventDefault();
         Swal.fire({
-            title: 'Do you want to save the changes?',
+            title: 'Bạn có muốn lưu các thay đổi không ?',
             showCancelButton: true,
-            confirmButtonText: 'Save',
+            confirmButtonText: 'Lưu',
+            cancelButtonText: 'Hủy',
         }).then((result) => {
             if (result.isConfirmed) {
                 setLoadingEdit(true);
@@ -87,7 +88,7 @@ const EditProduct = () => {
             const formDataIterator = formData.entries();
             const firstEntry = formDataIterator.next();
             if (firstEntry.done) {
-                notify('There are no instead of change to edit');
+                notify('Không có thay đổi để chỉnh sửa');
                 setLoadingEdit(false);
                 setSubmit(false);
             } else {
@@ -115,7 +116,7 @@ const EditProduct = () => {
             <main className="flex-1 ml-60">
                 <div className="flex items-center justify-center z-50">
                     <div className="bg-white p-8 w-full mt-8 mx-10 border-2 border-primaryColor rounded-3xl">
-                        <h2 className="flex text-3xl font-extrabold mb-4 justify-center">Edit Product</h2>
+                        <h2 className="flex text-3xl font-extrabold mb-4 justify-center">Chỉnh sửa</h2>
                         {loading ? (
                             <Spinner className="h-12 w-12 mt-10 mx-auto" />
                         ) : (
@@ -124,12 +125,12 @@ const EditProduct = () => {
                                     <div className="flex justify-around">
                                         <div className="flex-col mb-10">
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Title <span className="text-red-900">*</span>
+                                                Tiêu đề <span className="text-red-900">*</span>
                                             </label>
                                             <input
                                                 type="text"
                                                 className="w-[320px] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Enter title"
+                                                placeholder="Nhập tiêu đề"
                                                 value={title}
                                                 onChange={(e) => setTitle(e.target.value)}
                                             />
@@ -137,24 +138,24 @@ const EditProduct = () => {
                                         <div className="flex flex-row">
                                             <div className="mr-4">
                                                 <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                    Price <span className="text-red-900">*</span>
+                                                    Giá <span className="text-red-900">*</span>
                                                 </label>
                                                 <input
                                                     type="number"
                                                     className="w-[155px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
-                                                    placeholder="Enter price ($)"
+                                                    placeholder="Nhập giá (VND)"
                                                     value={price}
                                                     onChange={(e) => setPrice(e.target.value)}
                                                 />
                                             </div>
                                             <div>
                                                 <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                    Available <span className="text-red-900">*</span>
+                                                    Số lượng trong kho <span className="text-red-900">*</span>
                                                 </label>
                                                 <input
                                                     type="number"
                                                     className="w-[155px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
-                                                    placeholder="Enter available"
+                                                    placeholder="Nhập số lượng"
                                                     value={available}
                                                     onChange={(e) => setAvailable(e.target.value)}
                                                 />
@@ -164,24 +165,24 @@ const EditProduct = () => {
                                     <div className="flex justify-around">
                                         <div className="flex-col mb-10">
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Description
+                                                Mô tả
                                             </label>
                                             <textarea
                                                 type="text"
                                                 className="w-[320px] h-36 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Enter description"
+                                                placeholder="Nhập mô tả"
                                                 value={description}
                                                 onChange={(e) => setDescription(e.target.value)}
                                             />
                                         </div>
                                         <div className="flex-col mb-3">
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Made in
+                                                Địa chỉ xuất xứ
                                             </label>
                                             <textarea
                                                 type="text"
                                                 className="w-[320px] h-36 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Made in"
+                                                placeholder="Nhập địa chỉ xuất xứ"
                                                 value={madeIn}
                                                 onChange={(e) => setMadeIn(e.target.value)}
                                             />
@@ -190,24 +191,24 @@ const EditProduct = () => {
                                     <div className="flex justify-around">
                                         <div className="flex-col mb-3">
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Year of manufacture
+                                                Năm sản xuất
                                             </label>
                                             <input
                                                 type="text"
                                                 className="w-[320px] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Enter year of manufacture"
+                                                placeholder="Nhập năm sản xuất"
                                                 value={manufacture}
                                                 onChange={(e) => setManufacture(e.target.value)}
                                             />
                                         </div>
                                         <div className="flex-col">
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Certificate
+                                                Chứng chỉ
                                             </label>
                                             <input
                                                 type="text"
                                                 className="w-[320px] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Enter certificate"
+                                                placeholder="Nhập chứng chỉ"
                                                 value={certificate}
                                                 onChange={(e) => setCertificate(e.target.value)}
                                             />
@@ -216,26 +217,26 @@ const EditProduct = () => {
                                     <div className="flex justify-around">
                                         <div className="flex-col mb-7">
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Category
+                                                Danh mục
                                             </label>
                                             <select
                                                 className="w-[320px] px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
                                                 value={category}
                                                 onChange={(e) => setCategory(e.target.value)}
                                             >
-                                                <option value="Natural">Natural</option>
-                                                <option value="Organic">Organic</option>
-                                                <option value="Recycled">Recycled</option>
+                                                <option value="Tự nhiên">Tự nhiên</option>
+                                                <option value="Hữu cơ">Hữu cơ</option>
+                                                <option value="Tái chê">Tái chế</option>
                                             </select>
                                         </div>
                                         <div className="flex-col">
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Image
+                                                Ảnh
                                             </label>
                                             <input
                                                 type="file"
                                                 className="w-[320px] px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Enter certificate"
+                                                placeholder="Tải lên ảnh"
                                                 accept=".png, .jpg, .jpeg"
                                                 files={image}
                                                 onChange={(e) => setImage(e.target.files[0])}
@@ -254,14 +255,14 @@ const EditProduct = () => {
                                                 <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
                                             </div>
                                         ) : (
-                                            <span>Change</span>
+                                            <span>Thay đổi</span>
                                         )}
                                     </button>
                                     <a
                                         href="/dashboard/list-product"
                                         className="py-2 px-10 bg-gray-300 text-blue-gray-900 rounded-md w-32 mr-2 text-center hover:bg-gray-400"
                                     >
-                                        Back
+                                        Trở về
                                     </a>
                                 </div>
                             </form>

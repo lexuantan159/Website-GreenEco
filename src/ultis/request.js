@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const request = axios.create({
-    baseURL: 'https://greeneco.up.railway.app/api/',
+    baseURL: 'https://greeneco-vs.up.railway.app/api/',
 });
 
 export const post = async (endPoints, option = {}) => {

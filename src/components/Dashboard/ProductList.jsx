@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ProductsContext from '../../context/productsProvider';
 import { faPenToSquare, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
@@ -54,13 +54,14 @@ const ProductList = () => {
 
     const handleDelete = (e) => {
         Swal.fire({
-            title: 'Are you sure ?',
-            text: "You won't be able to revert this !",
+            title: 'Bạn có chắc không ?',
+            text: "Bạn sẽ không thể hoàn nguyên điều này !",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33', 
             cancelButtonColor: '#3085d6', 
-            confirmButtonText: 'Yes, delete it !',
+            confirmButtonText: 'Có, xóa nó đi !',
+            cancelButtonText: 'Hủy',
           }).then((result) => {
             if (result.isConfirmed) {
               setLoading(true)
@@ -76,8 +77,8 @@ const ProductList = () => {
             console.log(deleteProduct);
             if (deleteProduct.statusCode === 200) {
                 Swal.fire(
-                    'Deleted !',
-                    'Product has been deleted.',
+                    'Thành công !',
+                    'Sản phẩm đã được xóa.',
                     'success'
                 ).then(result => {
                     result.isConfirmed && setListProd(productsList.filter((product) => product.id !== prodId)); 
@@ -85,8 +86,8 @@ const ProductList = () => {
                 })
             } else {
                 Swal.fire(
-                    'Error !',
-                    'Has error when delete product.',
+                    'Lỗi !',
+                    'Có lỗi khi xóa sản phẩm.',
                     'error'
                 )
             }
@@ -100,8 +101,8 @@ const ProductList = () => {
             <main className="flex-1 ml-60">
                 <div className="sticky top-0 left-0 right-0 flex items-center justify-between py-5 px-10 border-2 border-gray-200 rounded-b-2xl bg-white">
                     <div>
-                        <h1 className="text-xl font-bold leading-relaxed text-gray-800">List of Products</h1>
-                        <p className="text-sm font-sm text-gray-500">Create your products on the store system</p>
+                        <h1 className="text-xl font-bold leading-relaxed text-gray-800">Danh sách sản phẩm</h1>
+                        <p className="text-sm font-sm text-gray-500">Tạo mới sản phẩm của bạn trên hệ thống cửa hàng</p>
                     </div>
                     <div className="flex items-center p-2 space-x-6 bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-500">
                         <div className="flex bg-gray-100 p-4 w-72 space-x-4 rounded-lg">
@@ -117,7 +118,7 @@ const ProductList = () => {
                             <input
                                 className="bg-gray-100 outline-none"
                                 type="text"
-                                placeholder="Article title or keyword..."
+                                placeholder="Nhập từ khóa..."
                                 onChange={handleChangeSearch}
                             />
                         </div>
@@ -125,7 +126,7 @@ const ProductList = () => {
                     <button className="inline-flex gap-x-2 items-center py-2.5 px-6 text-white bg-primaryColor rounded-xl hover:bg-light-green-800">
                         <FontAwesomeIcon icon={faPlus} />
                         <Link to={'/dashboard/add-product'}>
-                            <span className="text-sm font-semibold tracking-wide">Create new item</span>
+                            <span className="text-sm font-semibold tracking-wide">Tạo sản phẩm mới</span>
                         </Link>
                     </button>
                 </div>
@@ -135,11 +136,11 @@ const ProductList = () => {
                     <table className="w-[90%] m-auto">
                         <thead>
                             <tr className="text-sm font-medium text-gray-700 border-b-4 border-gray-200">
-                                <td className="py-4 px-16 text-lg font-bold text-primaryColor">Image</td>
-                                <td className="py-4 px-4 text-lg font-bold text-primaryColor">Title</td>
-                                <td className="py-4 px-4 text-lg font-bold text-primaryColor text-center">Price</td>
-                                <td className="py-4 px-4 text-lg font-bold text-primaryColor text-center">Available</td>
-                                <td className="py-4 px-4 text-lg font-bold text-primaryColor text-center">Category</td>
+                                <td className="py-4 px-16 text-lg font-bold text-primaryColor">Hình ảnh</td>
+                                <td className="py-4 px-4 text-lg font-bold text-primaryColor">Tiêu đề</td>
+                                <td className="py-4 px-4 text-lg font-bold text-primaryColor text-center">Giá</td>
+                                <td className="py-4 px-4 text-lg font-bold text-primaryColor text-center">Kho</td>
+                                <td className="py-4 px-4 text-lg font-bold text-primaryColor text-center">Danh mục</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -159,7 +160,7 @@ const ProductList = () => {
                                         />
                                     </td>
                                     <td className="py-4 text-blue-gray-900 font-extrabold">{product.title}</td>
-                                    <td className="py-4 px-8 text-center">{product.price}$</td>
+                                    <td className="py-4 px-8 text-center">{product.price}đ</td>
                                     <td className="py-4 px-8 text-center">{product.available}</td>
                                     <td className="py-4 px-8 text-center">{product.category}</td>
                                     <td className="py-4 px-8 text-center">

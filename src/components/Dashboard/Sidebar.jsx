@@ -10,10 +10,10 @@ const Sidebar = () => {
     const navigate = useNavigate();
     const { setAuth } = useContext(AuthContext) 
     const sidebar = [
-        { name: 'Overview', icon: faHouse, to: '/dashboard' },
-        { name: 'Products', icon: faShirt, to: '/dashboard/list-product' },
-        { name: 'Account', icon: faUsers, to: '/dashboard/list-user' },
-        { name: 'Orders', icon: faBagShopping, to: '/dashboard/list-order' },
+        { name: 'Tổng quan', icon: faHouse, to: '/dashboard' },
+        { name: 'Sản phẩm', icon: faShirt, to: '/dashboard/list-product' },
+        { name: 'Tài khoản', icon: faUsers, to: '/dashboard/list-user' },
+        { name: 'Đơn hàng', icon: faBagShopping, to: '/dashboard/list-order' },
     ];
     const handleLogOut = () => {
         setAuth({})
@@ -28,7 +28,7 @@ const Sidebar = () => {
                     src="https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1912/tuktukdesign191200146/134984546-profile-icon-vector-male-user-person-avatar-with-gear-cogwheel-for-settings-and-configuration-in.jpg?ver=6"
                     alt="ImageUser"
                 />
-                <h3 className="text-[#252525] text-xl font-bold px-3">ADMIN</h3>
+                <h1 className=" text-[#252525] text-xl font-bold px-3">ADMIN</h1>
             </div>
             <ul className="flex flex-col gap-y-6 pt-16 pb-7">
                 {sidebar.map((item, index) => (
@@ -51,18 +51,18 @@ const Sidebar = () => {
                 <li>
                     <FontAwesomeIcon icon={faShop} />
                     <Link to="/" className="pl-3  text-blue-gray-900 hover:text-black">
-                        Shop
+                        Cửa hàng
                     </Link>
                 </li>
                 <li>
                     <FontAwesomeIcon icon={faCircleUser} />
                     <Link to="/userinformation" className="pl-3  text-blue-gray-900 hover:text-black">
-                        My Profile
+                            Thông tin cá nhân
                     </Link>
                 </li>
                 <li>
                     <FontAwesomeIcon icon={faDoorOpen} />
-                    <button className="pl-3 text-blue-gray-900 hover:text-black" onClick={handleLogOut}>Log out</button>
+                    <button className="pl-3 text-blue-gray-900 hover:text-black" onClick={handleLogOut}>Đăng xuất</button>
                 </li>
             </ul>
         </aside>

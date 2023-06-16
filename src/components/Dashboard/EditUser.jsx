@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Spinner } from '@material-tailwind/react';
 import { UsersContext } from '../../context/usersProvider';
 import AuthContext from '../../context/authProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import * as adminServices from '../../services/adminServices';
 import Swal from 'sweetalert2';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBackwardFast, faBackwardStep, faBoxOpen, faFrownOpen, faOutdent } from '@fortawesome/free-solid-svg-icons';
 
 const EditUser = () => {
     const { userList } = useContext(UsersContext);
@@ -55,9 +53,10 @@ const EditUser = () => {
     const handleEdit = (e) => {
         e.preventDefault();
         Swal.fire({
-            title: 'Do you want to save the changes?',
+            title: 'Bạn có muốn lưu các thay đổi không ?',
             showCancelButton: true,
-            confirmButtonText: 'Save',
+            confirmButtonText: 'Lưu',
+            cancelButtonText: 'Hủy',
         }).then((result) => {
             if (result.isConfirmed) {
                 setLoadingEdit(true);
@@ -74,7 +73,7 @@ const EditUser = () => {
             phone !== user.phone && (data.phone = phone);
             role !== user.Role.value && (role === 'Admin' ? (data.roleId = 1) : (data.roleId = 2));
             if (Object.keys(data).length === 0) {
-                notify('There are no instead of change to edit');
+                notify('Không có thay đổi để chỉnh sửa');
                 setLoadingEdit(false);
                 setSubmit(false);
             } else {
@@ -102,7 +101,7 @@ const EditUser = () => {
             <main className="flex-1 ml-[16rem]">
                 <div className="flex items-center justify-center z-50">
                     <div className="bg-white py-14 px-8 w-full mt-14 mx-10 border-2 border-primaryColor rounded-3xl">
-                        <h2 className="flex text-3xl font-extrabold mb-4 justify-center">Edit User</h2>
+                        <h2 className="flex text-3xl font-extrabold mb-4 justify-center">Chỉnh sửa người dùng</h2>
                         {loading ? (
                             <Spinner className="h-12 w-12 mt-10 mx-auto" />
                         ) : (
@@ -111,12 +110,12 @@ const EditUser = () => {
                                     <div className="flex justify-around">
                                         <div className="flex-col mb-10">
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Fullname <span className="text-red-900">*</span>
+                                                Họ và tên <span className="text-red-900">*</span>
                                             </label>
                                             <input
                                                 type="text"
                                                 className="w-[320px] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Enter full name"
+                                                placeholder="Enter họ và tên"
                                                 value={fullName || ''}
                                                 onChange={(e) => setFullName(e.target.value)}
                                             />
@@ -128,7 +127,7 @@ const EditUser = () => {
                                             <input
                                                 type="text"
                                                 className="w-[320px] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Enter email"
+                                                placeholder="Nhập email"
                                                 value={email || ''}
                                                 onChange={(e) => setEmail(e.target.value)}
                                             />
@@ -137,12 +136,12 @@ const EditUser = () => {
                                     <div className="flex justify-around">
                                         <div className="flex-col mb-10">
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Address
+                                                Địa chỉ
                                             </label>
                                             <textarea
                                                 type="text"
                                                 className="w-[320px] h-36 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Enter address"
+                                                placeholder="Nhập địa chỉ"
                                                 value={address || ''}
                                                 onChange={(e) => setAddress(e.target.value)}
                                             />
@@ -150,7 +149,7 @@ const EditUser = () => {
                                         <div className="flex-col mb-3">
                                             <div>
                                                 <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                    Phone number
+                                                    Số điện thoại
                                                 </label>
                                                 <input
                                                     type="number"
@@ -162,7 +161,7 @@ const EditUser = () => {
                                             </div>
                                             <div className="mt-6">
                                                 <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                    Role
+                                                    Quyền
                                                 </label>
                                                 <select
                                                     className="w-[320px] px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
@@ -187,14 +186,14 @@ const EditUser = () => {
                                                 <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
                                             </div>
                                         ) : (
-                                            <span>Change</span>
+                                            <span>Thay đổi</span>
                                         )}
                                     </button>
                                     <a
                                         href="/dashboard/list-user"
                                         className="py-2 px-10 bg-gray-300 text-blue-gray-900 rounded-md w-32 mr-2 text-center hover:bg-gray-400"
                                     >
-                                        Back
+                                        Trở về
                                     </a>
                                 </div>
                             </form>

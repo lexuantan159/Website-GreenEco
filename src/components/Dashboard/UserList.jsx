@@ -1,7 +1,7 @@
 import { faPenToSquare, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as adminService from '../../services/adminServices';
 import { Spinner } from '@material-tailwind/react';
 import { UsersContext } from '../../context/usersProvider';
@@ -41,13 +41,14 @@ const UserList = () => {
 
     const handleDelete = (e) => {
         Swal.fire({
-            title: 'Are you sure ?',
-            text: "You won't be able to revert this !",
+            title: 'Bạn có chắc không ?',
+            text: "Bạn sẽ không thể hoàn nguyên điều này !",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33', 
             cancelButtonColor: '#3085d6', 
-            confirmButtonText: 'Yes, delete it !',
+            confirmButtonText: 'Có, xóa nó đi !',
+            cancelButtonText: 'Hủy',
         }).then((result) => {
             if (result.isConfirmed) {
                 setLoading(true);
@@ -57,17 +58,17 @@ const UserList = () => {
         const deleteEvent = async () => {
             const userId = e.target.closest('tr').getAttribute('data-id');
             if (userId === auth.id) {
-                Swal.fire('Error !', 'You are not allowed to delete the account you are logged in.', 'error');
+                Swal.fire('Lỗi !', 'Bạn không được phép xóa tài khoản mà bạn đang đăng nhập.', 'error');
                 setLoading(false)
             } else {
                 const deleteUser = await adminService.deleteUser(auth.accessToken, userId);
                 if (deleteUser.statusCode === 200) {
-                    Swal.fire('Deleted !', 'Account has been deleted.', 'success').then((result) => {
+                    Swal.fire('Thành công !', 'Tài khoản của người dùng này đã được xóa.', 'success').then((result) => {
                         result.isConfirmed && setFilterUser(userList.filter((user) => user.id !== userId));
                         setLoading(false);
                     });
                 } else {
-                    Swal.fire('Error !', 'Has error when delete account.', 'error');
+                    Swal.fire('Lỗi !', 'Có lỗi khi xóa tài khoản.', 'error');
                     setLoading(false)
                 }
             }
@@ -78,9 +79,9 @@ const UserList = () => {
         <main className="flex-1 ml-60">
             <div className="sticky top-0 left-0 right-0 flex items-center justify-between py-5 px-10 border-2 border-gray-200 rounded-b-2xl bg-white">
                 <div>
-                    <h1 className="text-xl font-bold leading-relaxed text-gray-800">List of Accounts</h1>
+                    <h1 className="text-xl font-bold leading-relaxed text-gray-800">Danh sách tài khoản</h1>
                     <p className="text-sm font-sm text-gray-500">
-                        This is the list of registered accounts on the system
+                        Đây là danh sách các tài khoản đã đăng ký trên hệ thống
                     </p>
                 </div>
                 <div className="flex items-center p-2 space-x-6 bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-500">
@@ -97,7 +98,7 @@ const UserList = () => {
                         <input
                             className="w-full bg-gray-100 outline-none"
                             type="text"
-                            placeholder="Article name or keyword..."
+                            placeholder="Nhập tên hoặc từ khóa..."
                             onChange={handleChangeSearch}
                         />
                     </div>
@@ -110,14 +111,14 @@ const UserList = () => {
                     <thead>
                         <tr className="text-sm font-medium text-gray-700 border-b border-gray-200">
                             <td className="py-4 px-12 w-[235px] text-lg font-bold text-primaryColor text-center">
-                                Full name
+                                Họ và tên
                             </td>
                             <td className="py-4 px-4 text-lg font-bold text-primaryColor text-center">Email</td>
                             <td className="py-4 px-9 w-[350px] text-lg font-bold text-primaryColor text-center">
-                                Address
+                                Địa chỉ
                             </td>
-                            <td className="py-4 px-9 text-lg font-bold text-primaryColor text-center">Phone</td>
-                            <td className="py-4 px-9 text-lg font-bold text-primaryColor text-center">Role</td>
+                            <td className="py-4 px-9 text-lg font-bold text-primaryColor text-center">SĐT</td>
+                            <td className="py-4 px-9 text-lg font-bold text-primaryColor text-center">Quyền</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -131,10 +132,10 @@ const UserList = () => {
                                     className={`ml-6 w-[350px] py-1 pr-9 truncate inline-block text-center ${user.phone ||
                                         'text-red-700'}`}
                                 >
-                                    {user.address || 'No address'}
+                                    {user.address || 'Chưa có địa chỉ'}
                                 </td>
                                 <td className={`py-1 px-8 text-center ${user.phone || 'text-red-700'}`}>
-                                    {user.phone || 'No phone'}
+                                    {user.phone || 'Chưa có SĐT'}
                                 </td>
                                 <td className={'py-1 px-8 text-center'}>{user.Role.value}</td>
                                 <td className="py-1 px-8 text-center">

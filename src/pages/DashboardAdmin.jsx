@@ -1,7 +1,5 @@
-import React, { useContext, useEffect } from 'react'
-import { Route, Routes, useNavigate } from 'react-router-dom'
-import { router } from '../routes'
-import LayoutAdmin from './LayoutAdmin'
+import React, { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AuthContext from '../context/authProvider'
 
 const DashboardAdmin = () => {
