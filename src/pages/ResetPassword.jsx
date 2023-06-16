@@ -2,7 +2,7 @@ import React from 'react';
 import Reset from '../components/ForgotPassword/Reset';
 
 const ResetPassword = () => {
-    document.title = "Reset Password"
+    document.title = "Đặt lại mật khẩu"
     return (
         <div>
             <Reset />

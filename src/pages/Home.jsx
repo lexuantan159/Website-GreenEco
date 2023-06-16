@@ -4,7 +4,7 @@ import MainHome from '../components/Home/MainHome'
 const Home = () => {
 
   useEffect( () => {
-    document.title = 'Home';
+    document.title = 'Trang chủ';
   })
   return (
     <div>

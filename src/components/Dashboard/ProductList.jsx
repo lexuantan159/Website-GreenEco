@@ -17,9 +17,7 @@ const ProductList = () => {
     const { productsList } = useContext(ProductsContext);
     const [listProd, setListProd] = useState([]);
     const [loading, setLoading] = useState([]);
-    const [reload, setReload] = useState([]);
     const { auth } = useContext(AuthContext);
-    const navigate = useNavigate()
 
     const notify = (message, type) => {
         const toastType = type === 'success' ? toast.success : toast.error;

@@ -11,6 +11,8 @@ import * as addProductServices from '../../services/addProductServices';
 import * as feedbackServices from '../../services/feedbackServices';
 
 const ProductDetailForm = () => {
+    const [product, setProduct] = useState({});
+    product && (document.title = `${product.title}`)
     const inputRef = useRef();
     const { productsList } = useContext(ProductsContext);
     const { auth } = useContext(AuthContext);
@@ -18,7 +20,6 @@ const ProductDetailForm = () => {
     const [activeTab, setActiveTab] = useState('description');
     const [feedbackList, setFeedbackList] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [product, setProduct] = useState({});
     const param = useParams();
 
     const notify = (message) =>

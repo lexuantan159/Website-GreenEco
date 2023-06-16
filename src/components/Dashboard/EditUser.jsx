@@ -105,7 +105,7 @@ const EditUser = () => {
                         {loading ? (
                             <Spinner className="h-12 w-12 mt-10 mx-auto" />
                         ) : (
-                            <form>
+                            <form onSubmit={handleEdit}>
                                 <div className="mb-4">
                                     <div className="flex justify-around">
                                         <div className="flex-col mb-10">
@@ -114,6 +114,7 @@ const EditUser = () => {
                                             </label>
                                             <input
                                                 type="text"
+                                                required
                                                 className="w-[320px] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
                                                 placeholder="Enter họ và tên"
                                                 value={fullName || ''}
@@ -125,7 +126,8 @@ const EditUser = () => {
                                                 Email <span className="text-red-900">*</span>
                                             </label>
                                             <input
-                                                type="text"
+                                                type="email"
+                                                required
                                                 className="w-[320px] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
                                                 placeholder="Nhập email"
                                                 value={email || ''}
@@ -140,6 +142,7 @@ const EditUser = () => {
                                             </label>
                                             <textarea
                                                 type="text"
+                                                required
                                                 className="w-[320px] h-36 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
                                                 placeholder="Nhập địa chỉ"
                                                 value={address || ''}
@@ -153,6 +156,7 @@ const EditUser = () => {
                                                 </label>
                                                 <input
                                                     type="number"
+                                                    required
                                                     className="w-[320px] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
                                                     placeholder="Enter phone number"
                                                     value={phone || ''}
@@ -179,7 +183,6 @@ const EditUser = () => {
                                     <button
                                         type="submit"
                                         className="py-2 px-4 bg-primaryColor text-blue-gray-900 rounded-md w-32 mx-6 hover:bg-light-green-800"
-                                        onClick={handleEdit}
                                     >
                                         {loadingEdit ? (
                                             <div className="flex items-center justify-center">

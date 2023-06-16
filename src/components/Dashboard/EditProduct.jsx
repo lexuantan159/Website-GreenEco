@@ -120,15 +120,16 @@ const EditProduct = () => {
                         {loading ? (
                             <Spinner className="h-12 w-12 mt-10 mx-auto" />
                         ) : (
-                            <form>
+                            <form onSubmit={handleEdit}>
                                 <div className="mb-4">
                                     <div className="flex justify-around">
                                         <div className="flex-col mb-10">
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Tiêu đề <span className="text-red-900">*</span>
+                                                Tiêu đề
                                             </label>
                                             <input
                                                 type="text"
+                                                required
                                                 className="w-[320px] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
                                                 placeholder="Nhập tiêu đề"
                                                 value={title}
@@ -138,10 +139,11 @@ const EditProduct = () => {
                                         <div className="flex flex-row">
                                             <div className="mr-4">
                                                 <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                    Giá <span className="text-red-900">*</span>
+                                                    Giá
                                                 </label>
                                                 <input
                                                     type="number"
+                                                    required
                                                     className="w-[155px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
                                                     placeholder="Nhập giá (VND)"
                                                     value={price}
@@ -150,10 +152,11 @@ const EditProduct = () => {
                                             </div>
                                             <div>
                                                 <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                    Số lượng trong kho <span className="text-red-900">*</span>
+                                                    Số lượng trong kho
                                                 </label>
                                                 <input
                                                     type="number"
+                                                    required
                                                     className="w-[155px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
                                                     placeholder="Nhập số lượng"
                                                     value={available}
@@ -169,6 +172,7 @@ const EditProduct = () => {
                                             </label>
                                             <textarea
                                                 type="text"
+                                                required
                                                 className="w-[320px] h-36 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
                                                 placeholder="Nhập mô tả"
                                                 value={description}
@@ -181,6 +185,7 @@ const EditProduct = () => {
                                             </label>
                                             <textarea
                                                 type="text"
+                                                required
                                                 className="w-[320px] h-36 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
                                                 placeholder="Nhập địa chỉ xuất xứ"
                                                 value={madeIn}
@@ -194,7 +199,8 @@ const EditProduct = () => {
                                                 Năm sản xuất
                                             </label>
                                             <input
-                                                type="text"
+                                                type="number"
+                                                required
                                                 className="w-[320px] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
                                                 placeholder="Nhập năm sản xuất"
                                                 value={manufacture}
@@ -207,6 +213,7 @@ const EditProduct = () => {
                                             </label>
                                             <input
                                                 type="text"
+                                                required
                                                 className="w-[320px] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primaryColor"
                                                 placeholder="Nhập chứng chỉ"
                                                 value={certificate}
@@ -236,7 +243,6 @@ const EditProduct = () => {
                                             <input
                                                 type="file"
                                                 className="w-[320px] px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Tải lên ảnh"
                                                 accept=".png, .jpg, .jpeg"
                                                 files={image}
                                                 onChange={(e) => setImage(e.target.files[0])}

@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 
 const Contact = () => {
     useEffect(() => {
-        document.title = 'Contact';
+        document.title = 'Liên hệ';
     });
     return (
         <div>

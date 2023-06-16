@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 
 const About = () => {
     useEffect(() => {
-        document.title = 'About';
+        document.title = 'Giới thiệu';
     });
     return (
         <div>

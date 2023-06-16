@@ -4,7 +4,7 @@ import FormLogin from '../components/FormLogin/FormLogin'
 const Login = () => {
 
   useEffect( () => {
-    document.title = 'Log In';
+    document.title = 'Đăng nhập';
   })
   return (
     <div>

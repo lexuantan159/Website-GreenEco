@@ -6,7 +6,7 @@ import { Spinner } from '@material-tailwind/react';
 import 'react-toastify/dist/ReactToastify.css';
 import React, { useEffect, useState, useContext } from 'react';
 import AuthContext from '../../context/authProvider';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as authServices from '../../services/authServices';
 
 const FormLogin = () => {
@@ -23,8 +23,9 @@ const FormLogin = () => {
         hiddenPass ? setHiddenPass(false) : setHiddenPass(true);
     };
 
-    const notify = (message) =>
-        toast(message, {
+    const notify = (message, type) => {
+        const toastType = type === "success" ? toast.success : toast.error
+        return toastType(message, {
             position: 'top-center',
             autoClose: 1500,
             hideProgressBar: false,
@@ -32,12 +33,13 @@ const FormLogin = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light',
+            theme: 'colored',
         });
+    }
 
     useEffect(() => {
         if (location.state?.toastMessage !== '') {
-            notify(location.state?.toastMessage);
+            notify(location.state?.toastMessage, 'success');
             navigate(location.pathname, { replace: true, state: {} });
         }
     }, []);
@@ -62,7 +64,7 @@ const FormLogin = () => {
                     if (authorization.statusCode === 200) {
                         if (authorization.roles === 'Admin') navigate('/dashboard');
                         else if (authorization.roles === 'User') navigate('/');
-                        else notify('Login failed');
+                        else notify('Đăng nhập thất bại');
                     } else {
                         notify(authorization.error.response.data.message);
                         setLoading(false);
@@ -91,7 +93,7 @@ const FormLogin = () => {
             // email is not valid or does not end with "@gmail.com"
             setSubmit(false);
             setLoading(false);
-            notify('Email is not valid with "@gmail.com"');
+            notify('Email phải bao gồm đuôi "@gmail.com"');
         }
     };
 
@@ -107,11 +109,11 @@ const FormLogin = () => {
                 <div className="bg-white w-full sm:w-[90%] md:w-[80%] lg:w-[75%] lg:grid lg:grid-cols-10 shadow-xl m-auto my-auto rounded-[20px] pb-4 lg:pb-0">
                     <div className="text-center lg:col-span-4">
                         <div className="w-[70%] m-auto">
-                            <h1 className="text-primaryColor text-3xl font-bold py-10">Log In To GreenEco</h1>
+                            <h1 className="text-primaryColor text-3xl font-bold py-10">Đăng Nhập GreenEco</h1>
                             <form action="" onSubmit={(e) => handleLogin(e)}>
                                 <div className="flex flex-col mb-6">
                                     <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                        Email Address
+                                        Địa Chỉ Email 
                                     </label>
                                     <input
                                         id="emailInput"
@@ -126,7 +128,7 @@ const FormLogin = () => {
                                 </div>
                                 <div className="flex flex-col ">
                                     <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                        Password
+                                        Mật Khẩu
                                     </label>
                                     <div className="relative">
                                         <input
@@ -134,7 +136,7 @@ const FormLogin = () => {
                                             className="w-full px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                             type={hiddenPass ? 'password' : 'text'}
                                             required
-                                            placeholder="yourpassword"
+                                            placeholder="Mật khẩu của bạn"
                                             onChange={(event) => setPassword(event.target.value)}
                                             value={password}
                                         />
@@ -154,27 +156,27 @@ const FormLogin = () => {
                                     </div>
                                 </div>
                                 <div className=" text-right mt-2 mb-9 ">
-                                    <a href="/forgot-password" className="text-lg text-primaryColor">
-                                        Forgot Password?
-                                    </a>
+                                    <Link to="/forgot-password" className="text-lg text-primaryColor">
+                                        Quên mật khẩu?
+                                    </Link>
                                 </div>
                                 <button className="py-3 bg-primaryColor w-full mb-3 rounded-lg text-xl font-bold text-white  opacity-100 active:opacity-80">
                                     {loading ? (
                                         <div className="flex items-center justify-center">
-                                            <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
+                                            <Spinner className="h-6 w-6 mr-4" /> <span>Đang tải....</span>
                                         </div>
                                     ) : (
-                                        <span>Log In</span>
+                                        <span>Đăng Nhập</span>
                                     )}
                                 </button>
                             </form>
 
                             <div className="mt-2 mb-9">
                                 <p className="">
-                                    Don’t have account?
-                                    <a href="/signup" className="text-lg text-primaryColor">
-                                        Sign Up
-                                    </a>
+                                    Chưa có tài khoản?
+                                    <Link to="/signup" className="text-lg text-primaryColor ml-2">
+                                        Đăng Ký
+                                    </Link>
                                 </p>
                             </div>
                         </div>

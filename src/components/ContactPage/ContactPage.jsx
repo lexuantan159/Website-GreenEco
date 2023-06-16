@@ -12,8 +12,9 @@ const ContactPage = () => {
     const [submit, setSubmit] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const notify = (message) =>
-        toast(message, {
+    const notify = (message, type) => {
+        const toastType = type === "success" ? toast.success : toast.error
+        return toastType(message, {
             position: 'top-center',
             autoClose: 1500,
             hideProgressBar: false,
@@ -21,8 +22,9 @@ const ContactPage = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light',
+            theme: 'colored',
         });
+    }
     useEffect(() => {
         if (submit) {
             const fetchContact = async () => {
@@ -30,7 +32,7 @@ const ContactPage = () => {
                 if (contact.statusCode === 200) {
                     setLoading(false);
                     setSubmit(false);
-                    notify(contact.response.message);
+                    notify(contact.response.message, 'success');
                 } else {
                     notify(contact.error.response.data.message);
                     setLoading(false);
@@ -88,13 +90,13 @@ const ContactPage = () => {
                 >
                     <div className="mb-4">
                         <label className="block text-gray-700 font-bold mb-2" htmlFor="name">
-                            Name
+                            Họ và tên
                         </label>
                         <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             required
                             type="text"
-                            placeholder="Full name"
+                            placeholder="Nhập họ và tên của bạn"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
@@ -107,19 +109,19 @@ const ContactPage = () => {
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
                             required
                             type="email"
-                            placeholder="Your email"
+                            placeholder="Nhập email của bạn"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="mb-6">
                         <label className="block text-gray-700 font-bold mb-2" htmlFor="message">
-                            Message
+                            Tin nhắn
                         </label>
                         <textarea
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             required
-                            placeholder="Message content"
+                            placeholder="Nội dung tin nhắn"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                         ></textarea>
@@ -132,10 +134,10 @@ const ContactPage = () => {
                         >
                             {loading ? (
                                 <div className="flex items-center justify-center">
-                                    <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
+                                    <Spinner className="h-6 w-6 mr-4" /> <span>Đang tải....</span>
                                 </div>
                             ) : (
-                                <span>Submit</span>
+                                <span>Gửi</span>
                             )}
                         </button>
                     </div>
@@ -171,7 +173,7 @@ const ContactPage = () => {
                                 <FontAwesomeIcon icon={faEnvelope} />
                             </div>
                             <h4 className="text-center font-bold my-4 text-[24px]">Email</h4>
-                            <p className="text-[#666666] text-[16px] font-medium text-center">GeenEco@gmail.com</p>
+                            <p className="text-[#666666] text-[16px] font-medium text-center">GreenEco@gmail.com</p>
                         </div>
                     </div>
                 </div>

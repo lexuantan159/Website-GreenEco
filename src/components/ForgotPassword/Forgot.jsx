@@ -42,7 +42,7 @@ const Forgot = () => {
                 console.log(forgotPassword);
                 if (forgotPassword.statusCode === 200) {
                     setLoading(false);
-                    navigate('/reset-password', { state: { toastMessage: forgotPassword.response.message + ". Please check your mailbox to receive the OTP" } });
+                    navigate('/reset-password', { state: { toastMessage: forgotPassword.response.message + ". Vui lòng kiểm tra hộp thư của bạn để nhận OTP" } });
                 } else {
                     notify(forgotPassword.error.message);
                     setLoading(false);
@@ -66,7 +66,7 @@ const Forgot = () => {
             // email is not valid or does not end with "@gmail.com"
             setSubmit(false);
             setLoading(false);
-            notify('Email is not valid with "@gmail.com"');
+            notify('Email phải bao gồm đuôi "@gmail.com"');
         }
     };
     return (
@@ -76,12 +76,12 @@ const Forgot = () => {
                 <div className="bg-white w-full sm:w-[90%] md:w-[80%] lg:w-[75%] lg:grid lg:grid-cols-10 shadow-xl m-auto my-auto rounded-[20px] pb-4 lg:pb-0">
                     <div className="text-center lg:col-span-4">
                         <div className="w-[70%] m-auto">
-                            <h1 className="text-primaryColor text-3xl font-bold py-12">Forgot Password</h1>
-                            <h1 className="text-primaryColor text-base font-bold">Please enter your email address. You will receive a OTP code to create a new password via email <FontAwesomeIcon icon={faEnvelope}/></h1>
+                            <h1 className="text-primaryColor text-3xl font-bold py-12">Quên mật khẩu</h1>
+                            <h1 className="text-primaryColor text-base font-bold">Hãy điền địa chỉ email của bạn. Bạn sẽ nhận được mã OTP để tạo mật khẩu mới qua email <FontAwesomeIcon icon={faEnvelope}/></h1>
                             <form action="" onSubmit={(e) => handleSubmit(e)}>
                                 <div className="flex flex-col mb-6 mt-9">
                                     <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                        Email Address
+                                        Địa Chỉ Email
                                     </label>
                                     <input
                                         className="px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
@@ -96,10 +96,10 @@ const Forgot = () => {
                                 <button className="py-3 bg-primaryColor w-full mt-3 mb-3 rounded-lg text-xl font-bold text-white  opacity-100 active:opacity-80">
                                     {loading ? (
                                         <div className="flex items-center justify-center">
-                                            <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
+                                            <Spinner className="h-6 w-6 mr-4" /> <span>Đang tải....</span>
                                         </div>
                                     ) : (
-                                        <span>Send</span>
+                                        <span>Gửi</span>
                                     )}
                                 </button>
                             </form>

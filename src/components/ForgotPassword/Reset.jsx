@@ -8,7 +8,6 @@ import * as authServices from '../../services/authServices.js';
 
 const Reset = () => {
     const [otp, setOtp] = useState('');
-    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
     const [submit, setSubmit] = useState(false);
@@ -33,7 +32,7 @@ const Reset = () => {
     }
     useEffect(() => {
         if (location.state?.toastMessage !== '') {
-            notify(location.state?.toastMessage);
+            notify(location.state?.toastMessage, "success");
             navigate(location.pathname, { replace: true, state: {} });
         }
     }, []);
@@ -59,13 +58,13 @@ const Reset = () => {
         e.preventDefault();
         // Validation input
         if (otp.length !== 6) {
-            notify('OTP code must have exactly 6 numbers');
+            notify('Mã OTP phải có đúng 6 chữ số');
             setSubmit(false);
         } else if (password.length < 6) {
-            notify('Password must be at least 6 characters');
+            notify('Mật khẩu phải có tối thiểu 6 ký tự');
             setSubmit(false);
         } else if (rePassword !== password) {
-            notify('Password does not match');
+            notify('Mật khẩu nhập lại không khớp');
             setSubmit(false);
         } else {
             setLoading(true);
@@ -79,7 +78,7 @@ const Reset = () => {
                 <div className="bg-white w-full sm:w-[90%] md:w-[80%] lg:w-[75%] lg:grid lg:grid-cols-10 shadow-xl m-auto my-auto rounded-[20px] pb-4 lg:pb-0">
                     <div className="text-center lg:col-span-4">
                         <div className="w-[70%] m-auto">
-                            <h1 className="text-primaryColor text-3xl font-bold py-10">Reset Password</h1>
+                            <h1 className="text-primaryColor text-3xl font-bold py-10">Đặt lại mật khẩu</h1>
                             <form action="" onSubmit={(e) => handleSubmit(e)}>
                                 <div className="flex flex-col mb-6">
                                     <label className="font-medium text-left text-lg mb-2 " htmlFor="">
@@ -89,21 +88,21 @@ const Reset = () => {
                                         className="px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                         required
                                         type="text"
-                                        placeholder="Your OTP"
+                                        placeholder="Mã OTP của bạn"
                                         onChange={(event) => setOtp(event.target.value)}
                                         value={otp}
                                     />
                                 </div>
                                 <div className="flex flex-col mb-6">
                                     <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                        New Password
+                                        Mật Khẩu Mới
                                     </label>
                                     <div className="relative">
                                         <input
                                             className="w-full px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                             type={hiddenPass ? 'password' : 'text'}
                                             required
-                                            placeholder="Your new password"
+                                            placeholder="Mật khẩu mới của bạn"
                                             onChange={(event) => setPassword(event.target.value)}
                                             value={password}
                                         />
@@ -124,14 +123,14 @@ const Reset = () => {
                                 </div>
                                 <div className="flex flex-col ">
                                     <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                        Confirm Password
+                                        Xác Nhận Mật Khẩu
                                     </label>
                                     <div className="relative">
                                         <input
                                             className="w-full px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                             type={hiddenRePass ? 'password' : 'text'}
                                             required
-                                            placeholder="Your confirm password"
+                                            placeholder="Nhập lại mật khẩu của bạn"
                                             onChange={(e) => setRePassword(e.target.value)}
                                             value={rePassword}
                                         />
@@ -153,10 +152,10 @@ const Reset = () => {
                                 <button className="py-3 bg-primaryColor w-full mt-8 mb-12 rounded-lg text-xl font-bold text-white  opacity-100 active:opacity-80">
                                     {loading ? (
                                         <div className="flex items-center justify-center">
-                                            <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
+                                            <Spinner className="h-6 w-6 mr-4" /> <span>Đang tải....</span>
                                         </div>
                                     ) : (
-                                        <span>Reset</span>
+                                        <span>Đặt lại</span>
                                     )}
                                 </button>
                             </form>
