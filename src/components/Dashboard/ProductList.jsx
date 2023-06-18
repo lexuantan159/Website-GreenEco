@@ -96,7 +96,7 @@ const ProductList = () => {
     return (
         <>
             <ToastContainer />
-            <main className="flex-1 ml-60">
+            <main className="flex-1">
                 <div className="sticky top-0 left-0 right-0 flex items-center justify-between py-5 px-10 border-2 border-gray-200 rounded-b-2xl bg-white">
                     <div>
                         <h1 className="text-xl font-bold leading-relaxed text-gray-800">Danh sách sản phẩm</h1>

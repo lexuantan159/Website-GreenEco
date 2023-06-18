@@ -75,7 +75,7 @@ const AddProduct = () => {
     return (
         <>
             <ToastContainer />
-            <main className="flex-1 ml-60">
+            <main className="flex-1">
                 <div className="flex items-center justify-center z-50">
                     <div className="bg-white p-8 w-full mt-8 mx-10 border-2 border-primaryColor rounded-3xl">
                         <h2 className="flex text-3xl font-extrabold mb-4 justify-center">Thêm sản phẩm mới</h2>
