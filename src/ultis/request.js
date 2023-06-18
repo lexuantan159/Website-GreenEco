@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const request = axios.create({
-    baseURL: 'https://greeneco.up.railway.app/api/',
+    baseURL: 'https://greeneco-vs.up.railway.app/api/',
 });
 
 export const post = async (endPoints, option = {}) => {
@@ -29,10 +29,12 @@ export const put = async (endPoints, body = {}, header = {} ) => {
     return response;
 };
 
-export const deleteProduct = async (endPoints, header = {}, body = {} ) => {
-    const response = await request.delete(endPoints, header, body);
+export const reDelete = async (endPoints, option = {}) => {
+    const response = await request.delete(endPoints, option);
     return response;
 };
+
+
 export const getUser = async (endPoints, option = {}) => {
     const response = await request.get(endPoints, option);
     return response;
