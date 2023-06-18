@@ -5,7 +5,7 @@ import ChangePassword from '../ChangePassword/ChangePassword';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 //server
-import * as userServer from '../../services/userServices'
+import * as userServer from '../../services/userServices';
 import AuthContext from '../../context/authProvider';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -108,7 +108,7 @@ const UserInfomation = () => {
         setSelectedImage(imageUrl.url);
         setShowImageList(false);
     };
-    
+
     const toggleImageList = () => {
         setShowImageList(!showImageList);
     };
@@ -124,7 +124,7 @@ const UserInfomation = () => {
             progress: undefined,
             theme: 'light',
         });
-        
+
     useEffect(() => {
         if (location.state?.toastMessage !== '') {
             notify(location.state?.toastMessage);
@@ -134,24 +134,22 @@ const UserInfomation = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-          if (auth.accessToken) {
-            const response = await userServer.getUser(auth.accessToken);
-            setEmail(response.email);
-            setFullname(response.fullname);
-            setAddress(response.address);
-            setPhoneNumber(response.phone);
-          } else {
-            setHasUser(false);
-          }
-          setIsEditing(false);
+            if (auth.accessToken) {
+                const response = await userServer.getUser(auth.accessToken);
+                setEmail(response.email);
+                setFullname(response.fullname);
+                setAddress(response.address);
+                setPhoneNumber(response.phone);
+            } else {
+                setHasUser(false);
+            }
+            setIsEditing(false);
         };
-      
-        fetchData();
-      }, [auth]);
 
-      //responsive
-      
-      
+        fetchData();
+    }, [auth]);
+
+    //responsive
 
     return (
         <>
@@ -174,7 +172,7 @@ const UserInfomation = () => {
                                 <div>
                                     <span className="ml-2 text-xs text-gray-400">
                                         <FontAwesomeIcon icon={faPen} className="mr-2" />
-                                        Edit Profile
+                                        Chỉnh sửa trang cá nhân
                                     </span>
                                 </div>
                             </div>
@@ -186,7 +184,7 @@ const UserInfomation = () => {
                     <div className="h-80 mt-6 ml-32 ">
                         <span className="">
                             <FontAwesomeIcon icon={faUser} className="mr-4" />
-                            My account
+                            Tài khoản
                         </span>
                         <br />
                         <button
@@ -195,7 +193,7 @@ const UserInfomation = () => {
                             } ml-9 mt-3`}
                             onClick={() => handleButtonClick(1)}
                         >
-                            Profile
+                            Hồ sơ cá nhân
                         </button>
                         <br />
                         <button
@@ -204,7 +202,7 @@ const UserInfomation = () => {
                             } ml-9 mt-3`}
                             onClick={() => handleButtonClick(2)}
                         >
-                            Address
+                            Địa chỉ
                         </button>
                         <br />
                         <button
@@ -213,7 +211,7 @@ const UserInfomation = () => {
                             } ml-9 mt-3`}
                             onClick={() => handleButtonClick(3)}
                         >
-                            Change Password
+                            Thay đổi mật khẩu
                         </button>
                     </div>
                 </div>
@@ -223,10 +221,10 @@ const UserInfomation = () => {
                         {activeButton === 1 && (
                             <>
                                 <div className="ml-12">
-                                    <span className="">My Profile</span>
+                                    <span className="">Thông tin cá nhân</span>
                                     <br />
                                     <span className="text-xs text-gray-400">
-                                        Manage profile information for account security
+                                        Quản lý thông tin hồ sơ để bảo mật tài khoản
                                     </span>
                                 </div>
                             </>
@@ -234,10 +232,10 @@ const UserInfomation = () => {
                         {activeButton === 2 && (
                             <>
                                 <div className="ml-12">
-                                    <span className="">My Address</span>
+                                    <span className="">Địa chỉ của bạn</span>
                                     <br />
                                     <span className="text-xs text-gray-400">
-                                        Manage and change your delivery address
+                                        Quản lý và thay đổi địa chỉ giao hàng của bạn
                                     </span>
                                 </div>
                             </>
@@ -245,10 +243,10 @@ const UserInfomation = () => {
                         {activeButton === 3 && (
                             <>
                                 <div className="ml-12">
-                                    <span className="">My Password</span>
+                                    <span className="">Mật khẩu của bạn</span>
                                     <br />
                                     <span className="text-xs text-gray-400">
-                                        Manage and change account passwords to prevent theft
+                                        Quản lý và thay đổi mật khẩu của tài khoản để bảo mật tốt hơn
                                     </span>
                                 </div>
                             </>
@@ -262,69 +260,95 @@ const UserInfomation = () => {
                                     {isEditing ? (
                                         <form className="text-black">
                                             <div>
-                                                <span className="mr-14 mr-1">Email : </span>
-                                                <input
-                                                    required
-                                                    type="email"
-                                                    autoComplete="email"
-                                                    placeholder="youraccount@gmail.com"
-                                                    onChange={(e) => setEmail(e.target.value)}
-                                                    value={email}
-                                                    className="mb-2 ml-6 w-80 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
-                                                />
-                                            </div>
-                                            <br />
-                                            <div>
-                                                <span className="mr-8">Full Name : </span>
-                                                <input
-                                                    type="text"
-                                                    value={fullname}
-                                                    onChange={(e) => setFullname(e.target.value)}
-                                                    placeholder="Name"
-                                                    className="mb-2 ml-4 w-80 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
-                                                />
-                                            </div>
-                                            <br />
-                                            <div>
-                                                <span className="">Phone Number : </span>
-                                                <input
-                                                    type="text"
-                                                    value={phoneNumber}
-                                                    onChange={(e) => setPhoneNumber(e.target.value)}
-                                                    placeholder="Name"
-                                                    className="mb-2 ml-4 w-80 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
-                                                />
-                                            </div>
-                                            <div className="flex ml-64 mt-8">
-                                                <button
-                                                    className="bg-primaryColor hover:bg-green-300 text-white font-semibold py-2 px-6 rounded-lg"
-                                                    onClick={handleSaveChanges1}
-                                                >
-                                                    Save
-                                                </button>
-                                                <button
-                                                    className="ml-2 ml-4  text-red-500 hover:text-red-600 font-semibold"
-                                                    onClick={handleCancelChanges}
-                                                >
-                                                    Cancel
-                                                </button>
+                                                <div class="flex items-center mb-9">
+                                                    <div class="w-1/4">
+                                                        <span>Email : </span>
+                                                    </div>
+                                                    <div class="w-3/4">
+                                                        <input
+                                                            required
+                                                            type="email"
+                                                            autoComplete="email"
+                                                            placeholder="youraccount@gmail.com"
+                                                            onChange={(e) => setEmail(e.target.value)}
+                                                            value={email}
+                                                            className="mb-2 w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex items-center mb-9">
+                                                    <div class="w-1/4">
+                                                        <span>Họ và Tên : </span>
+                                                    </div>
+                                                    <div class="w-3/4">
+                                                        <input
+                                                            type="text"
+                                                            value={fullname}
+                                                            onChange={(e) => setFullname(e.target.value)}
+                                                            placeholder="Name"
+                                                            className="mb-2 w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex items-center mb-5">
+                                                    <div class="w-1/4">
+                                                        <span>Số điện thoại : </span>
+                                                    </div>
+                                                    <div class="w-3/4">
+                                                        <input
+                                                            type="text"
+                                                            value={phoneNumber}
+                                                            onChange={(e) => setPhoneNumber(e.target.value)}
+                                                            placeholder="Name"
+                                                            className="mb-2 w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex ml-64 mt-8">
+                                                    <button
+                                                        className="bg-primaryColor hover:bg-green-300 text-white font-semibold py-2 px-6 rounded-lg"
+                                                        onClick={handleSaveChanges1}
+                                                    >
+                                                        Lưu
+                                                    </button>
+                                                    <button
+                                                        className="ml-2 ml-4  text-red-500 hover:text-red-600 font-semibold"
+                                                        onClick={handleCancelChanges}
+                                                    >
+                                                        Hủy
+                                                    </button>
+                                                </div>
                                             </div>
                                         </form>
                                     ) : (
                                         <div>
-                                            <div className="flex items-center mb-9 ">
-                                                <h1 className="mb-2">Email :</h1>
-                                                <h3 className="ml-24 ">{email}</h3>
+                                            <div class="flex items-center mb-9">
+                                                <div class="w-1/4">
+                                                    <h1 class="mb-2">Email :</h1>
+                                                </div>
+                                                <div class="w-3/4">
+                                                    <h3 class="">{email}</h3>
+                                                </div>
                                             </div>
 
-                                            <div className="flex items-center mb-9 ">
-                                                <h1 className="mb-2">Full Name :</h1>
-                                                <h3 className="ml-14">{fullname}</h3>
+                                            <div class="flex items-center mb-9">
+                                                <div class="w-1/4">
+                                                    <h1 class="mb-2">Họ và Tên :</h1>
+                                                </div>
+                                                <div class="w-3/4">
+                                                    <h3 class="">{fullname}</h3>
+                                                </div>
                                             </div>
 
-                                            <div className="flex items-center mb-5">
-                                                <h1 className="mb-2">Phone Number :</h1>
-                                                <h3 className="ml-6">{phoneNumber}</h3>
+                                            <div class="flex items-center mb-5">
+                                                <div class="w-1/4">
+                                                    <h1 class="mb-2">Số điện thoại :</h1>
+                                                </div>
+                                                <div class="w-3/4">
+                                                    <h3 class="">{phoneNumber}</h3>
+                                                </div>
                                             </div>
 
                                             <div className="flex ml-64">
@@ -332,7 +356,7 @@ const UserInfomation = () => {
                                                     className="text-white bg-primaryColor hover:bg-green-300 font-semibold py-2 px-6 mt-4 border rounded-lg cursor-pointer"
                                                     onClick={() => setIsEditing(true)}
                                                 >
-                                                    <span className="mr-2 ">Change</span>
+                                                    <span className="mr-2 ">Thay đổi</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -348,42 +372,56 @@ const UserInfomation = () => {
                                     {isEditing ? (
                                         <form className="text-black">
                                             <div>
-                                                <span className="mr-14">Address : </span>
-                                                <input
-                                                    type="text"
-                                                    value={address}
-                                                    onChange={(e) => setAddress(e.target.value)}
-                                                    placeholder="Name"
-                                                    className="mb-32 ml-6 w-80 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
-                                                />
-                                            </div>
-                                            <div className="flex ml-64 mt-8">
-                                                <button
-                                                    className="bg-primaryColor hover:bg-green-300 text-white font-semibold py-2 px-6 rounded-lg"
-                                                    onClick={handleSaveChanges2}
-                                                >
-                                                    Save
-                                                </button>
-                                                <button
-                                                    className="ml-2 ml-4  text-red-500 hover:text-red-600 font-semibold"
-                                                    onClick={handleCancelChanges}
-                                                >
-                                                    Cancel
-                                                </button>
+                                                <div class="flex items-center justify-center mb-9">
+                                                    <div class="w-1/4">
+                                                        <span>Địa chỉ :</span>
+                                                    </div>
+                                                    <div class="w-3/4">
+                                                        
+                                                            <input
+                                                                type="text"
+                                                                value={address}
+                                                                onChange={(e) => setAddress(e.target.value)}
+                                                                placeholder="Địa chỉ"
+                                                                className="w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                            />
+                                                        </div>
+                                                    
+                                                </div>
+
+                                                <div className="flex ml-64 mt-8">
+                                                    <button
+                                                        className="bg-primaryColor hover:bg-green-300 text-white font-semibold py-2 px-6 rounded-lg"
+                                                        onClick={handleSaveChanges2}
+                                                    >
+                                                        Lưu
+                                                    </button>
+                                                    <button
+                                                        className="ml-2 ml-4  text-red-500 hover:text-red-600 font-semibold"
+                                                        onClick={handleCancelChanges}
+                                                    >
+                                                        Hủy
+                                                    </button>
+                                                </div>
                                             </div>
                                         </form>
                                     ) : (
                                         <div>
-                                            <div className="flex items-center mb-20 ">
-                                                <h1>Address :</h1>
-                                                <h3 className="ml-4">{address}</h3>
+                                            <div class="flex items-center mb-5">
+                                                <div class="w-1/4">
+                                                    <h1>Địa chỉ :</h1>
+                                                </div>
+                                                <div class="w-3/4">
+                                                    <h3 class="">{address}</h3>
+                                                </div>
                                             </div>
+
                                             <div className="flex ml-64">
                                                 <div
                                                     className="text-white bg-primaryColor hover:bg-green-300 font-semibold py-2 px-6 mt-6 border rounded-lg cursor-pointer"
                                                     onClick={() => setIsEditing(true)}
                                                 >
-                                                    <button className="mr-2 ">Change</button>
+                                                    <button className="mr-2 ">Thay đổi</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -418,7 +456,7 @@ const UserInfomation = () => {
                                 onClick={toggleImageList}
                                 className="btn btn-light btn-sm inline-flex items-center border"
                             >
-                                Select Image
+                                Chọn hình đại diện
                             </button>
                             {showImageList && (
                                 <div className="mt-2">

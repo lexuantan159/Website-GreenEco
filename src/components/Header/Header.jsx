@@ -3,21 +3,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/authProvider';
+import * as userServer from '../../services/userServices'
 
 const Header = () => {
     const navigate = useNavigate();
     const { auth, setAuth } = useContext(AuthContext);
-
+    const [fullname , setFullName] = useState("");
     const [hasUser, setHasUser] = useState(false);
     const router = useLocation();
 
     useEffect(() => {
         if (Object.keys(auth).length === 0) {
             setHasUser(false);
+          
         } else {
             setHasUser(true);
+           
         }
     }, [auth]);
+    useEffect(() => {
+          if (auth.accessToken) {
+            const fetchData = async () => {
+                if (auth.accessToken) {
+                    const response = await userServer.getUser(auth.accessToken);
+                    setFullName(response.fullname);
+                }
+            }
+            fetchData();
+          }      
+      }, [auth]);
 
     const handleLogOut = () => {
         setAuth({});
@@ -104,36 +118,28 @@ const Header = () => {
                     </li>
                 </ul>
 
-                <div className="h-full flex items-center">
-                    {hasUser ? (
-                        <button className="relative flex justify-center items-center group">
-                            <p className="text-lg text-textColor font-medium mr-3">{auth.fullName || 'Name User'}</p>
-                            <FontAwesomeIcon
-                                className="rotate-90 group-hover:rotate-0 transition-all"
-                                icon={faCaretDown}
-                            />
-                            <div className="absolute top-7 left-0 w-[200px] hidden group-hover:block transition-all bg-white shadow rounded z-10">
-                                <ul className="">
-                                    <li
-                                        onClick={() => navigate('/userinformation')}
-                                        className="my-2 px-2 py-2 text-start mx-3 hover:text-primaryColor "
-                                    >
-                                        <FontAwesomeIcon className="mr-2" icon={faUser} />
-                                        <span className="text-textColor font-medium hover:text-primaryColor">
-                                            Thông Tin Cá Nhân
-                                        </span>
-                                    </li>
-                                    {auth.role === 'Admin' && (
+                    <div className="h-full flex items-center">
+                        {hasUser ? (
+                            <button className="relative flex justify-center items-center group">
+                                <p className="text-lg text-textColor font-medium mr-3">
+                                    {fullname || 'Name User'}
+                                </p>
+                                <FontAwesomeIcon
+                                    className="rotate-90 group-hover:rotate-0 transition-all"
+                                    icon={faCaretDown}
+                                />
+                                <div className="absolute top-7 left-0 right-0 hidden group-hover:block transition-all bg-white shadow rounded py-2 z-10">
+                                    <ul className="">
                                         <li
-                                            onClick={() => navigate('/dashboard')}
-                                            className="my-2 px-2 py-2 text-start mx-3 hover:text-primaryColor "
+                                            onClick={() => navigate('/userinformation')}
+                                            className="my-1 text-textColor font-medium "
                                         >
                                             <FontAwesomeIcon className="mr-2" icon={faChartSimple} />
                                             <span className="text-textColor font-medium hover:text-primaryColor">
                                                 Bảng Điều Khiển
                                             </span>
                                         </li>
-                                    )}
+                                    
                                     <li
                                         onClick={handleLogOut}
                                         className="my-2 px-2 py-2 text-start mx-3 hover:text-primaryColor "
