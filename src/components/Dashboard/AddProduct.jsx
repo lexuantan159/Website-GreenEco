@@ -3,7 +3,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import * as adminServices from '../../services/adminServices';
 import AuthContext from '../../context/authProvider';
 import { Spinner } from '@material-tailwind/react';
-import { Link } from 'react-router-dom';
 
 const AddProduct = () => {
     const { auth } = useContext(AuthContext);
@@ -16,12 +15,12 @@ const AddProduct = () => {
     const [madeIn, setMadeIn] = useState('');
     const [manufacture, setManufacture] = useState('');
     const [certificate, setCertificate] = useState('');
-    const [category, setCategory] = useState('Natural');
+    const [category, setCategory] = useState('Tự nhiên');
     const [image, setImage] = useState(null);
     const formData = new FormData();
 
     const notify = (message, type) => {
-        const toastType = type === "success" ? toast.success : toast.error
+        const toastType = type === 'success' ? toast.success : toast.error;
         return toastType(message, {
             position: 'top-right',
             autoClose: 1500,
@@ -32,7 +31,7 @@ const AddProduct = () => {
             progress: undefined,
             theme: 'colored',
         });
-    }
+    };
 
     const handleAdd = (e) => {
         e.preventDefault();
@@ -54,16 +53,16 @@ const AddProduct = () => {
             formData.append('madeIn', madeIn);
             formData.append('certificate', certificate);
             formData.append('category', category);
-
+            
             const addProduct = await adminServices.addProduct(auth.accessToken, formData);
             // console.log(auth.accessToken);
             console.log(addProduct);
             if (addProduct.statusCode === 201) {
-                notify(addProduct.response.message, "success");
+                notify(addProduct.response.message, 'success');
                 setLoading(false);
                 setSubmit(false);
             } else {
-                notify(addProduct.error.data.message);
+                notify(addProduct.error.message);
                 setLoading(false);
                 setSubmit(false);
             }
@@ -79,18 +78,19 @@ const AddProduct = () => {
             <main className="flex-1 ml-60">
                 <div className="flex items-center justify-center z-50">
                     <div className="bg-white p-8 w-full mt-8 mx-10 border-2 border-primaryColor rounded-3xl">
-                        <h2 className="flex text-3xl font-extrabold mb-4 justify-center">Add New Product</h2>
-                        <form>
+                        <h2 className="flex text-3xl font-extrabold mb-4 justify-center">Thêm sản phẩm mới</h2>
+                        <form method='POST' onSubmit={handleAdd}>
                             <div className="mb-4">
                                 <div className="flex justify-around">
                                     <div className="flex-col mb-10">
                                         <label className="block text-primaryColor text-sm font-bold mb-2">
-                                            Title <span className="text-red-900">*</span>
+                                            Tiêu đề
                                         </label>
                                         <input
                                             type="text"
+                                            required
                                             className="w-[320px] px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
-                                            placeholder="Enter title"
+                                            placeholder="Nhập tiêu đề"
                                             value={title}
                                             onChange={(e) => setTitle(e.target.value)}
                                         />
@@ -98,24 +98,26 @@ const AddProduct = () => {
                                     <div className="flex flex-row">
                                         <div className="mr-4">
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Price <span className="text-red-900">*</span>
+                                                Giá
                                             </label>
                                             <input
                                                 type="number"
+                                                required
                                                 className="w-[155px] px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Enter price ($)"
+                                                placeholder="Nhập giá (VND)"
                                                 value={price}
                                                 onChange={(e) => setPrice(e.target.value)}
                                             />
                                         </div>
                                         <div>
                                             <label className="block text-primaryColor text-sm font-bold mb-2">
-                                                Available <span className="text-red-900">*</span>
+                                                Số lượng trong kho
                                             </label>
                                             <input
                                                 type="number"
+                                                required
                                                 className="w-[155px] px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
-                                                placeholder="Enter available"
+                                                placeholder="Nhập số lượng"
                                                 value={available}
                                                 onChange={(e) => setAvailable(e.target.value)}
                                             />
@@ -125,24 +127,26 @@ const AddProduct = () => {
                                 <div className="flex justify-around">
                                     <div className="flex-col mb-7">
                                         <label className="block text-primaryColor text-sm font-bold mb-2">
-                                            Description
+                                            Mô tả
                                         </label>
                                         <textarea
                                             type="text"
+                                            required
                                             className="w-[320px] h-36 px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
-                                            placeholder="Enter description"
+                                            placeholder="Nhập mô tả"
                                             value={description}
                                             onChange={(e) => setDescription(e.target.value)}
                                         />
                                     </div>
                                     <div className="flex-col mb-3">
                                         <label className="block text-primaryColor text-sm font-bold mb-2">
-                                            Made in
+                                            Địa chỉ xuất xứ
                                         </label>
                                         <textarea
                                             type="text"
+                                            required
                                             className="w-[320px] h-36 px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
-                                            placeholder="Made in"
+                                            placeholder="Địa chỉ xuất xứ"
                                             value={madeIn}
                                             onChange={(e) => setMadeIn(e.target.value)}
                                         />
@@ -151,24 +155,26 @@ const AddProduct = () => {
                                 <div className="flex justify-around">
                                     <div className="flex-col mb-3">
                                         <label className="block text-primaryColor text-sm font-bold mb-2">
-                                            Year of manufacture
+                                            Năm sản xuất
                                         </label>
                                         <input
-                                            type="text"
+                                            type="number"
+                                            required
                                             className="w-[320px] px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
-                                            placeholder="Enter year of manufacture"
+                                            placeholder="Nhập năm sản xuất"
                                             value={manufacture}
                                             onChange={(e) => setManufacture(e.target.value)}
                                         />
                                     </div>
                                     <div className="flex-col">
                                         <label className="block text-primaryColor text-sm font-bold mb-2">
-                                            Certificate
+                                            Chứng chỉ
                                         </label>
                                         <input
                                             type="text"
+                                            required
                                             className="w-[320px] px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
-                                            placeholder="Enter certificate"
+                                            placeholder="Nhập chứng chỉ"
                                             value={certificate}
                                             onChange={(e) => setCertificate(e.target.value)}
                                         />
@@ -177,24 +183,25 @@ const AddProduct = () => {
                                 <div className="flex justify-around">
                                     <div className="flex-col mb-7">
                                         <label className="block text-primaryColor text-sm font-bold mb-2">
-                                            Category
+                                            Danh mục
                                         </label>
                                         <select
                                             className="w-[320px] px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
                                             onChange={(e) => setCategory(e.target.value)}
                                             value={category}
                                         >
-                                            <option value="Natural">Natural</option>
-                                            <option value="Organic">Organic</option>
-                                            <option value="Recycled">Recycled</option>
+                                            <option value="Tự nhiên">Tự nhiên</option>
+                                            <option value="Hữu cơ">Hữu cơ</option>
+                                            <option value="Tái chế">Tái chế</option>
                                         </select>
                                     </div>
                                     <div className="flex-col">
-                                        <label className="block text-primaryColor text-sm font-bold mb-2">Image</label>
+                                        <label className="block text-primaryColor text-sm font-bold mb-2">Hình ảnh</label>
                                         <input
                                             type="file"
+                                            required
                                             className="w-[320px] px-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:border-primaryColor"
-                                            placeholder="Enter certificate"
+                                            accept=".png, .jpg, .jpeg"
                                             files={image}
                                             onChange={(e) => setImage(e.target.files[0])}
                                         />
@@ -205,23 +212,22 @@ const AddProduct = () => {
                                 <button
                                     type="submit"
                                     className="py-2 px-4 bg-primaryColor text-blue-gray-900 rounded-md w-32 mx-6 hover:bg-light-green-800"
-                                    onClick={handleAdd}
                                 >
                                     {loading ? (
                                         <div className="flex items-center justify-center">
-                                            <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
+                                            <Spinner className="h-6 w-6 mr-4" /> <span>Loading...</span>
                                         </div>
                                     ) : (
-                                        <span>Add</span>
+                                        <span>Thêm</span>
                                     )}
                                 </button>
 
-                                <Link
-                                    to="/dashboard/list-product"
-                                    className="py-2 px-10 bg-gray-300 text-blue-gray-900 rounded-md w-32 mr-2 hover:bg-gray-400"
+                                <a
+                                    href="/dashboard/list-product"
+                                    className="py-2 px-10 bg-gray-300 text-blue-gray-900 rounded-md w-32 mr-2 hover:bg-gray-400 text-center"
                                 >
-                                    Cancel
-                                </Link>
+                                    Hủy
+                                </a>
                             </div>
                         </form>
                     </div>

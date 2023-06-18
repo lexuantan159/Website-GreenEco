@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const request = axios.create({
-    baseURL: 'https://greeneco.up.railway.app/api/',
+    baseURL: 'https://greeneco-vs.up.railway.app/api/',
 });
 
 export const post = async (endPoints, option = {}) => {
@@ -26,6 +26,11 @@ export const get = async (endPoints, option = {}) => {
 
 export const put = async (endPoints, body = {}, header = {} ) => {
     const response = await request.put(endPoints, body, header);
+    return response;
+};
+
+export const reDelete = async (endPoints, option = {}) => {
+    const response = await request.delete(endPoints, option);
     return response;
 };
 

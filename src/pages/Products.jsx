@@ -4,7 +4,7 @@ import MainProducts from '../components/Products/MainProducts';
 const Products = () => {
 
     useEffect( () => {
-        document.title = 'Products';
+        document.title = 'Danh sách sản phẩm';
       })
     return (
         <div>

@@ -4,7 +4,7 @@ import FormSignup from '../components/FormSignup/FormSignup';
 const Signup = () => {
 
     useEffect( () => {
-        document.title = 'Sign Up';
+        document.title = 'Đăng ký';
       })
     return <FormSignup />;
 };

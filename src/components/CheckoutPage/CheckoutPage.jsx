@@ -256,7 +256,7 @@ const CheckoutPage = () => {
                             value={paymentMethod}
                             onChange={handlePaymentMethodChange}
                         >
-                            <option value="bankTransfer">Thanh toán qua ngân hàng</option>
+                            <option value="bankTransfer">Thanh toán bằng ví điện tử</option>
                             <option value="cod">Thanh toán khi nhận hàng (COD)</option>
                         </select>
                     </div>
@@ -270,7 +270,7 @@ const CheckoutPage = () => {
                                     <td>{totalAmount}</td>
                                 </tr>
                                 <tr>
-                                    <td>Tiền vận chuyển:</td>
+                                    <td>Phí vận chuyển:</td>
                                     <td>{TransportFee}</td>
                                 </tr>
                                 <tr>

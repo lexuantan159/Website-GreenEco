@@ -5,6 +5,14 @@ import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
 
 const ProductsSlide = ({ title, products, numOfProducts = 6, category = 'All' }) => {
+    const truncatedString = (str, num) => {
+        if (str?.length > num) {
+            return str.slice(0, num) + '...';
+        } else {
+            return str;
+        }
+    };
+
     const randomProducts = (products, numOfProducts) => {
         var randomProducts = [];
         var flag = 0;
@@ -18,21 +26,26 @@ const ProductsSlide = ({ title, products, numOfProducts = 6, category = 'All' })
         return randomProducts;
     };
 
+    const formattedNumber = (num) => {
+        return num.toLocaleString('en-US').replace(/,/g, '.');
+    };
+
     const listProducts = (passProducts) => {
-        const products = category=== "All"? passProducts: passProducts.filter((product) => product.category === category);
-        if (products.length < 6){
+        const products =
+            category === 'All' ? passProducts : passProducts.filter((product) => product.category === category);
+        if (products.length < 6) {
             return products;
-        } 
-        else {
+        } else {
             return randomProducts(products, numOfProducts);
         }
     };
 
     const lowProducts = (passProducts, numOfProducts) => {
-        const products = category=== "All"? passProducts: passProducts.filter((product) => product.category === category);
-        if (products.length < numOfProducts)return 3;
+        const products =
+            category === 'All' ? passProducts : passProducts.filter((product) => product.category === category);
+        if (products.length < numOfProducts) return 3;
         return 4;
-    }
+    };
 
     var settings = {
         dots: true,
@@ -94,8 +107,16 @@ const ProductsSlide = ({ title, products, numOfProducts = 6, category = 'All' })
                                     </div>
                                 </Link>
                                 <div className="text-center mt-2">
-                                    <h3 className=" text-xl font-bold">{product.title}</h3>
-                                    <p className="text-[#252525] text-lg font-bold ">{product.price}$</p>
+                                    <h3 className=" text-xl font-bold">
+                                        {
+                                            <h4 className="text-lg font-medium px-2">
+                                                {truncatedString(product.title, 23)}
+                                            </h4>
+                                        }
+                                    </h3>
+                                    <p className="text-lg text-primaryColor font-bold mt-3">
+                                        {formattedNumber(product.price)} VNĐ
+                                    </p>
                                 </div>
                             </div>
                         </div>

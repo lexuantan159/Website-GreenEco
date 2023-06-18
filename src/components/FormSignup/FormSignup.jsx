@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import React, { useContext, useEffect, useState } from 'react';
 import * as registerServices from '../../services/registerServices';
 import * as authServices from '../../services/authServices';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/authProvider';
 
 const FormSignup = () => {
@@ -22,8 +22,9 @@ const FormSignup = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const notify = (message) =>
-        toast(message, {
+    const notify = (message, type) => {
+        const toastType = type === "success" ? toast.success : toast.error
+        return toastType(message, {
             position: 'top-center',
             autoClose: 1500,
             hideProgressBar: false,
@@ -31,8 +32,9 @@ const FormSignup = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light',
+            theme: 'colored',
         });
+    }
 
     const replaceEmail = (email) => {
         const username = email
@@ -78,12 +80,12 @@ const FormSignup = () => {
                 setLoading(true);
                 setSubmit(true);
             } else {
-                notify('Password does not match');
+                notify('Mật khẩu nhập lại không khớp');
                 setSubmit(false);
             }
         } else {
             // email is not valid or does not end with "@gmail.com"
-            notify('Email is not valid with "@gmail.com"');
+            notify('Email phải bao gồm đuôi "@gmail.com"');
             setSubmit(false);
         }
     };
@@ -99,18 +101,18 @@ const FormSignup = () => {
             <div className="h-screen flex items-center bg-gradient-to-r from-[#1e524e] to-[#6cff95]">
                 <div className="bg-white  w-full sm:w-[90%] md:w-[80%] lg:w-[75%] lg:grid lg:grid-cols-10 shadow-xl mx-auto rounded-[20px] pb-4 lg:pb-0">
                     <div className="text-center lg:col-span-4">
-                        <h1 className="text-primaryColor text-3xl font-bold py-6">Sign Up To GreenEco</h1>
+                        <h1 className="text-primaryColor text-3xl font-bold py-6">Đăng Ký GreenEco</h1>
                         <div className="w-[70%] m-auto">
                             <form action="" onSubmit={(e) => handleSubmit(e)}>
                                 <div className="grid grid-cols-2 gap-4 mb-2">
                                     <div className="flex flex-col ">
                                         <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                            First Name
+                                            Họ
                                         </label>
                                         <input
                                             className="px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                             type="text"
-                                            placeholder="firstname"
+                                            placeholder="Họ của bạn"
                                             onChange={(e) => setFirstName(e.target.value)}
                                             value={firstName}
                                             required
@@ -118,12 +120,12 @@ const FormSignup = () => {
                                     </div>
                                     <div className="flex flex-col ">
                                         <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                            Last Name
+                                            Tên
                                         </label>
                                         <input
                                             className="px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                             type="text"
-                                            placeholder="lastname"
+                                            placeholder="Tên của bạn"
                                             onChange={(e) => setLastName(e.target.value)}
                                             value={lastName}
                                             required
@@ -132,7 +134,7 @@ const FormSignup = () => {
                                 </div>
                                 <div className="flex flex-col mb-2">
                                     <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                        Email Address
+                                        Địa Chỉ Email
                                     </label>
                                     <input
                                         className="px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
@@ -145,13 +147,13 @@ const FormSignup = () => {
                                 </div>
                                 <div className="flex flex-col mb-2">
                                     <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                        Password
+                                        Mật Khẩu
                                     </label>
                                     <div className="relative">
                                         <input
                                             className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                             type={hiddenPass ? 'password' : 'text'}
-                                            placeholder="yourpassword"
+                                            placeholder="Mật khẩu của bạn"
                                             onChange={(e) => setPassword(e.target.value)}
                                             value={password}
                                             required
@@ -173,14 +175,14 @@ const FormSignup = () => {
                                 </div>
                                 <div className="flex flex-col mb-6">
                                     <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                                        Retype Password
+                                        Xác Nhận Mật Khẩu
                                     </label>
                                     <div className="relative">
                                         <input
                                             className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
                                             type={reHiddenPass ? 'password' : 'text'}
                                             required
-                                            placeholder="retypeyourpassword"
+                                            placeholder="Nhập lại mật khẩu của bạn"
                                             onChange={(e) => setRePassword(e.target.value)}
                                             value={rePassword}
                                         />
@@ -202,7 +204,7 @@ const FormSignup = () => {
                                 <button className="py-2 bg-primaryColor w-full mb-3 rounded-lg text-xl font-bold text-white opacity-100 active:opacity-80">
                                     {loading ? (
                                         <div className="flex items-center justify-center">
-                                            <Spinner className="h-6 w-6 mr-4" /> <span>Loading....</span>
+                                            <Spinner className="h-6 w-6 mr-4" /> <span>Đang tải....</span>
                                         </div>
                                     ) : (
                                         <span>Sign Up</span>
@@ -212,10 +214,10 @@ const FormSignup = () => {
 
                             <div className="mt-2 mb-9">
                                 <p className="">
-                                    Already a member?
-                                    <a href="/login" className="text-lg text-primaryColor">
-                                        Log In
-                                    </a>
+                                    Đã có tài khoản?
+                                    <Link to="/login" className="text-lg text-primaryColor ml-2">
+                                        Đăng nhập
+                                    </Link>
                                 </p>
                             </div>
                         </div>

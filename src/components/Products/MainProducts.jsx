@@ -11,7 +11,7 @@ import AuthContext from '../../context/authProvider';
 const MainProducts = () => {
     const { auth } = useContext(AuthContext);
     const { productsList } = useContext(ProductsContext);
-    const [category, setCategory] = useState('All');
+    const [category, setCategory] = useState('Tất cả');
     const [productsCategory, setProductsCategory] = useState([]);
     const [loadings, setLoadings] = useState(true);
 
@@ -28,7 +28,7 @@ const MainProducts = () => {
         });
 
     const handleDivideProducts = (category) => {
-        return category === 'All' ? productsList : productsList.filter((product) => product.category === category);
+        return category === 'Tất cả' ? productsList : productsList.filter((product) => product.category === category);
     };
 
     const handleChangeCategory = (category) => {
@@ -47,7 +47,7 @@ const MainProducts = () => {
     }, [loadings, productsCategory, productsList]);
 
     const addProduct = async (token, id, quantity) => {
-        notify("Add product successfully")
+        notify("Thêm Sản Phẩm Thành Công")
         const response = await addProductServices.addProduct(token, id, quantity);
         response.statusCode !== 200 && notify(response.error);
     };
@@ -56,7 +56,7 @@ const MainProducts = () => {
         if (auth.accessToken !== undefined) {
             addProduct(auth.accessToken,id, 1);
         } else {
-            notify('Login Before Add Product')
+            notify('Đăng Nhập Trước Khi Thêm Sản Phẩm')
         }
     };
 
