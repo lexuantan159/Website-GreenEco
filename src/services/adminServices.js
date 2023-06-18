@@ -127,12 +127,12 @@ export const deleteProduct = async (accessToken, prodId, fileName) => {
 const ORDERS_ENDPOINT = 'order/get-all-order';
 export const getOrders = async (accessToken) => {
     try {
-        const users = await request.get(ORDERS_ENDPOINT, {
+        const response = await request.get(ORDERS_ENDPOINT, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
         return {
-            users: users.data.userData,
-            statusCode: users.status,
+            orders: response.data.ordersData,
+            statusCode: response.status,
         };
     } catch (e) {
         return {

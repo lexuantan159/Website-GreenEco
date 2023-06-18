@@ -1,4 +1,5 @@
 import AddProduct from '../components/Dashboard/AddProduct';
+import DetailOrder from '../components/Dashboard/DetailOrder';
 import EditProduct from '../components/Dashboard/EditProduct';
 import EditUser from '../components/Dashboard/EditUser';
 import OrderList from '../components/Dashboard/OrderList';
@@ -26,6 +27,7 @@ const router = [
     { path: '/dashboard/edit-product/:id', component: EditProduct },
     { path: '/dashboard/list-user', component: UserList },
     { path: '/dashboard/list-order', component: OrderList },
+    { path: '/dashboard/list-order/:id', component: DetailOrder },
     { path: '/dashboard/edit-user/:id', component: EditUser },
 ];
 

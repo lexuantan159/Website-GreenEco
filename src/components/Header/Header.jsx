@@ -57,15 +57,27 @@ const Header = () => {
                         </Link>
                     </li>
                     <li className="block ">
-                        <Link to="/cart">
-                            <p
-                                className={`mr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
-                                    router.pathname === '/cart' ? 'text-primaryColor' : 'text-black'
-                                }`}
-                            >
-                                Giỏ Hàng
-                            </p>
-                        </Link>
+                        {auth.accessToken === undefined ? (
+                            <Link to="/login">
+                                <p
+                                    className={`mr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
+                                        router.pathname === '/cart' ? 'text-primaryColor' : 'text-black'
+                                    }`}
+                                >
+                                    Giỏ Hàng
+                                </p>
+                            </Link>
+                        ) : (
+                            <Link to="/cart">
+                                <p
+                                    className={`mr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
+                                        router.pathname === '/cart' ? 'text-primaryColor' : 'text-black'
+                                    }`}
+                                >
+                                    Giỏ Hàng
+                                </p>
+                            </Link>
+                        )}
                     </li>
 
                     <li className="block ">

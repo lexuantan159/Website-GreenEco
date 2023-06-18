@@ -1,16 +1,39 @@
-import React, { useEffect } from 'react'
-import MainHome from '../components/Home/MainHome'
+import React, { useEffect } from 'react';
+import MainHome from '../components/Home/MainHome';
+import { ToastContainer, toast } from 'react-toastify';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Home = () => {
-
-  useEffect( () => {
     document.title = 'Trang chủ';
-  })
-  return (
-    <div>
-      <MainHome/>
-    </div>
-  )
-}
+    const location = useLocation();
+    const navigate = useNavigate();
+    const notify = (message) => {
+        return toast.success(message, {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+        });
+    };
 
-export default Home
+    useEffect(() => {
+        if (location.state?.toastMessage !== '') {
+            notify(location.state?.toastMessage);
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, []);
+    return (
+        <>
+            <ToastContainer />
+            <div>
+                <MainHome />
+            </div>
+        </>
+    );
+};
+
+export default Home;

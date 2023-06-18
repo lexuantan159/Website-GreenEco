@@ -10,10 +10,14 @@ const LayoutAdmin = ({ children }) => {
     const navigate = useNavigate();
     return (
         <>
-            {location.pathname.startsWith('/dashboard') && <Sidebar />}
-            {location.pathname.startsWith('/dashboard') && (!auth.accessToken || auth.role !== 'Admin')
-                ? navigate('/')
-                : children}
+            {location.pathname.startsWith('/dashboard') ? (
+                <div className="flex gap-64 min-h-screen">
+                    <Sidebar />
+                    {!auth.accessToken || auth.role !== 'Admin' ? navigate('/') : children}
+                </div>
+            ) : (
+                children
+            )}
         </>
     );
 };

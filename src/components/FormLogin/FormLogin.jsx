@@ -62,8 +62,8 @@ const FormLogin = () => {
                     localStorage.setItem('auth',JSON.stringify({ id, email, password, accessToken, fullName, phoneNumber ,address, role }));
                 
                     if (authorization.statusCode === 200) {
-                        if (authorization.roles === 'Admin') navigate('/dashboard');
-                        else if (authorization.roles === 'User') navigate('/');
+                        if (authorization.roles === 'Admin') navigate('/dashboard', { state: { toastMessage: "Đăng nhập thành công" } });
+                        else if (authorization.roles === 'User') navigate('/', { state: { toastMessage: "Đăng nhập thành công" } });
                         else notify('Đăng nhập thất bại');
                     } else {
                         notify(authorization.error.response.data.message);
