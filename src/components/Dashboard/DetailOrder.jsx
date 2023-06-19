@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Spinner } from '@material-tailwind/react';
 
 const DetailOrder = () => {
+    document.title = 'Chi tiết đơn hàng | Dashboard';
     const { ordersList } = useContext(OrdersContext);
     const [order, setOrder] = useState({});
     const [loading, setLoading] = useState([]);

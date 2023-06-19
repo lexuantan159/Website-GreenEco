@@ -7,14 +7,25 @@ import AuthContext from '../../context/authProvider';
 import { OrdersContext } from '../../context/ordersProvider';
 import { Spinner } from '@material-tailwind/react';
 import moment from 'moment/moment';
+import vnStr from 'vn-str'
 
 const OrderList = () => {
+    document.title = 'Danh sách đơn hàng | Dashboard';
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState([]);
     const { auth } = useContext(AuthContext);
     const { ordersList, setOrdersList } = useContext(OrdersContext);
     const formattedNumber = (num) => {
         return num.toLocaleString('en-US').replace(/,/g, '.');
+    };
+    const handleChangeSearch = (e) => {
+        const searchValue = vnStr.rmVnTones(e.target.value).toLowerCase();
+        console.log(searchValue);
+        const searchItem =
+            searchValue !== ''
+                ? ordersList.filter((item) => vnStr.rmVnTones(item.name.toLowerCase()).includes(searchValue))
+                : ordersList;
+        setOrders(searchItem);
     };
     useEffect(() => {
         const fetchOrder = async () => {
@@ -28,7 +39,6 @@ const OrderList = () => {
         if (ordersList.length === 0 && auth.accessToken !== undefined) {
             fetchOrder();
         }
-        fetchOrder();
     }, [ordersList]);
     return (
         <>
@@ -50,7 +60,12 @@ const OrderList = () => {
                             >
                                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
-                            <input className="bg-gray-100 outline-none" type="text" placeholder="Nhập từ khóa..." />
+                            <input
+                                className="bg-gray-100 outline-none"
+                                type="text"
+                                placeholder="Nhập tên người đặt..."
+                                onChange={handleChangeSearch}
+                            />
                         </div>
                     </div>
                 </div>
@@ -71,7 +86,7 @@ const OrderList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.length > 0 ? (
+                            {orders.length > 0 &&
                                 orders.map((order) => (
                                     <tr key={order.id} className="border-2 border-gray-200 text-center">
                                         <td className="py-4 px-4 text-center text-blue-gray-900 font-extrabold">
@@ -107,12 +122,7 @@ const OrderList = () => {
                                         </button> */}
                                         </td>
                                     </tr>
-                                ))
-                            ) : (
-                                <h3 className="text-xl font-bold leading-relaxed text-gray-800">
-                                    Không có đơn hàng nào
-                                </h3>
-                            )}
+                                ))}
                         </tbody>
                     </table>
                 )}

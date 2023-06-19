@@ -7,19 +7,21 @@ import { Spinner } from '@material-tailwind/react';
 import { UsersContext } from '../../context/usersProvider';
 import AuthContext from '../../context/authProvider';
 import Swal from 'sweetalert2';
+import vnStr from 'vn-str'
 
 const UserList = () => {
+    document.title = 'Danh sách tài khoản | Dashboard';
     const { userList, setUserList } = useContext(UsersContext);
-    // const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState([]);
     const { auth } = useContext(AuthContext);
     const [filterUser, setFilterUser] = useState([]);
 
     const handleChangeSearch = (e) => {
-        const searchValue = e.target.value;
+        const searchValue = vnStr.rmVnTones(e.target.value).toLowerCase();
+        console.log(searchValue)
         const searchItem =
             searchValue !== ''
-                ? userList.filter((item) => item.fullname.toLowerCase().includes(searchValue))
+                ? userList.filter((item) => vnStr.rmVnTones(item.fullname.toLowerCase()).includes(searchValue))
                 : userList;
         setFilterUser(searchItem);
     };
@@ -27,8 +29,6 @@ const UserList = () => {
         const fetchUsers = async () => {
             const response = await adminService.getUsers(auth.accessToken);
             if (response.statusCode === 200) {
-                // console.log(response.users);
-                // setUsers(response.users);
                 setFilterUser(response.users);
                 setUserList(response.users);
                 setLoading(false);
@@ -102,7 +102,7 @@ const UserList = () => {
                             <input
                                 className="w-full bg-gray-100 outline-none"
                                 type="text"
-                                placeholder="Nhập tên hoặc từ khóa..."
+                                placeholder="Nhập tên tài khoản..."
                                 onChange={handleChangeSearch}
                             />
                         </div>
