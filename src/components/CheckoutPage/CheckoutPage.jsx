@@ -4,8 +4,8 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import * as userServer from '../../services/userServices';
 import AuthContext from '../../context/authProvider';
 import { ToastContainer, toast } from 'react-toastify';
-import * as cartServer from '../../services/cartServer'
-
+import * as cartServer from '../../services/cartServer';
+//import {PayPalButton} from 'react-paypal-button-v3';
 const CheckoutPage = () => {
     const [fullname, setFullName] = useState('');
     const [address, setAddress] = useState('');
@@ -14,12 +14,10 @@ const CheckoutPage = () => {
     const [hasUser, setHasUser] = useState(false);
     const { auth } = useContext(AuthContext);
 
-    //khai báo biến dùng cho sản phẩm 
-    const [cartList , setCartList] = useState([]);
-    const [totalAmount , setTotalAmount] = useState('');
+    //khai báo biến dùng cho sản phẩm
+    const [cartList, setCartList] = useState([]);
+    const [totalAmount, setTotalAmount] = useState('');
     const TransportFee = 1;
-
-
 
     const handleSaveChanges = async (even) => {
         even.preventDefault();
@@ -151,7 +149,7 @@ const CheckoutPage = () => {
                                                     value={phoneNumber}
                                                     onChange={(e) => setPhoneNumber(e.target.value)}
                                                     placeholder="Name"
-                                                    className="mt-2 ml-4 w-60 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                    className="mt-2 w-60 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
                                                 />
                                             </div>
                                         </div>
@@ -164,7 +162,7 @@ const CheckoutPage = () => {
                                                     Lưu
                                                 </button>
                                                 <button
-                                                    className="ml-2 ml-4  text-red-500 hover:text-red-600 font-semibold"
+                                                    className="ml-2  text-red-500 hover:text-red-600 font-semibold"
                                                     onClick={handleCancelChanges}
                                                 >
                                                     Hủy
@@ -256,7 +254,7 @@ const CheckoutPage = () => {
                             value={paymentMethod}
                             onChange={handlePaymentMethodChange}
                         >
-                            <option value="bankTransfer">Thanh toán bằng ví điện tử</option>
+                            <option value="paypal">Thanh toán bằng ví điện tử paypal</option>
                             <option value="cod">Thanh toán khi nhận hàng (COD)</option>
                         </select>
                     </div>
@@ -276,7 +274,7 @@ const CheckoutPage = () => {
                                 <tr>
                                     <td>Số tiền phải trả:</td>
                                     <td>
-                                        <h1 className="text-primaryColor inline-block">{totalAmount+TransportFee}</h1>
+                                        <h1 className="text-primaryColor inline-block">{totalAmount + TransportFee}</h1>
                                     </td>
                                 </tr>
                             </tbody>
@@ -288,9 +286,27 @@ const CheckoutPage = () => {
                         <div className="text-black text-sm">
                             <h3>Nhấp vào liên kết để hiển thị các điều khoản GreenEco</h3>
                         </div>
-                        <button className="bg-primaryColor hover:bg-blue-300 text-white font-semibold py-2 px-6 rounded-lg focus:outline-none">
-                           Đặt hàng
-                        </button>
+                        {/* {paymentMethod == 'paypal' ? (
+                            <PayPalButton
+                                amount="0.01"
+                                // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
+                                onSuccess={(details, data) => {
+                                    alert('Transaction completed by ' + details.payer.name.given_name);
+
+                                    // OPTIONAL: Call your server to save the transaction
+                                    return fetch('/paypal-transaction-complete', {
+                                        method: 'post',
+                                        body: JSON.stringify({
+                                            orderID: data.orderID,
+                                        }),
+                                    });
+                                }}
+                            />
+                        ) : ( */}
+                            <button className="bg-primaryColor hover:bg-blue-300 text-white font-semibold py-2 px-6 rounded-lg focus:outline-none">
+                                Đặt hàng
+                            </button>
+                        {/* )} */}
                     </div>
                 </div>
             </div>

@@ -287,7 +287,7 @@ const UserInfomation = () => {
                                                             value={fullname}
                                                             onChange={(e) => setFullname(e.target.value)}
                                                             placeholder="Name"
-                                                            className="mb-2 w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                            className="w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
                                                         />
                                                     </div>
                                                 </div>
@@ -302,7 +302,7 @@ const UserInfomation = () => {
                                                             value={phoneNumber}
                                                             onChange={(e) => setPhoneNumber(e.target.value)}
                                                             placeholder="Name"
-                                                            className="mb-2 w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                            className="w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
                                                         />
                                                     </div>
                                                 </div>
@@ -314,7 +314,7 @@ const UserInfomation = () => {
                                                         Lưu
                                                     </button>
                                                     <button
-                                                        className="ml-2 ml-4  text-red-500 hover:text-red-600 font-semibold"
+                                                        className="ml-2 text-red-500 hover:text-red-600 font-semibold"
                                                         onClick={handleCancelChanges}
                                                     >
                                                         Hủy
@@ -326,7 +326,7 @@ const UserInfomation = () => {
                                         <div>
                                             <div class="flex items-center mb-9">
                                                 <div class="w-1/4">
-                                                    <h1 class="mb-2">Email :</h1>
+                                                    <h1>Email :</h1>
                                                 </div>
                                                 <div class="w-3/4">
                                                     <h3 class="">{email}</h3>
@@ -335,7 +335,7 @@ const UserInfomation = () => {
 
                                             <div class="flex items-center mb-9">
                                                 <div class="w-1/4">
-                                                    <h1 class="mb-2">Họ và Tên :</h1>
+                                                    <h1 class="">Họ và Tên :</h1>
                                                 </div>
                                                 <div class="w-3/4">
                                                     <h3 class="">{fullname}</h3>
@@ -344,7 +344,7 @@ const UserInfomation = () => {
 
                                             <div class="flex items-center mb-5">
                                                 <div class="w-1/4">
-                                                    <h1 class="mb-2">Số điện thoại :</h1>
+                                                    <h1 class="">Số điện thoại :</h1>
                                                 </div>
                                                 <div class="w-3/4">
                                                     <h3 class="">{phoneNumber}</h3>
