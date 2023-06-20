@@ -207,7 +207,7 @@ const FormSignup = () => {
                                             <Spinner className="h-6 w-6 mr-4" /> <span>Đang tải....</span>
                                         </div>
                                     ) : (
-                                        <span>Sign Up</span>
+                                        <span>Đăng Ký</span>
                                     )}
                                 </button>
                             </form>

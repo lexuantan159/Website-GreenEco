@@ -51,7 +51,7 @@ const ChangePassword = () => {
         <>
             <ToastContainer />
             <form>
-                <div className=" mr-20">
+                <div className="pb-4 mr-20">
                     <div className="mb-3">
                         <label htmlFor="" className="block font-medium text-left text-lg mb-2">
                             Mật Khẩu Cũ
@@ -69,13 +69,13 @@ const ChangePassword = () => {
                             {hiddenOldPassword ? (
                                 <FontAwesomeIcon
                                     onClick={() => setHiddenOldPassword(!hiddenOldPassword)}
-                                    className="absolute top-4 right-6"
+                                    className="absolute top-4 right-6 hover:cursor-pointer"
                                     icon={faEyeSlash}
                                 />
                             ) : (
                                 <FontAwesomeIcon
                                     onClick={() => setHiddenOldPassword(!hiddenOldPassword)}
-                                    className="absolute top-4 right-6"
+                                    className="absolute top-4 right-6 hover:cursor-pointer"
                                     icon={faEye}
                                 />
                             )}
@@ -98,13 +98,13 @@ const ChangePassword = () => {
                             {hiddenNewPassword ? (
                                 <FontAwesomeIcon
                                     onClick={() => setHiddenNewPassword(!hiddenNewPassword)}
-                                    className="absolute top-4 right-6"
+                                    className="absolute top-4 right-6 hover:cursor-pointer"
                                     icon={faEyeSlash}
                                 />
                             ) : (
                                 <FontAwesomeIcon
                                     onClick={() => setHiddenNewPassword(!hiddenNewPassword)}
-                                    className="absolute top-4 right-6"
+                                    className="absolute top-4 right-6 hover:cursor-pointer"
                                     icon={faEye}
                                 />
                             )}
@@ -127,13 +127,13 @@ const ChangePassword = () => {
                             {hiddenReNewPassword ? (
                                 <FontAwesomeIcon
                                     onClick={() => setHiddenReNewPassword(!hiddenReNewPassword)}
-                                    className="absolute top-4 right-6"
+                                    className="absolute top-4 right-6 hover:cursor-pointer"
                                     icon={faEyeSlash}
                                 />
                             ) : (
                                 <FontAwesomeIcon
                                     onClick={() => setHiddenReNewPassword(!hiddenReNewPassword)}
-                                    className="absolute top-4 right-6"
+                                    className="absolute top-4 right-6 hover:cursor-pointer"
                                     icon={faEye}
                                 />
                             )}
@@ -142,7 +142,7 @@ const ChangePassword = () => {
 
                     <div>
                         <button
-                            className="border px-4 py-2 rounded-lg bg-primaryColor text-white absolute right-16 "
+                            className="border px-4 py-2 rounded-lg bg-primaryColor text-white absolute right-[80px] "
                             type="submit"
                             onClick={handleChangePassword}
                         >

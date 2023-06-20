@@ -216,39 +216,33 @@ const UserInfomation = () => {
 
                 <div className="h-auto w-3/4 mb-12">
                     {/* ------------------------------Header colum 2------------------------------------------ */}
-                    <div className="border border-solid border-green-800 bg-light-green-300 py-4">
+                    <div className="border border-solid border-green-800 bg-light-green-300 pt-4 pb-[10px]">
                         {activeButton === 1 && (
-                            <>
-                                <div>
-                                    <span className="text-xl ml-12">Thông tin cá nhân</span>
-                                    <br />
-                                    <span className="text-xs text-gray-900 ml-16 ">
-                                        Quản lý thông tin hồ sơ để bảo mật tài khoản
-                                    </span>
-                                </div>
-                            </>
+                            <div>
+                                <span className="text-xl ml-12">Thông tin cá nhân</span>
+                                <br />
+                                <span className="text-xs text-gray-900 ml-10">
+                                    Quản lý thông tin hồ sơ để bảo mật tài khoản
+                                </span>
+                            </div>
                         )}
                         {activeButton === 2 && (
-                            <>
-                                <div>
-                                    <span className="text-xl ml-12">Đơn hàng của bạn</span>
-                                    <br />
-                                    <span className="text-xs text-gray-900 ml-16">
-                                        Quản lý những đơn hàng mà bạn đã đặt
-                                    </span>
-                                </div>
-                            </>
+                            <div>
+                                <span className="text-xl ml-12">Đơn hàng của bạn</span>
+                                <br />
+                                <span className="text-xs text-gray-900 ml-16">
+                                    Quản lý những đơn hàng mà bạn đã đặt
+                                </span>
+                            </div>
                         )}
                         {activeButton === 3 && (
-                            <>
-                                <div>
-                                    <span className="text-xl ml-12">Mật khẩu của bạn</span>
-                                    <br />
-                                    <span className="text-xs text-gray-900 ml-16">
-                                        Quản lý và thay đổi mật khẩu của tài khoản để bảo mật tốt hơn
-                                    </span>
-                                </div>
-                            </>
+                            <div>
+                                <span className="text-xl ml-12">Mật khẩu của bạn</span>
+                                <br />
+                                <span className="text-xs text-gray-900 ml-16">
+                                    Quản lý và thay đổi mật khẩu của tài khoản để bảo mật tốt hơn
+                                </span>
+                            </div>
                         )}
                     </div>
                     {/* --------------------------Body colum 2 ------------------------------------------ */}
@@ -458,7 +452,7 @@ const UserInfomation = () => {
                                                 </div>
                                             ))
                                         ) : (
-                                            <h3 className="text-xl font-bold leading-relaxed text-gray-800">
+                                            <h3 className="mt-4 text-xl font-bold flex justify-center text-gray-800">
                                                 Không Có Đơn Hàng Nào
                                             </h3>
                                         )}
