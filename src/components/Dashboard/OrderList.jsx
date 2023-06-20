@@ -1,4 +1,4 @@
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -7,7 +7,8 @@ import AuthContext from '../../context/authProvider';
 import { OrdersContext } from '../../context/ordersProvider';
 import { Spinner } from '@material-tailwind/react';
 import moment from 'moment/moment';
-import vnStr from 'vn-str'
+import vnStr from 'vn-str';
+import Swal from 'sweetalert2';
 
 const OrderList = () => {
     document.title = 'Danh sách đơn hàng | Dashboard';
@@ -28,6 +29,7 @@ const OrderList = () => {
         setOrders(searchItem);
     };
     useEffect(() => {
+        console.log('1');
         const fetchOrder = async () => {
             const response = await adminServices.getOrders(auth.accessToken);
             if (response.statusCode === 200) {
@@ -36,10 +38,38 @@ const OrderList = () => {
                 setLoading(false);
             }
         };
-        if (ordersList.length === 0 && auth.accessToken !== undefined) {
-            fetchOrder();
-        }
-    }, [ordersList]);
+        fetchOrder();
+    }, []);
+
+    const handleDelete = (e) => {
+        Swal.fire({
+            title: 'Bạn có chắc không ?',
+            text: 'Bạn sẽ không thể hoàn nguyên điều này !',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Có, xóa nó đi !',
+            cancelButtonText: 'Hủy',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setLoading(true);
+                deleteEvent();
+            }
+        });
+        const deleteEvent = async () => {
+            const orderId = e.target.closest('tr').getAttribute('data-id');
+            const deleteOrder = await adminServices.deleteOrder(auth.accessToken, orderId);
+            if (deleteOrder.statusCode === 200) {
+                Swal.fire('Thành công !', 'Đơn hàng đã được xóa.', 'success').then((result) => {
+                    result.isConfirmed && setOrders(ordersList.filter((order) => +order.id !== +orderId));
+                    setLoading(false);
+                });
+            } else {
+                Swal.fire('Lỗi !', 'Có lỗi khi xóa đơn hàng.', 'error');
+            }
+        };
+    };
     return (
         <>
             <div></div>
@@ -88,7 +118,11 @@ const OrderList = () => {
                         <tbody>
                             {orders.length > 0 &&
                                 orders.map((order) => (
-                                    <tr key={order.id} className="border-2 border-gray-200 text-center">
+                                    <tr
+                                        key={order.id}
+                                        data-id={order.id}
+                                        className="border-2 border-gray-200 text-center"
+                                    >
                                         <td className="py-4 px-4 text-center text-blue-gray-900 font-extrabold">
                                             {order.id}
                                         </td>
@@ -117,9 +151,12 @@ const OrderList = () => {
                                             >
                                                 <FontAwesomeIcon icon={faInfoCircle} />
                                             </Link>
-                                            {/* <button className="px-2 text-primaryColor hover:text-deep-orange-900">
-                                            <FontAwesomeIcon icon={faCancel} />
-                                        </button> */}
+                                            <button
+                                                className="px-2 text-primaryColor hover:text-deep-orange-900"
+                                                onClick={handleDelete}
+                                            >
+                                                <FontAwesomeIcon icon={faTrashAlt} />
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}

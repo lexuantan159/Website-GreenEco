@@ -49,7 +49,7 @@ const EditUser = () => {
             setRole(user.Role.value);
             setLoading(false);
         }
-    }, []);
+    }, [userList]);
 
     const handleEdit = (e) => {
         e.preventDefault();

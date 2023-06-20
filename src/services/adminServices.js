@@ -141,3 +141,25 @@ export const getOrders = async (accessToken) => {
         };
     }
 };
+
+export const deleteOrder = async (accessToken, orderId) => {
+    try {
+        const response = await request.reDelete('order/delete-order', {
+            params: {
+                orderId: orderId,
+            },
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        return {
+            response: response.data,
+            statusCode: response.status,
+        };
+    } catch (e) {
+        return {
+            error: e.response.data,
+            status: e.response.status,
+        };
+    }
+};

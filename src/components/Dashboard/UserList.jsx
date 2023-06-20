@@ -12,9 +12,9 @@ import vnStr from 'vn-str'
 const UserList = () => {
     document.title = 'Danh sách tài khoản | Dashboard';
     const { userList, setUserList } = useContext(UsersContext);
+    const [filterUser, setFilterUser] = useState([]);
     const [loading, setLoading] = useState([]);
     const { auth } = useContext(AuthContext);
-    const [filterUser, setFilterUser] = useState([]);
 
     const handleChangeSearch = (e) => {
         const searchValue = vnStr.rmVnTones(e.target.value).toLowerCase();
@@ -32,14 +32,10 @@ const UserList = () => {
                 setFilterUser(response.users);
                 setUserList(response.users);
                 setLoading(false);
-            } else {
-                console.log(response.error);
             }
-        };
-        if (userList.length === 0 && auth.accessToken !== undefined) {
-            fetchUsers();
         }
-    }, [userList]);
+        fetchUsers();
+    }, []);
 
     const handleDelete = (e) => {
         Swal.fire({
@@ -138,11 +134,11 @@ const UserList = () => {
                                     >
                                         {user.address || 'Chưa có địa chỉ'}
                                     </td>
-                                    <td className={`py-1 px-8 text-center ${user.phone || 'text-red-700'}`}>
+                                    <td className={`py-1 px-15 text-center ${user.phone || 'text-red-700'}`}>
                                         {user.phone || 'Chưa có SĐT'}
                                     </td>
                                     <td className={'py-1 px-8 text-center'}>{user.Role.value}</td>
-                                    <td className="py-1 px-8 text-center">
+                                    <td className="py-1 px-2 text-center">
                                         <Link
                                             to={`/dashboard/edit-user/${user.id}`}
                                             className="px-2 text-primaryColor hover:text-light-blue-900"
