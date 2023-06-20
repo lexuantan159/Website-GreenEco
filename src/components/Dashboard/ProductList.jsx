@@ -71,9 +71,7 @@ const ProductList = () => {
         const deleteEvent = async () => {
             const prodId = e.target.closest('tr').getAttribute('data-id');
             const fileName = e.target.closest('tr').getAttribute('data-filename');
-            console.log(productsList.filter((product) => product.id !== prodId));
             const deleteProduct = await adminServices.deleteProduct(auth.accessToken, prodId, fileName);
-            console.log(deleteProduct);
             if (deleteProduct.statusCode === 200) {
                 Swal.fire('Thành công !', 'Sản phẩm đã được xóa.', 'success').then((result) => {
                     result.isConfirmed && setListProd(productsList.filter((product) => product.id !== prodId));
