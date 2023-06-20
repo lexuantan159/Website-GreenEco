@@ -47,7 +47,7 @@ export const updateUserPassword = async (accessToken, oldPassword, newPassword) 
     }
 };
 
-export const updateUserProfile = async (accessToken, email, fullname,phoneNumber) => {
+export const updateUserProfile = async (accessToken, email, fullname,phoneNumber,address) => {
     try {
         const response = await request.put(
             EDID_USERS,
@@ -55,6 +55,8 @@ export const updateUserProfile = async (accessToken, email, fullname,phoneNumber
                 email: email,
                 fullname: fullname,
                 phone: phoneNumber,
+                address: address,
+
             },
             {
                 headers: { Authorization: `Bearer ${accessToken}` },
@@ -98,26 +100,3 @@ export const updateUserProfileCheckout = async (accessToken, address, fullname,p
     }
 };
 
-export const updateUserAddress = async (accessToken, address) => {
-    try {
-        const response = await request.put(
-            EDID_USERS,
-            {
-               address,
-            },
-            {
-                headers: { Authorization: `Bearer ${accessToken}` },
-            },
-        );
-
-        return {
-            message: response.data.message,
-            statusCode: response.status,
-        };
-    } catch (error) {
-        return {
-            errorMessage: error.response.data.message,
-            statusCode: error.status,
-        };
-    }
-};

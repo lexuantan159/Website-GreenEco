@@ -30,41 +30,43 @@ const Sidebar = () => {
                 />
                 <h1 className=" text-[#252525] text-xl font-bold px-3">ADMIN</h1>
             </div>
-            <ul className="flex flex-col gap-y-6 pt-16 pb-7">
-                {sidebar.map((item, index) => (
-                    <li key={index}>
-                        <FontAwesomeIcon
-                            icon={item.icon}
-                            className={`${router.pathname === item.to && 'text-blue-gray-900 font-extrabold'}`}
-                        />
-                        <a
-                            href={item.to}
-                            className={`pl-3 text-blue-gray-900 hover:text-black ${router.pathname === item.to &&
-                                'text-blue-gray-900 font-extrabold'}`}
-                        >
-                            {item.name}
-                        </a>
+            <div className='flex flex-col pt-16 justify-between min-h-[650px]'>
+                <ul className="flex flex-col gap-y-6">
+                    {sidebar.map((item, index) => (
+                        <li key={index}>
+                            <FontAwesomeIcon
+                                icon={item.icon}
+                                className={`${router.pathname === item.to && 'text-blue-gray-900 font-extrabold'}`}
+                            />
+                            <a
+                                href={item.to}
+                                className={`pl-3 text-blue-gray-900 hover:text-black ${router.pathname === item.to &&
+                                    'text-blue-gray-900 font-extrabold'}`}
+                            >
+                                {item.name}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+                <ul className="flex flex-col gap-y-6">
+                    <li>
+                        <FontAwesomeIcon icon={faShop} />
+                        <Link to="/" className="pl-3  text-blue-gray-900 hover:text-black">
+                            Cửa hàng
+                        </Link>
                     </li>
-                ))}
-            </ul>
-            <ul className="flex flex-col gap-y-6 pt-[17rem]">
-                <li>
-                    <FontAwesomeIcon icon={faShop} />
-                    <Link to="/" className="pl-3  text-blue-gray-900 hover:text-black">
-                        Cửa hàng
-                    </Link>
-                </li>
-                <li>
-                    <FontAwesomeIcon icon={faCircleUser} />
-                    <Link to="/userinformation" className="pl-3  text-blue-gray-900 hover:text-black">
-                            Thông tin cá nhân
-                    </Link>
-                </li>
-                <li>
-                    <FontAwesomeIcon icon={faDoorOpen} />
-                    <button className="pl-3 text-blue-gray-900 hover:text-black" onClick={handleLogOut}>Đăng xuất</button>
-                </li>
-            </ul>
+                    <li>
+                        <FontAwesomeIcon icon={faCircleUser} />
+                        <Link to="/userinformation" className="pl-3  text-blue-gray-900 hover:text-black">
+                                Thông tin cá nhân
+                        </Link>
+                    </li>
+                    <li>
+                        <FontAwesomeIcon icon={faDoorOpen} />
+                        <button className="pl-3 text-blue-gray-900 hover:text-black" onClick={handleLogOut}>Đăng xuất</button>
+                    </li>
+                </ul>
+            </div>
         </aside>
     );
 };

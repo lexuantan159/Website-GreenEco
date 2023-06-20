@@ -1,4 +1,4 @@
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -7,8 +7,11 @@ import AuthContext from '../../context/authProvider';
 import { OrdersContext } from '../../context/ordersProvider';
 import { Spinner } from '@material-tailwind/react';
 import moment from 'moment/moment';
+import vnStr from 'vn-str';
+import Swal from 'sweetalert2';
 
 const OrderList = () => {
+    document.title = 'Danh sách đơn hàng | Dashboard';
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState([]);
     const { auth } = useContext(AuthContext);
@@ -16,7 +19,17 @@ const OrderList = () => {
     const formattedNumber = (num) => {
         return num.toLocaleString('en-US').replace(/,/g, '.');
     };
+    const handleChangeSearch = (e) => {
+        const searchValue = vnStr.rmVnTones(e.target.value).toLowerCase();
+        console.log(searchValue);
+        const searchItem =
+            searchValue !== ''
+                ? ordersList.filter((item) => vnStr.rmVnTones(item.name.toLowerCase()).includes(searchValue))
+                : ordersList;
+        setOrders(searchItem);
+    };
     useEffect(() => {
+        console.log('1');
         const fetchOrder = async () => {
             const response = await adminServices.getOrders(auth.accessToken);
             if (response.statusCode === 200) {
@@ -25,11 +38,38 @@ const OrderList = () => {
                 setLoading(false);
             }
         };
-        if (ordersList.length === 0 && auth.accessToken !== undefined) {
-            fetchOrder();
-        }
         fetchOrder();
-    }, [ordersList]);
+    }, []);
+
+    const handleDelete = (e) => {
+        Swal.fire({
+            title: 'Bạn có chắc không ?',
+            text: 'Bạn sẽ không thể hoàn nguyên điều này !',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Có, xóa nó đi !',
+            cancelButtonText: 'Hủy',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setLoading(true);
+                deleteEvent();
+            }
+        });
+        const deleteEvent = async () => {
+            const orderId = e.target.closest('tr').getAttribute('data-id');
+            const deleteOrder = await adminServices.deleteOrder(auth.accessToken, orderId);
+            if (deleteOrder.statusCode === 200) {
+                Swal.fire('Thành công !', 'Đơn hàng đã được xóa.', 'success').then((result) => {
+                    result.isConfirmed && setOrders(ordersList.filter((order) => +order.id !== +orderId));
+                    setLoading(false);
+                });
+            } else {
+                Swal.fire('Lỗi !', 'Có lỗi khi xóa đơn hàng.', 'error');
+            }
+        };
+    };
     return (
         <>
             <div></div>
@@ -50,7 +90,12 @@ const OrderList = () => {
                             >
                                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
-                            <input className="bg-gray-100 outline-none" type="text" placeholder="Nhập từ khóa..." />
+                            <input
+                                className="bg-gray-100 outline-none"
+                                type="text"
+                                placeholder="Nhập tên người đặt..."
+                                onChange={handleChangeSearch}
+                            />
                         </div>
                     </div>
                 </div>
@@ -71,9 +116,13 @@ const OrderList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.length > 0 ? (
+                            {orders.length > 0 &&
                                 orders.map((order) => (
-                                    <tr key={order.id} className="border-2 border-gray-200 text-center">
+                                    <tr
+                                        key={order.id}
+                                        data-id={order.id}
+                                        className="border-2 border-gray-200 text-center"
+                                    >
                                         <td className="py-4 px-4 text-center text-blue-gray-900 font-extrabold">
                                             {order.id}
                                         </td>
@@ -102,17 +151,15 @@ const OrderList = () => {
                                             >
                                                 <FontAwesomeIcon icon={faInfoCircle} />
                                             </Link>
-                                            {/* <button className="px-2 text-primaryColor hover:text-deep-orange-900">
-                                            <FontAwesomeIcon icon={faCancel} />
-                                        </button> */}
+                                            <button
+                                                className="px-2 text-primaryColor hover:text-deep-orange-900"
+                                                onClick={handleDelete}
+                                            >
+                                                <FontAwesomeIcon icon={faTrashAlt} />
+                                            </button>
                                         </td>
                                     </tr>
-                                ))
-                            ) : (
-                                <h3 className="text-xl font-bold leading-relaxed text-gray-800">
-                                    Không có đơn hàng nào
-                                </h3>
-                            )}
+                                ))}
                         </tbody>
                     </table>
                 )}
@@ -121,4 +168,4 @@ const OrderList = () => {
     );
 };
 
-export default OrderList;
+export default OrderList

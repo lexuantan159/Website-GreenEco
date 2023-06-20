@@ -4,8 +4,8 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import * as userServer from '../../services/userServices';
 import AuthContext from '../../context/authProvider';
 import { ToastContainer, toast } from 'react-toastify';
-import * as cartServer from '../../services/cartServer';
-import {PayPalButton} from 'react-paypal-button-v3';
+import * as cartServices from '../../services/cartServices'
+
 const CheckoutPage = () => {
     const [fullname, setFullName] = useState('');
     const [address, setAddress] = useState('');
@@ -70,7 +70,7 @@ const CheckoutPage = () => {
     useEffect(() => {
         if (auth.accessToken !== undefined) {
             const fetchCart = async () => {
-                const fetchCart = await cartServer.getCart(auth.accessToken);
+                const fetchCart = await cartServices.getCart(auth.accessToken);
                 if (fetchCart.statusCode === 200) {
                     setCartList(fetchCart.products);
                     console.log(cartList);
@@ -149,7 +149,7 @@ const CheckoutPage = () => {
                                                     value={phoneNumber}
                                                     onChange={(e) => setPhoneNumber(e.target.value)}
                                                     placeholder="Name"
-                                                    className="mt-2 ml-4 w-60 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                    className="mt-2 w-60 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
                                                 />
                                             </div>
                                         </div>
@@ -162,7 +162,7 @@ const CheckoutPage = () => {
                                                     Lưu
                                                 </button>
                                                 <button
-                                                    className="ml-2 ml-4  text-red-500 hover:text-red-600 font-semibold"
+                                                    className="ml-2  text-red-500 hover:text-red-600 font-semibold"
                                                     onClick={handleCancelChanges}
                                                 >
                                                     Hủy
@@ -285,28 +285,10 @@ const CheckoutPage = () => {
                     <div className="flex justify-between items-center mt-40">
                         <div className="text-black text-sm">
                             <h3>Nhấp vào liên kết để hiển thị các điều khoản GreenEco</h3>
-                        </div>
-                        {paymentMethod == 'paypal' ? (
-                            <PayPalButton
-                                amount="0.01"
-                                // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
-                                onSuccess={(details, data) => {
-                                    alert('Transaction completed by ' + details.payer.name.given_name);
-
-                                    // OPTIONAL: Call your server to save the transaction
-                                    return fetch('/paypal-transaction-complete', {
-                                        method: 'post',
-                                        body: JSON.stringify({
-                                            orderID: data.orderID,
-                                        }),
-                                    });
-                                }}
-                            />
-                        ) : (
+                        </div>                       
                             <button className="bg-primaryColor hover:bg-blue-300 text-white font-semibold py-2 px-6 rounded-lg focus:outline-none">
                                 Đặt hàng
                             </button>
-                        )}
                     </div>
                 </div>
             </div>
