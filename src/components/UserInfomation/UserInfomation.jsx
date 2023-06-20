@@ -1,378 +1,457 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen, faUser, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import ChangePassword from '../ChangePassword/ChangePassword';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
+import * as order from '../../services/Order';
+import Xanh2 from '../../img/Xanh2.jpg';
+import moment from 'moment/moment';
+
+//server
+import * as userServer from '../../services/userServices';
 import AuthContext from '../../context/authProvider';
 import { ToastContainer, toast } from 'react-toastify';
-import * as userServices from '../../services/userServices';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
-import { Spinner } from '@material-tailwind/react';
+import { updateUserProfile } from '../../services/userServices';
 
 const UserInfomation = () => {
-    const { auth, setAuth } = useContext(AuthContext);
-    const [name, setName] = useState('');
+    const [activeButton, setActiveButton] = useState(1);
     const [email, setEmail] = useState('');
+    const [fullname, setFullname] = useState('');
     const [address, setAddress] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [oldPassword, setOldPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [reNewPassword, setReNewPassword] = useState('');
-    const [stateChange, setStateChange] = useState('None');
-    const [hiddenOldPassword, setHiddenOldPassword] = useState(true);
-    const [hiddenNewPassword, setHiddenNewPassword] = useState(true);
-    const [hiddenReNewPassword, setHiddenReNewPassword] = useState(true);
-    const [loading, setLoading] = useState(false);
+    const [orderList, setOrderList] = useState([]);
+    const navigate = useNavigate();
+    const [submit, setSubmit] = useState(false);
+    const location = useLocation();
+    const { auth } = useContext(AuthContext); 
+    const [isEditing, setIsEditing] = useState(false);
+    const [hasUser, setHasUser] = useState(false);
+    const formattedNumber = (num) => {
+        return num.toLocaleString('en-US').replace(/,/g, '.');
+    }
 
-    const inputFullName = document.querySelector('#input-fullName');
-    const inputPhoneNumber = document.querySelector('#input-phoneNumber');
-    const inputEmail = document.querySelector('#input-email');
-    const inputAddress = document.querySelector('#input-address');
-    const inputOldPassword = document.querySelector('#input-oldPassword');
-    const inputNewPassword = document.querySelector('#input-newPassword');
-    const inputReNewPassword = document.querySelector('#input-reNewPassword');
+    const handleButtonClick = (buttonId) => {
+        setActiveButton(buttonId);
+    };
 
-    const notify = (message, type) => {
-        const toastType = type === 'success' ? toast.success : toast.error;
-        return toastType(message, {
-            position: 'top-right',
+    const handleSaveChanges1 = async (even) => {
+        even.preventDefault();
+        handleCheckInput();
+        if (submit) {
+            const response = await updateUserProfile(auth.accessToken, email, fullname, phoneNumber, address);
+            if (response.statusCode === 200) {
+                notify(response.message);
+            } else {
+                notify(response.errorMessage);
+            }
+            setIsEditing(false);
+        }
+    };
+
+    const handleCheckInput = () => {
+        const emailRegex = /\S+@\S+\.\S+/;
+        const isEmailValid = emailRegex.test(email);
+
+        if (isEmailValid && email.endsWith('@gmail.com')) {
+            // email is valid and ends with "@gmail.com"
+            setSubmit(true);
+        } else {
+            // email is not valid or does not end with "@gmail.com"
+            setSubmit(false);
+            notify('Email is not valid with "@gmail.com"');
+        }
+    };
+
+    const handleCancelChanges = () => {
+        setIsEditing(false);
+    };
+
+    const notify = (message) =>
+        toast(message, {
+            position: 'top-center',
             autoClose: 1500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'colored',
+            theme: 'light',
         });
-    };
 
-    const handleEditInformation = () => {
-        // disable password change
-        inputOldPassword.disabled = true;
-        inputNewPassword.disabled = true;
-        inputReNewPassword.disabled = true;
-        inputFullName.disabled = false;
-        inputPhoneNumber.disabled = false;
-        inputEmail.disabled = false;
-        inputAddress.disabled = false;
-        // set input value
-        setName(auth.fullName);
-        setPhoneNumber(auth.phoneNumber);
-        setEmail(auth.email);
-        setAddress(auth.address);
-        setOldPassword('');
-        setNewPassword('');
-        setReNewPassword('');
-        // focus on the first
-        document.querySelector('#input-fullName').focus();
-        setStateChange('Info');
-    };
-
-    const handleEditPassword = () => {
-        // disable password change
-        inputOldPassword.disabled = false;
-        inputNewPassword.disabled = false;
-        inputReNewPassword.disabled = false;
-        inputFullName.disabled = true;
-        inputPhoneNumber.disabled = true;
-        inputEmail.disabled = true;
-        inputAddress.disabled = true;
-        // set input value
-        setName('');
-        setPhoneNumber('');
-        setEmail('');
-        setAddress('');
-        // focus on the first
-        document.querySelector('#input-oldPassword').focus();
-        setStateChange('Pass');
-    };
-
-    const editChangeProfiles = async (token, fullName, email, address, phoneNumber) => {
-        const response = await userServices.updateUserProfile(token, fullName, email, address, phoneNumber);
-        if (response.statusCode === 200) {
-            // update context
-            setAuth({ ...auth, fullName: fullName, email: email, address: address, phoneNumber: phoneNumber });
-            // update localStorage
-            localStorage.setItem(
-                'auth',
-                JSON.stringify({
-                    ...auth,
-                    fullName: fullName,
-                    email: email,
-                    address: address,
-                    phoneNumber: phoneNumber,
-                }),
-            );
-            notify(response.message, 'success');
-        } else notify(response.errorMessage, 'error');
-        setLoading(false);
-    };
-    const editChangePassword = async (token, oldPassword, newPassword) => {
-        const response = await userServices.updateUserPassword(token, oldPassword, newPassword);
-        if (response.statusCode === 200) {
-            // update context
-            setAuth({ ...auth, password: newPassword });
-            // update localStorage
-            localStorage.setItem(
-                'auth',
-                JSON.stringify({
-                    ...auth,
-                    password: newPassword,
-                }),
-            );
-            notify(response.message, 'success');
-        } else notify(response.errorMessage, 'error');
-        setLoading(false);
-    };
-
-    const handleCheckInput = (email) => {
-        const emailRegex = /\S+@\S+\.\S+/;
-        const isEmailValid = emailRegex.test(email);
-        if (isEmailValid && email.endsWith('@gmail.com')) return true;
-        else return false;
-    };
-
-    const checkInputProfile = () => {
-        if (handleCheckInput) {
-            editChangeProfiles(auth.accessToken, name.trim(), email, address.trim(), phoneNumber);
-        } else {
-            notify('Email phải bao gồm đuôi "@gmail.com"', 'error');
-            setLoading(false);
+    useEffect(() => {
+        if (location.state?.toastMessage !== '') {
+            notify(location.state?.toastMessage);
+            navigate(location.pathname, { replace: true, state: {} });
         }
-    };
+    }, []);
 
-    const checkInputPassword = () => {
-        if (newPassword !== reNewPassword) {
-            notify('Mật Khẩu Không Trùng Khớp', 'error');
-            setLoading(false);
-        } else if (newPassword.length < 6) {
-            notify('Mật Khẩu Tối Thiểu 6 Ký Tự', 'error');
-            setLoading(false);
-        } else editChangePassword(auth.accessToken, oldPassword, newPassword);
-    };
-
-    const handleSaveChangeProfile = (e) => {
-        e.preventDefault();
-        if (stateChange === 'Info') {
-            checkInputProfile();
-        } else if (stateChange === 'Pass') {
-            checkInputPassword();
-        } else {
-            notify('Chọn Chế Độ Thay Mà Bạn Muốn Thay Đổi', 'error');
+    useEffect(() => {
+        if (auth.accessToken !== undefined) {
+            console.log(auth.accessToken);
+            const fetchCart = async () => {
+                const response = await order.getOrder(auth.accessToken);
+                if (response.statusCode === 200) {
+                    setOrderList(response.orders);
+                } else {
+                    console.log(response.error);
+                }
+            };
+            fetchCart();
         }
-        setLoading(true);
-    };
+    }, [auth.accessToken]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            console.log();
+            if (auth.accessToken) {
+                const response = await userServer.getUser(auth.accessToken);
+                setEmail(response.email);
+                setFullname(response.fullname);
+                setAddress(response.address);
+                setPhoneNumber(response.phone);
+                console.log(email);
+            } else {
+                setHasUser(false);
+            }
+            setIsEditing(false);
+        };
+        fetchData();
+    }, [auth]);
 
     return (
         <>
             <ToastContainer />
-            <div className="">
-                <div className="container mx-auto mt-10">
-                    <div className="relative h-[250px]">
-                        <img
-                            className="h-full w-full object-cover rounded"
-                            src="https://margram.vn/files/san-pham-than-thien-moi-truong-014.png"
-                            alt="Sản Phẩm Làm Bằng Gỗ"
-                        />
-                        <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]">
-                            <h2 className="text-textColor text-4xl font-bold mb-5 inline">Thông Tin Cá Nhân</h2>
+            <div className="w-[70%] mx-auto my-4 flex font-medium text-left text-lg border border-solid shadow-lg rounded-md">
+                <div
+                    className="w-1/4 h-auto justify-center bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: `url(${Xanh2})` }}
+                >
+                    {/* Tên và hình đại diện của user */}
+                    <div className="border-b border-solid border-green-800">
+                        <div className="flex items-center my-3 ml-10 ">
+                            <div>
+                                <span className="ml-2 text-2xl">{fullname}</span>
+                                <div>
+                                    <span className="ml-6 text-xs text-gray-900">
+                                        <FontAwesomeIcon icon={faPen} className="mr-2" />
+                                        Chỉnh sửa trang cá nhân
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="my-10">
-                        <h3 className="text-textColor text-xl font-bold ">Thông Tin Chung</h3>
-                        <div className="lg:grid lg:grid-cols-10 mt-5 lg:gap-6">
-                            <div className="lg:col-span-4 rounded shadow text-center">
-                                <div className="h-[50%] w-full">
-                                    <img
-                                        className="w-full h-full object-cover rounded-t"
-                                        src="https://btnmt.1cdn.vn/2023/03/02/313408215_3360650307525295_9107288947384745325_n.jpg"
-                                        alt="Sản Phẩm"
-                                    />
-                                </div>
-                                <p className="block mb-3 mt-5 text-xl font-bold text-primaryColor">{auth.fullName}</p>
-                                <p className="block mb-3 font-medium text-lg">{auth.email}</p>
-                                <p className="block mb-3 font-medium text-lg">{auth.address}</p>
-                                <p className="block mb-3 font-medium text-lg">{auth.phoneNumber}</p>
-                                <div className="">
-                                    <button
-                                        onClick={handleEditInformation}
-                                        className="px-5 py-2 text-white text-lg font-bold bg-primaryColor active:opacity-80 rounded mb-5 mr-4"
-                                    >
-                                        Thay Đổi Thông Tin
-                                    </button>
-                                    <button
-                                        onClick={handleEditPassword}
-                                        className="px-5 py-2 text-white text-lg font-bold bg-primaryColor active:opacity-80 rounded mb-5"
-                                    >
-                                        Thay Đổi Mật Khẩu
-                                    </button>
-                                </div>
-                            </div>
+                    {/* _________________________________Body____________________________________________ */}
 
-                            <form
-                                onSubmit={(e) => handleSaveChangeProfile(e)}
-                                className="lg:col-span-6 rounded shadow px-12"
-                            >
-                                <div className="md:grid md:grid-cols-2 md:gap-3 mt-5 pt-5">
-                                    <div className="mb-3">
-                                        <label htmlFor="" className="block font-medium text-left text-lg mb-2">
-                                            Họ Và Tên
-                                        </label>
-                                        <input
-                                            id="input-fullName"
-                                            className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
-                                            type="text"
-                                            placeholder="Họ Và Tên"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                            required
-                                        />
-                                    </div>
+                    <div className="h-80 mt-6 ml-14 ">
+                        <span className="">
+                            <FontAwesomeIcon icon={faUser} className="mr-4" />
+                            Tài khoản
+                        </span>
+                        <br />
+                        <button
+                            className={`text-base ${
+                                activeButton === 1 ? 'text-red-700 font-bold' : 'text-black'
+                            } ml-9 mt-3`}
+                            onClick={() => handleButtonClick(1)}
+                        >
+                            Hồ sơ cá nhân
+                        </button>
+                        <br />
+                        <button
+                            className={`text-base ${
+                                activeButton === 2 ? 'text-red-700 font-bold' : 'text-black'
+                            } ml-9 mt-3`}
+                            onClick={() => handleButtonClick(2)}
+                        >
+                            Đơn hàng
+                        </button>
+                        <br />
+                        <button
+                            className={`text-base ${
+                                activeButton === 3 ? 'text-red-700 font-bold' : 'text-black'
+                            } ml-9 mt-3`}
+                            onClick={() => handleButtonClick(3)}
+                        >
+                            Thay đổi mật khẩu
+                        </button>
+                    </div>
+                </div>
 
-                                    <div className="mb-3">
-                                        <label htmlFor="" className="block font-medium text-left text-lg mb-2">
-                                            Số Điện Thoại
-                                        </label>
-                                        <input
-                                            id="input-phoneNumber"
-                                            className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
-                                            type="number"
-                                            placeholder="Số Điện Thoại"
-                                            value={phoneNumber}
-                                            onChange={(e) => setPhoneNumber(e.target.value)}
-                                            required
-                                            max="9999999999"
-                                        />
-                                    </div>
+                <div className="h-auto w-3/4 mb-12">
+                    {/* ------------------------------Header colum 2------------------------------------------ */}
+                    <div className="border border-solid border-green-800 bg-light-green-300 py-4">
+                        {activeButton === 1 && (
+                            <>
+                                <div>
+                                    <span className="text-xl ml-12">Thông tin cá nhân</span>
+                                    <br />
+                                    <span className="text-xs text-gray-900 ml-16 ">
+                                        Quản lý thông tin hồ sơ để bảo mật tài khoản
+                                    </span>
                                 </div>
+                            </>
+                        )}
+                        {activeButton === 2 && (
+                            <>
+                                <div>
+                                    <span className="text-xl ml-12">Đơn hàng của bạn</span>
+                                    <br />
+                                    <span className="text-xs text-gray-900 ml-16">
+                                        Quản lý những đơn hàng mà bạn đã đặt
+                                    </span>
+                                </div>
+                            </>
+                        )}
+                        {activeButton === 3 && (
+                            <>
+                                <div>
+                                    <span className="text-xl ml-12">Mật khẩu của bạn</span>
+                                    <br />
+                                    <span className="text-xs text-gray-900 ml-16">
+                                        Quản lý và thay đổi mật khẩu của tài khoản để bảo mật tốt hơn
+                                    </span>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                    {/* --------------------------Body colum 2 ------------------------------------------ */}
+                    <div className="relative">
+                        <div className="ml-20 my-20">
+                            {activeButton === 1 && (
+                                <>
+                                    {isEditing ? (
+                                        <form className="text-black">
+                                            <div>
+                                                <div class="flex items-center mb-9">
+                                                    <div class="w-1/4">
+                                                        <span>Email : </span>
+                                                    </div>
+                                                    <div class="w-3/4">
+                                                        <input
+                                                            required
+                                                            type="email"
+                                                            autoComplete="email"
+                                                            placeholder="youraccount@gmail.com"
+                                                            onChange={(e) => setEmail(e.target.value)}
+                                                            value={email}
+                                                            className="mb-2 w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                        />
+                                                    </div>
+                                                </div>
 
-                                <div className="mb-3">
-                                    <label htmlFor="" className="block font-medium text-left text-lg mb-2">
-                                        Địa Chỉ Email
-                                    </label>
-                                    <input
-                                        id="input-email"
-                                        className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
-                                        type="email"
-                                        placeholder="Địa chỉ email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="" className="block font-medium text-left text-lg mb-2">
-                                        Địa Chỉ
-                                    </label>
-                                    <input
-                                        id="input-address"
-                                        className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
-                                        type="text"
-                                        placeholder="Địa chỉ"
-                                        value={address}
-                                        onChange={(e) => setAddress(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                {/* change pass */}
-                                <div className="mb-3">
-                                    <label htmlFor="" className="block font-medium text-left text-lg mb-2">
-                                        Mật Khẩu Cũ
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            id="input-oldPassword"
-                                            className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
-                                            type={hiddenOldPassword ? 'password' : 'text'}
-                                            placeholder="Mật Khẩu Cũ"
-                                            value={oldPassword}
-                                            onChange={(e) => setOldPassword(e.target.value)}
-                                            required
-                                        />
-                                        {hiddenOldPassword ? (
-                                            <FontAwesomeIcon
-                                                onClick={() => setHiddenOldPassword(!hiddenOldPassword)}
-                                                className="absolute top-4 right-6"
-                                                icon={faEyeSlash}
-                                            />
-                                        ) : (
-                                            <FontAwesomeIcon
-                                                onClick={() => setHiddenOldPassword(!hiddenOldPassword)}
-                                                className="absolute top-4 right-6"
-                                                icon={faEye}
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="" className="block font-medium text-left text-lg mb-2">
-                                        Mật Khẩu Mới
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            id="input-newPassword"
-                                            className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
-                                            type={hiddenNewPassword ? 'password' : 'text'}
-                                            placeholder="Mật Khẩu Mới"
-                                            value={newPassword}
-                                            onChange={(e) => setNewPassword(e.target.value)}
-                                            required
-                                        />
-                                        {hiddenNewPassword ? (
-                                            <FontAwesomeIcon
-                                                onClick={() => setHiddenNewPassword(!hiddenNewPassword)}
-                                                className="absolute top-4 right-6"
-                                                icon={faEyeSlash}
-                                            />
-                                        ) : (
-                                            <FontAwesomeIcon
-                                                onClick={() => setHiddenNewPassword(!hiddenNewPassword)}
-                                                className="absolute top-4 right-6"
-                                                icon={faEye}
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="" className="block font-medium text-left text-lg mb-2">
-                                        Nhập Lại Mật Khẩu Mới
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            id="input-reNewPassword"
-                                            className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
-                                            type={hiddenReNewPassword ? 'password' : 'text'}
-                                            placeholder="Nhập Lại Mật Khẩu Mới"
-                                            value={reNewPassword}
-                                            onChange={(e) => setReNewPassword(e.target.value)}
-                                            required
-                                        />
-                                        {hiddenReNewPassword ? (
-                                            <FontAwesomeIcon
-                                                onClick={() => setHiddenReNewPassword(!hiddenReNewPassword)}
-                                                className="absolute top-4 right-6"
-                                                icon={faEyeSlash}
-                                            />
-                                        ) : (
-                                            <FontAwesomeIcon
-                                                onClick={() => setHiddenReNewPassword(!hiddenReNewPassword)}
-                                                className="absolute top-4 right-6"
-                                                icon={faEye}
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-                                <button className="mt-4 px-8 py-2 text-white text-lg font-bold bg-primaryColor active:opacity-80 rounded mb-5">
-                                    {loading ? (
-                                        <div className="flex items-center justify-center">
-                                            <Spinner className="h-6 w-6 mr-4" /> <span>Đang lưu...</span>
-                                        </div>
+                                                <div class="flex items-center mb-9">
+                                                    <div class="w-1/4">
+                                                        <span>Họ và Tên : </span>
+                                                    </div>
+                                                    <div class="w-3/4">
+                                                        <input
+                                                            type="text"
+                                                            value={fullname}
+                                                            onChange={(e) => setFullname(e.target.value)}
+                                                            placeholder="Name"
+                                                            className="w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex items-center mb-9">
+                                                    <div class="w-1/4">
+                                                        <span>Số điện thoại : </span>
+                                                    </div>
+                                                    <div class="w-3/4">
+                                                        <input
+                                                            type="text"
+                                                            value={phoneNumber}
+                                                            onChange={(e) => setPhoneNumber(e.target.value)}
+                                                            placeholder="Name"
+                                                            className="w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex items-center mb-9">
+                                                    <div class="w-1/4">
+                                                        <span>Địa chỉ : </span>
+                                                    </div>
+                                                    <div class="w-3/4">
+                                                        <input
+                                                            type="text"
+                                                            value={address}
+                                                            onChange={(e) => setAddress(e.target.value)}
+                                                            placeholder="Địa chỉ"
+                                                            className="w-4/5 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex mt-8 absolute right-14">
+                                                    <button
+                                                        className="bg-primaryColor hover:bg-green-300 text-white font-semibold py-2 px-6 rounded-lg"
+                                                        onClick={handleSaveChanges1}
+                                                    >
+                                                        Lưu
+                                                    </button>
+                                                    <button
+                                                        className="ml-2 text-red-500 hover:text-red-600 font-semibold"
+                                                        onClick={handleCancelChanges}
+                                                    >
+                                                        Hủy
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     ) : (
-                                        <span>Lưu</span>
+                                        <div>
+                                            <div class="flex items-center mb-9">
+                                                <div class="w-1/4">
+                                                    <h1>Email :</h1>
+                                                </div>
+                                                <div class="w-3/4">
+                                                    <h3 class="">{email}</h3>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex items-center mb-9">
+                                                <div class="w-1/4">
+                                                    <h1 class="">Họ và Tên :</h1>
+                                                </div>
+                                                <div class="w-3/4">
+                                                    <h3 class="">{fullname}</h3>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex items-center mb-9">
+                                                <div class="w-1/4">
+                                                    <h1 class="">Số điện thoại :</h1>
+                                                </div>
+                                                <div class="w-3/4">
+                                                    <h3 class="">{phoneNumber}</h3>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center mb-9">
+                                                <div class="w-1/4">
+                                                    <h1>Địa chỉ :</h1>
+                                                </div>
+                                                <div class="w-3/4">
+                                                    <h3 class="">{address}</h3>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex ml-64 absolute right-14">
+                                                <div
+                                                    className="text-white bg-primaryColor hover:bg-green-300 font-semibold py-2 px-6 mt-4 border rounded-lg cursor-pointer"
+                                                    onClick={() => setIsEditing(true)}
+                                                >
+                                                    <span className="mb-10">Thay đổi</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     )}
-                                </button>
-                            </form>
+                                </>
+                            )}
+                        </div>
+
+                        {/* ---------------------------------------------------------------------------------------------------------------------------------------*/}
+                        <div className="mx-2 h-auto">
+                            {activeButton === 2 && (
+                                <>
+                                    <div className="grid">
+                                        <div className="w-full flex border-b border-green-800">
+                                            <div className="col-1 w-[10%] py-4 text-lg font-bold text-primaryColor text-center ">
+                                                ID
+                                            </div>
+
+                                            <div className="col-2 w-[35%] py-4 text-lg font-bold text-primaryColor text-center">
+                                                Địa chỉ
+                                            </div>
+
+                                            <div className="col-3 w-[20%] py-4 text-lg font-bold text-primaryColor text-center">
+                                                Tổng tiền
+                                            </div>
+
+                                            <div className="col-4 w-[20%] py-4 text-lg font-bold text-primaryColor text-center">
+                                                Ngày đặt
+                                            </div>
+
+                                            <div className="col-5 w-[15%] py-4 text-lg font-bold text-primaryColor text-center">
+                                                Trạng thái
+                                            </div>
+                                        </div>
+
+                                        {orderList.length > 0 ? (
+                                            orderList.map((order) => (
+                                                <React.Fragment key={order.id}>
+                                                    
+                                                    <div className="w-full flex">
+                                                        <div className="py-4 w-[10%] text-center text-blue-gray-900 font-extrabold">
+                                                            {order.id}
+                                                        </div>
+
+                                                        <div className="w-[35%] py-4 truncate inline-block text-center">
+                                                            {order.address}
+                                                        </div>
+
+                                                        <div className="py-4 pl-2 w-[20%] text-center">
+                                                            <span>{formattedNumber(order.totalAmount)} đ</span>
+                                                        </div>
+
+                                                        <div className="py-4 w-[20%] text-center">
+                                                            {moment(order.createdAt).format('DD/MM/YYYY')}
+                                                        </div>
+
+                                                        <div
+                                                            className={`py-4 px-1 w-[15%] text-center text-base font-bold ${
+                                                                order.status === 'Đã đặt'
+                                                                    ? 'text-primaryColor'
+                                                                    : 'text-red-700'
+                                                            }`}
+                                                        >
+                                                            {order.status}
+                                                            {/* <div>
+                                                                {!showDetails ? (
+                                                                    <button
+                                                                        className="px-2 text-primaryColor hover:text-light-blue-900"
+                                                                        onClick={() => handleClick(order.id)}
+                                                                        title="Chi tiết"
+                                                                    >
+                                                                        <FontAwesomeIcon icon={faInfoCircle} />
+                                                                    </button>
+                                                                ) : (
+                                                                    <DetalOrder orderId={order.id}
+                                                                                dateofbuy={moment(order.createdAt).format('DD/MM/YYYY')}
+                                                                                address={order.address}
+                                                                                name={order.name}
+                                                                                phone={order.phone}
+                                                                                total ={formattedNumber(order.totalAmount)}
+                                                                                status={order.status}
+                                                                                product={ProductList} />
+                                                                  )}
+                                                            </div> */}
+                                                        </div>
+                                                    </div>
+                                                </React.Fragment>
+                                            ))
+                                        ) : (
+                                            <h3 className="text-xl font-bold leading-relaxed text-gray-800">
+                                                Không có đơn hàng nào
+                                            </h3>
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        {/* Change Password */}
+                        <div className="ml-20">
+                            {activeButton === 3 && (
+                                <>
+                                    <ChangePassword />
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
+                {/* -------------------------column 3------------------ */}
             </div>
         </>
     );

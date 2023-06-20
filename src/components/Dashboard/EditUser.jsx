@@ -8,6 +8,7 @@ import * as adminServices from '../../services/adminServices';
 import Swal from 'sweetalert2';
 
 const EditUser = () => {
+    document.title = 'Cập nhật tài khoản | Dashboard';
     const { userList } = useContext(UsersContext);
     const { auth } = useContext(AuthContext);
     const [loading, setLoading] = useState([]);
@@ -101,7 +102,7 @@ const EditUser = () => {
             <main className="flex-1">
                 <div className="flex items-center justify-center z-50">
                     <div className="bg-white py-14 px-8 w-full mt-14 mx-10 border-2 border-primaryColor rounded-3xl">
-                        <h2 className="flex text-3xl font-extrabold mb-4 justify-center">Chỉnh sửa người dùng</h2>
+                        <h2 className="flex text-3xl font-extrabold mb-4 justify-center">Cập nhật tài khoản</h2>
                         {loading ? (
                             <Spinner className="h-12 w-12 mt-10 mx-auto" />
                         ) : (
