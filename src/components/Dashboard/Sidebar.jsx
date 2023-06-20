@@ -30,7 +30,7 @@ const Sidebar = () => {
                 />
                 <h1 className=" text-[#252525] text-xl font-bold px-3">ADMIN</h1>
             </div>
-            <div className='flex flex-col pt-16 justify-between min-h-[650px]'>
+            <div className='flex flex-col pt-16 justify-between min-h-[630px]'>
                 <ul className="flex flex-col gap-y-6">
                     {sidebar.map((item, index) => (
                         <li key={index}>
