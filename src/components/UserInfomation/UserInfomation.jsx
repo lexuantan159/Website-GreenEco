@@ -1,13 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faUser, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import ChangePassword from '../ChangePassword/ChangePassword';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { faPen, faUser } from '@fortawesome/free-solid-svg-icons';
+import ChangePassword from './ChangePassword/ChangePassword';
+import { useLocation, useNavigate} from 'react-router-dom';
 import * as order from '../../services/Order';
 import Xanh2 from '../../img/Xanh2.jpg';
 import moment from 'moment/moment';
-
-//server
 import * as userServer from '../../services/userServices';
 import AuthContext from '../../context/authProvider';
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,7 +23,10 @@ const UserInfomation = () => {
     const location = useLocation();
     const { auth } = useContext(AuthContext); 
     const [isEditing, setIsEditing] = useState(false);
-    const [hasUser, setHasUser] = useState(false);
+   
+
+ 
+
     const formattedNumber = (num) => {
         return num.toLocaleString('en-US').replace(/,/g, '.');
     }
@@ -102,16 +103,12 @@ const UserInfomation = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log();
             if (auth.accessToken) {
                 const response = await userServer.getUser(auth.accessToken);
                 setEmail(response.email);
                 setFullname(response.fullname);
                 setAddress(response.address);
                 setPhoneNumber(response.phone);
-                console.log(email);
-            } else {
-                setHasUser(false);
             }
             setIsEditing(false);
         };
@@ -223,11 +220,11 @@ const UserInfomation = () => {
                                     {isEditing ? (
                                         <form className="text-black">
                                             <div>
-                                                <div class="flex items-center mb-9">
-                                                    <div class="w-1/4">
+                                                <div className="flex items-center mb-9">
+                                                    <div className="w-1/4">
                                                         <span>Email : </span>
                                                     </div>
-                                                    <div class="w-3/4">
+                                                    <div className="w-3/4">
                                                         <input
                                                             required
                                                             type="email"
@@ -240,11 +237,11 @@ const UserInfomation = () => {
                                                     </div>
                                                 </div>
 
-                                                <div class="flex items-center mb-9">
-                                                    <div class="w-1/4">
+                                                <div className="flex items-center mb-9">
+                                                    <div className="w-1/4">
                                                         <span>Họ và Tên : </span>
                                                     </div>
-                                                    <div class="w-3/4">
+                                                    <div className="w-3/4">
                                                         <input
                                                             type="text"
                                                             value={fullname}
@@ -255,11 +252,11 @@ const UserInfomation = () => {
                                                     </div>
                                                 </div>
 
-                                                <div class="flex items-center mb-9">
-                                                    <div class="w-1/4">
+                                                <div className="flex items-center mb-9">
+                                                    <div className="w-1/4">
                                                         <span>Số điện thoại : </span>
                                                     </div>
-                                                    <div class="w-3/4">
+                                                    <div className="w-3/4">
                                                         <input
                                                             type="text"
                                                             value={phoneNumber}
@@ -270,11 +267,11 @@ const UserInfomation = () => {
                                                     </div>
                                                 </div>
 
-                                                <div class="flex items-center mb-9">
-                                                    <div class="w-1/4">
+                                                <div className="flex items-center mb-9">
+                                                    <div className="w-1/4">
                                                         <span>Địa chỉ : </span>
                                                     </div>
-                                                    <div class="w-3/4">
+                                                    <div className="w-3/4">
                                                         <input
                                                             type="text"
                                                             value={address}
@@ -302,38 +299,37 @@ const UserInfomation = () => {
                                         </form>
                                     ) : (
                                         <div>
-                                            <div class="flex items-center mb-9">
-                                                <div class="w-1/4">
+                                            <div className="flex items-center mb-9">
+                                                <div className="w-1/4">
                                                     <h1>Email :</h1>
                                                 </div>
-                                                <div class="w-3/4">
-                                                    <h3 class="">{email}</h3>
+                                                <div className="w-3/4">
+                                                    <h3 className="">{email}</h3>
                                                 </div>
                                             </div>
 
-                                            <div class="flex items-center mb-9">
-                                                <div class="w-1/4">
-                                                    <h1 class="">Họ và Tên :</h1>
+                                            <div className="flex items-center mb-9">
+                                                <div className="w-1/4">
+                                                    <h1 className="">Họ và Tên :</h1>
                                                 </div>
-                                                <div class="w-3/4">
-                                                    <h3 class="">{fullname}</h3>
+                                                <div className="w-3/4">
+                                                    <h3 className="">{fullname}</h3>
                                                 </div>
                                             </div>
 
-                                            <div class="flex items-center mb-9">
-                                                <div class="w-1/4">
-                                                    <h1 class="">Số điện thoại :</h1>
-                                                </div>
-                                                <div class="w-3/4">
-                                                    <h3 class="">{phoneNumber}</h3>
+                                            <div className="flex items-center mb-9">
+                                                <div className="w-1/4">
+                                                className                                                </div>
+                                                <div className="w-3/4">
+                                                    <h3 className="">{phoneNumber}</h3>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center mb-9">
-                                                <div class="w-1/4">
+                                            <div className="flex items-center mb-9">
+                                                <div className="w-1/4">
                                                     <h1>Địa chỉ :</h1>
                                                 </div>
-                                                <div class="w-3/4">
-                                                    <h3 class="">{address}</h3>
+                                                <div className="w-3/4">
+                                                    <h3 className="">{address}</h3>
                                                 </div>
                                             </div>
 

@@ -4,20 +4,28 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import * as userServer from '../../services/userServices';
 import AuthContext from '../../context/authProvider';
 import { ToastContainer, toast } from 'react-toastify';
-import * as cartServices from '../../services/cartServices'
+import * as cartServices from '../../services/cartServices';
+import * as orders from '../../services/Order';
+import { useNavigate } from 'react-router';
+import { Spinner } from '@material-tailwind/react';
 
 const CheckoutPage = () => {
+    const navigation = useNavigate();
     const [fullname, setFullName] = useState('');
     const [address, setAddress] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [hasUser, setHasUser] = useState(false);
     const { auth } = useContext(AuthContext);
-
-    //khai báo biến dùng cho sản phẩm
     const [cartList, setCartList] = useState([]);
     const [totalAmount, setTotalAmount] = useState('');
-    const TransportFee = 1;
+    const [paymentMethod, setPaymentMethod] = useState(''); // Biến state cho phương thức thanh toán
+    const [loading, setLoading] = useState(false);
+    const TransportFee = 25000;
+
+    const formattedNumber = (num) => {
+        return num.toLocaleString('en-US').replace(/,/g, '.');
+    };
 
     const handleSaveChanges = async (even) => {
         even.preventDefault();
@@ -35,13 +43,13 @@ const CheckoutPage = () => {
         setIsEditing(false);
     };
 
-    const [paymentMethod, setPaymentMethod] = useState(''); // Biến state cho phương thức thanh toán
-
     const handlePaymentMethodChange = (event) => {
         setPaymentMethod(event.target.value); // Cập nhật giá trị biến state paymentMethod khi thay đổi
     };
-    const notify = (message) =>
-        toast(message, {
+
+    const notify = (message, type) => {
+        const toastType = type === "success" ? toast.success : toast.error
+        return toastType(message, {
             position: 'top-center',
             autoClose: 1500,
             hideProgressBar: false,
@@ -49,8 +57,9 @@ const CheckoutPage = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light',
+            theme: 'colored',
         });
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,15 +76,14 @@ const CheckoutPage = () => {
 
         fetchData();
     }, [auth]);
+
     useEffect(() => {
         if (auth.accessToken !== undefined) {
             const fetchCart = async () => {
                 const fetchCart = await cartServices.getCart(auth.accessToken);
                 if (fetchCart.statusCode === 200) {
                     setCartList(fetchCart.products);
-                    console.log(cartList);
                     setTotalAmount(fetchCart.totalAmount);
-                    console.log(fetchCart);
                 } else {
                     console.log(fetchCart.error);
                 }
@@ -84,12 +92,24 @@ const CheckoutPage = () => {
         }
     }, [auth.accessToken]);
 
+    const handleCheckout = async () => {
+        setLoading(true);
+        const response = await orders.createOrders(auth.accessToken, 'Tiền mặt');
+        if (response.statusCode === 201) {
+            setLoading(false);
+            navigation('/userinformation', { state: { toastMessage: "Thanh Toán Thành Công!" } });
+        } else {
+            notify(response.error, "error");
+            setLoading(false);
+        }
+    };
+
     return (
         <>
             <ToastContainer />
-            <div>
+            <div className="container mx-auto">
                 {/* header checkout */}
-                <div className="h-20 flex items-center mx-auto border pl-10 max-w-[866px]">
+                <div className="h-20 flex items-center mx-auto border pl-10 mt-10">
                     <div className="w-14 h-14 flex items-center justify-center text-white text-3xl font-bold mr-4">
                         <img
                             src="https://cdn.icon-icons.com/icons2/1786/PNG/128/shoppingcart-checkout_114473.png"
@@ -97,26 +117,26 @@ const CheckoutPage = () => {
                             className="h-10 w-10 mr-2"
                         />
                     </div>
-                    <h1 className="text-3xl font-bold text-primaryColor">Thanh toán</h1>
+                    <h1 className="text-3xl font-bold text-primaryColor">Thanh Toán</h1>
                 </div>
                 {/* body checkout */}
-                <div className="max-w-2xl mx-auto text-primaryColor shadow-lg rounded-lg px-8 py-6 mt-8">
+                <div className="mx-auto shadow-lg rounded-lg px-8 py-6 my-8 border-spacing-2 border-primaryColor">
                     {/* Body information user */}
                     <div>
-                        <h2 className="text-2xl font-semibold mb-6">
-                            <FontAwesomeIcon icon={faLocationDot} className="mr-2" />
-                            Thông tin giao hàng
+                        <h2 className="text-primaryColor text-2xl font-semibold mb-6">
+                            <FontAwesomeIcon icon={faLocationDot} className="text-primaryColor mr-2" />
+                            Thông Tin Giao Hàng
                         </h2>
 
-                        {/* edi information user */}
+                        {/* edit information user */}
 
                         {isEditing ? (
-                            <form className="text-black">
+                            <form className="text-black h-[290px]">
                                 <div className="flex flex-col-2 ">
                                     <div className="w-full md:w-1/2 px-4 mt-2">
                                         <div className="mb-5 flex items-center">
                                             <div>
-                                                <span className="text-primaryColor font-bold">Tên dầy đủ : </span>
+                                                <span className="text-lg text-primaryColor font-bold">Tên Đầy Đủ : </span>
                                                 <input
                                                     type="text"
                                                     value={fullname}
@@ -128,7 +148,7 @@ const CheckoutPage = () => {
                                         </div>
                                         <div className="mb-9 flex items-center mt-8">
                                             <div>
-                                                <span className="text-primaryColor font-bold">Địa chỉ : </span>
+                                                <span className="text-lg text-primaryColor font-bold">Địa Chỉ : </span>
 
                                                 <input
                                                     type="text"
@@ -143,26 +163,26 @@ const CheckoutPage = () => {
                                     <div className="w-full md:w-1/2 px-4 mt-2">
                                         <div className="mb-5 flex items-center">
                                             <div>
-                                                <span className="text-primaryColor font-bold">Số điện thoại : </span>
+                                                <span className="text-lg text-primaryColor font-bold">Số Điện Thoại : </span>
                                                 <input
                                                     type="text"
                                                     value={phoneNumber}
                                                     onChange={(e) => setPhoneNumber(e.target.value)}
                                                     placeholder="Name"
-                                                    className="mt-2 w-60 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
+                                                    className="mt-2 ml-4 w-60 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
                                                 />
                                             </div>
                                         </div>
                                         <div className="flex ml-auto items-center justify-center mt-32">
                                             <div className="flex">
                                                 <button
-                                                    className="bg-primaryColor hover:bg-green-300 text-white font-semibold py-2 px-6 rounded-lg"
+                                                    className="bg-primaryColor hover:opacity-80 text-white font-bold py-2 px-6 rounded-lg"
                                                     onClick={handleSaveChanges}
                                                 >
                                                     Lưu
                                                 </button>
                                                 <button
-                                                    className="ml-2  text-red-500 hover:text-red-600 font-semibold"
+                                                    className="ml-2 shadow text-red-500 hover:text-red-600 font-bold py-2 px-6 rounded-lg"
                                                     onClick={handleCancelChanges}
                                                 >
                                                     Hủy
@@ -173,28 +193,28 @@ const CheckoutPage = () => {
                                 </div>
                             </form>
                         ) : (
-                            <div className="flex flex-col-2 ml-2 ">
+                            <div className="flex flex-col-2 ml-2 h-[290px]">
                                 <div className="w-full md:w-1/2 px-4 mt-2">
                                     <div className="mb-5 flex items-center">
-                                        <h1 className="font-bold">Tên đầy đủ:</h1>
+                                        <h1 className="text-lg text-primaryColor font-bold">Tên Đầy Đủ:</h1>
                                         <h3 className="ml-2 text-black">{fullname}</h3>
                                     </div>
                                     <div className="mb-9 flex flex-wrap items-center mt-8">
-                                        <h1 className="font-bold">Địa chỉ:</h1>
+                                        <h1 className="text-lg text-primaryColor font-bold">Địa Chỉ:</h1>
                                         <span className="ml-4 h-auto min-h-8 w-64 text-black">{address}</span>
                                     </div>
                                 </div>
                                 <div className="w-full md:w-1/2 px-4 mt-2">
                                     <div className="mb-5 flex items-center">
-                                        <h1 className="font-bold">Số điện thoại:</h1>
+                                        <h1 className="text-lg text-primaryColor font-bold">Số Điện Thoại:</h1>
                                         <h3 className="ml-2 text-black">{phoneNumber}</h3>
                                     </div>
                                     <div className="flex ml-auto items-center justify-center mt-16">
                                         <div
-                                            className="text-white bg-primaryColor hover:bg-green-300 font-semibold py-2 px-6 mt-4 border rounded-lg cursor-pointer"
+                                            className="text-white bg-primaryColor hover:opacity-80 font-bold py-2 px-6 mt-4 border rounded-lg cursor-pointer"
                                             onClick={() => setIsEditing(true)}
                                         >
-                                            <span className="mr-2">Thay đổi</span>
+                                            <span className="mr-2">Thay Đổi</span>
                                         </div>
                                     </div>
                                 </div>
@@ -205,15 +225,15 @@ const CheckoutPage = () => {
                     {/* Body information Product */}
 
                     <div className="mb-4">
-                        <h3 className="text-2xl  mb-6">Sản Phẩm</h3>
+                        <h3 className="text-2xl text-primaryColor font-medium mb-6">Sản Phẩm</h3>
                         <table className="w-full">
                             <thead>
                                 <tr>
                                     <th className="py-2 px-4"></th>
-                                    <th className="py-2 px-4"></th>
+                                    <th className="py-2 px-4 text-black">Loại</th>
                                     <th className="py-2 px-4 text-black">Giá</th>
-                                    <th className="py-2 px-4 text-black">Số lượng</th>
-                                    <th className="py-2 px-4 text-black">Tổng tiền</th>
+                                    <th className="py-2 px-4 text-black">Số Lượng</th>
+                                    <th className="py-2 px-4 text-black">Tổng Tiền</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -227,35 +247,44 @@ const CheckoutPage = () => {
                                                     className="w-12 h-12 rounded-lg mr-4"
                                                 />
                                                 <div>
-                                                    <p className="text-gray-700">{product.title}</p>
+                                                    <p className="text-xl font-medium text-textColor">
+                                                        {product.title}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="py-2 px-4 text-black">{product.category}</td>
-                                        <td className="py-2 px-4 text-black">{product.price} vnd</td>
-                                        <td className="py-2 px-4 text-black">{product.CartItem.quantity}</td>
-                                        <td className="py-2 px-4 text-black">{product.CartItem.totalPrice}</td>
+                                        <td className="py-2 px-4 text-lg font-medium text-center text-textColor">{product.category}</td>
+                                        <td className="py-2 px-4 text-lg font-medium text-center text-textColor">
+                                            {formattedNumber(product.price)} vnđ
+                                        </td>
+                                        <td className="py-2 px-4 text-lg font-medium text-center text-textColor">
+                                            {product.CartItem.quantity}
+                                        </td>
+                                        <td className="py-2 px-4 text-lg font-medium text-center text-textColor">
+                                            {formattedNumber(product.CartItem.totalPrice)} vnđ
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
                     <div className="mb-2 text-black text-sm text-right">
-                        <h3>Tổng tiền : {totalAmount} : vnd</h3>
+                        <h3 className="font-bold text-base">
+                            Tổng tiền : <span className="text-lg font-medium">{formattedNumber(totalAmount)} vnđ</span>
+                        </h3>
                     </div>
 
                     {/* body Payment methods */}
 
                     <div className="mb-4 mt-5">
-                        <h3 className="text-2xl font-semibold mb-6">Phương thức thanh toán</h3>
+                        <h3 className="text-primaryColor text-2xl font-medium mb-6">Phương Thức Thanh Toán</h3>
                         <select
                             id="paymentMethod"
                             className="w-full text-black px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={paymentMethod}
                             onChange={handlePaymentMethodChange}
                         >
-                            <option value="paypal">Thanh toán bằng ví điện tử paypal</option>
-                            <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                            <option value="cod">Thanh Toán Khi Nhận Hàng (COD)</option>
                         </select>
                     </div>
 
@@ -264,17 +293,23 @@ const CheckoutPage = () => {
                         <table className="float-right">
                             <tbody>
                                 <tr>
-                                    <td>Tổng tiền đơn hàng:</td>
-                                    <td>{totalAmount}</td>
+                                    <td className="font-bold text-base">Tổng Tiền Đơn Hàng: </td>
+                                    <td className="py-2 px-4 text-lg font-medium text-textColor">
+                                        {formattedNumber(totalAmount)} vnđ
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>Phí vận chuyển:</td>
-                                    <td>{TransportFee}</td>
+                                    <td className="font-bold text-base">Phí Vận Chuyển: </td>
+                                    <td className="py-2 px-4 text-lg font-medium text-textColor">
+                                        {formattedNumber(TransportFee)} vnđ
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>Số tiền phải trả:</td>
+                                    <td className="font-bold text-base">Số Tiền Phải Trả: </td>
                                     <td>
-                                        <h1 className="text-primaryColor inline-block">{totalAmount + TransportFee}</h1>
+                                        <h1 className="py-2 px-4 text-lg text-textColor font-bold inline-block">
+                                            {formattedNumber(totalAmount + TransportFee)} vnđ
+                                        </h1>
                                     </td>
                                 </tr>
                             </tbody>
@@ -284,11 +319,22 @@ const CheckoutPage = () => {
                     {/* pay money */}
                     <div className="flex justify-between items-center mt-40">
                         <div className="text-black text-sm">
-                            <h3>Nhấp vào liên kết để hiển thị các điều khoản GreenEco</h3>
-                        </div>                       
-                            <button className="bg-primaryColor hover:bg-blue-300 text-white font-semibold py-2 px-6 rounded-lg focus:outline-none">
-                                Đặt hàng
-                            </button>
+                            <h3 className="font-medium text-base">
+                                Nhấp Vào Liên Kết Để Hiển Thị Các Điều Khoản GreenEco
+                            </h3>
+                        </div>
+                        <button
+                            onClick={handleCheckout}
+                            className="bg-primaryColor hover:opacity-80 text-white font-medium py-2 px-6 rounded "
+                        >
+                            {loading ? (
+                                <div className="flex items-center justify-center">
+                                    <Spinner className="h-6 w-6 mr-4 font-bold" /> <span>Đang Thanh Toán....</span>
+                                </div>
+                            ) : (
+                                <span className='font-bold'>Thanh Toán</span>
+                            )}
+                        </button>
                     </div>
                 </div>
             </div>
