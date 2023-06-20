@@ -18,12 +18,12 @@ const DetailOrder = () => {
             setOrder(ordersList.filter((order) => order.id === +params.id)[0]);
             setLoading(false)
         }
-        console.log(order);
     });
+    
     return (
         <>
             <div></div>
-            <main className="flex-1">
+            <main className="container mx-auto flex-1">
                 {loading ? (
                     <Spinner className="h-12 w-12 mt-60 mx-auto" />
                 ) : (

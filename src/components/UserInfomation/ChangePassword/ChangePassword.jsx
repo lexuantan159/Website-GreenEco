@@ -1,142 +1,163 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import AuthContext from '../../context/authProvider';
-import { updateUserPassword } from '../../services/userServices';
+import AuthContext from '../../../context/authProvider';
+import { updateUserPassword } from '../../../services/userServices';
+import { ToastContainer, toast } from 'react-toastify';
+import { Spinner } from '@material-tailwind/react';
 
 const ChangePassword = () => {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [hiddenPass, setHiddenPass] = useState(true);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [reNewPassword, setReNewPassword] = useState('');
+    const [hiddenOldPassword, setHiddenOldPassword] = useState(true);
+    const [hiddenNewPassword, setHiddenNewPassword] = useState(true);
+    const [hiddenReNewPassword, setHiddenReNewPassword] = useState(true);
+    const [loading, setLoading] = useState(false);
     const { auth } = useContext(AuthContext);
 
-    const handleHiddenPassword = () => {
-        setHiddenPass(!hiddenPass);
+    const notify = (message, type) => {
+        const toastType = type === 'success' ? toast.success : toast.error;
+        return toastType(message, {
+            position: 'top-right',
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+        });
     };
 
     const handleChangePassword = async (event) => {
         event.preventDefault(); // Ngăn chặn trình duyệt tải lại trang
-
-        if (oldPassword !== newPassword) {
-            setErrorMessage('The old password was entered incorrectly. Please try again');
-            return;
-        } else if (oldPassword === newPassword) {
-            setErrorMessage('The old password and the new password are the same');
-            return;
-        } else if (newPassword !== confirmPassword) {
-            setErrorMessage('New password and confirm password do not match. Please try again.');
-            return;
+        setLoading(true);
+        if (newPassword !== reNewPassword) {
+            notify('Mật khẩu Không Khớp', 'error');
         } else {
             const response = await updateUserPassword(auth.accessToken, oldPassword, newPassword);
             if (response.statusCode === 200) {
-                setErrorMessage(response.message);
+                setLoading(false);
+                notify(response.message, "success");
             } else {
-                setErrorMessage(response.errorMessage);
+                setLoading(false);
+                notify(response.errorMessage, "error");
             }
         }
     };
+
     return (
-        <form>
-            <div className="flex flex-col h-96 ">
-                <label className="font-medium text-left text-lg mb-2 " htmlFor="">
-                    Old Password
-                </label>
-                <div className="relative">
-                    <input
-                        id="passwordInput"
-                        className="w-11/12 px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
-                        type={hiddenPass ? 'password' : 'text'}
-                        required
-                        placeholder="Input Old PassWord"
-                        onChange={(event) => setOldPassword(event.target.value)}
-                        value={oldPassword}
-                    />
-                    {hiddenPass ? (
-                        <FontAwesomeIcon
-                            onClick={handleHiddenPassword}
-                            className="absolute top-5 right-20"
-                            icon={faEyeSlash}
-                        />
-                    ) : (
-                        <FontAwesomeIcon
-                            onClick={handleHiddenPassword}
-                            className="absolute top-5 right-20"
-                            icon={faEye}
-                        />
-                    )}
-                </div>
+        <>
+            <ToastContainer />
+            <form>
+                <div className=" mr-20">
+                    <div className="mb-3">
+                        <label htmlFor="" className="block font-medium text-left text-lg mb-2">
+                            Mật Khẩu Cũ
+                        </label>
+                        <div className="relative">
+                            <input
+                                id="input-oldPassword"
+                                className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
+                                type={hiddenOldPassword ? 'password' : 'text'}
+                                placeholder="Mật Khẩu Cũ"
+                                value={oldPassword}
+                                onChange={(e) => setOldPassword(e.target.value)}
+                                required
+                            />
+                            {hiddenOldPassword ? (
+                                <FontAwesomeIcon
+                                    onClick={() => setHiddenOldPassword(!hiddenOldPassword)}
+                                    className="absolute top-4 right-6"
+                                    icon={faEyeSlash}
+                                />
+                            ) : (
+                                <FontAwesomeIcon
+                                    onClick={() => setHiddenOldPassword(!hiddenOldPassword)}
+                                    className="absolute top-4 right-6"
+                                    icon={faEye}
+                                />
+                            )}
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="" className="block font-medium text-left text-lg mb-2">
+                            Mật Khẩu Mới
+                        </label>
+                        <div className="relative">
+                            <input
+                                id="input-newPassword"
+                                className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
+                                type={hiddenNewPassword ? 'password' : 'text'}
+                                placeholder="Mật Khẩu Mới"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                required
+                            />
+                            {hiddenNewPassword ? (
+                                <FontAwesomeIcon
+                                    onClick={() => setHiddenNewPassword(!hiddenNewPassword)}
+                                    className="absolute top-4 right-6"
+                                    icon={faEyeSlash}
+                                />
+                            ) : (
+                                <FontAwesomeIcon
+                                    onClick={() => setHiddenNewPassword(!hiddenNewPassword)}
+                                    className="absolute top-4 right-6"
+                                    icon={faEye}
+                                />
+                            )}
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="" className="block font-medium text-left text-lg mb-2">
+                            Nhập Lại Mật Khẩu Mới
+                        </label>
+                        <div className="relative">
+                            <input
+                                id="input-reNewPassword"
+                                className="w-full px-4 py-2 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
+                                type={hiddenReNewPassword ? 'password' : 'text'}
+                                placeholder="Nhập Lại Mật Khẩu Mới"
+                                value={reNewPassword}
+                                onChange={(e) => setReNewPassword(e.target.value)}
+                                required
+                            />
+                            {hiddenReNewPassword ? (
+                                <FontAwesomeIcon
+                                    onClick={() => setHiddenReNewPassword(!hiddenReNewPassword)}
+                                    className="absolute top-4 right-6"
+                                    icon={faEyeSlash}
+                                />
+                            ) : (
+                                <FontAwesomeIcon
+                                    onClick={() => setHiddenReNewPassword(!hiddenReNewPassword)}
+                                    className="absolute top-4 right-6"
+                                    icon={faEye}
+                                />
+                            )}
+                        </div>
+                    </div>
 
-                <label className="font-medium text-left text-lg mt-4 mb-2 " htmlFor="">
-                    New Password
-                </label>
-                <div className="relative">
-                    <input
-                        id="passwordInput"
-                        className="w-11/12 px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
-                        type={hiddenPass ? 'password' : 'text'}
-                        required
-                        placeholder="Input New PassWord"
-                        onChange={(event) => setNewPassword(event.target.value)}
-                        value={newPassword}
-                    />
-                    {hiddenPass ? (
-                        <FontAwesomeIcon
-                            onClick={handleHiddenPassword}
-                            className="absolute top-5 right-20"
-                            icon={faEyeSlash}
-                        />
-                    ) : (
-                        <FontAwesomeIcon
-                            onClick={handleHiddenPassword}
-                            className="absolute top-5 right-20"
-                            icon={faEye}
-                        />
-                    )}
+                    <div>
+                        <button
+                            className="border px-4 py-2 rounded-lg bg-primaryColor text-white absolute right-16 "
+                            type="submit"
+                            onClick={handleChangePassword}
+                        >
+                            {loading ? (
+                                        <div className="flex items-center justify-center">
+                                            <Spinner className="h-6 w-6 mr-4" /> <span>Đang lưu...</span>
+                                        </div>
+                                    ) : (
+                                        <span>Lưu</span>
+                                    )}
+                        </button>
+                    </div>
                 </div>
-
-                <label className="font-medium text-left text-lg mt-4 mb-2 " htmlFor="">
-                    Confirm Password
-                </label>
-                <div className="relative">
-                    <input
-                        id="passwordInput"
-                        className="w-11/12 px-4 py-3 border-2 border-[#afafaf] rounded-lg shadow-lg outline-none focus:border-primaryColor placeholder:text-lg text-lg"
-                        type={hiddenPass ? 'password' : 'text'}
-                        required
-                        placeholder="Input Confirm PassWord"
-                        onChange={(event) => setConfirmPassword(event.target.value)}
-                        value={confirmPassword}
-                    />
-                    {hiddenPass ? (
-                        <FontAwesomeIcon
-                            onClick={handleHiddenPassword}
-                            className="absolute top-5 right-20"
-                            icon={faEyeSlash}
-                        />
-                    ) : (
-                        <FontAwesomeIcon
-                            onClick={handleHiddenPassword}
-                            className="absolute top-5 right-20"
-                            icon={faEye}
-                        />
-                    )}
-                </div>
-
-                {errorMessage && <div className="text-red-500 mt-4">{errorMessage}</div>}
-                <div>
-                    <button
-                        className="border px-4 py-2 my-10 rounded-lg bg-primaryColor text-white absolute right-16 "
-                        type="submit"
-                        onClick={handleChangePassword}
-                    >
-                        Change Password
-                    </button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </>
     );
 };
 
