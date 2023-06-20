@@ -5,6 +5,7 @@ import AuthContext from '../../context/authProvider';
 import { Spinner } from '@material-tailwind/react';
 
 const AddProduct = () => {
+    document.title = 'Thêm sản phẩm mới | Dashboard';
     const { auth } = useContext(AuthContext);
     const [submit, setSubmit] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -55,8 +56,6 @@ const AddProduct = () => {
             formData.append('category', category);
             
             const addProduct = await adminServices.addProduct(auth.accessToken, formData);
-            // console.log(auth.accessToken);
-            console.log(addProduct);
             if (addProduct.statusCode === 201) {
                 notify(addProduct.response.message, 'success');
                 setLoading(false);

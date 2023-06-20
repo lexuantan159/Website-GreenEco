@@ -8,6 +8,7 @@ import * as adminServices from '../../services/adminServices';
 import Swal from 'sweetalert2';
 
 const EditProduct = () => {
+    document.title = 'Cập nhật sản phẩm | Dashboard';
     const { productsList } = useContext(ProductsContext);
     const { auth } = useContext(AuthContext);
     const params = useParams();
@@ -113,10 +114,10 @@ const EditProduct = () => {
     return (
         <>
             <ToastContainer />
-            <main className="flex-1 ml-60">
+            <main className="flex-1">
                 <div className="flex items-center justify-center z-50">
                     <div className="bg-white p-8 w-full mt-8 mx-10 border-2 border-primaryColor rounded-3xl">
-                        <h2 className="flex text-3xl font-extrabold mb-4 justify-center">Chỉnh sửa</h2>
+                        <h2 className="flex text-3xl font-extrabold mb-4 justify-center">Cập nhật sản phẩm</h2>
                         {loading ? (
                             <Spinner className="h-12 w-12 mt-10 mx-auto" />
                         ) : (

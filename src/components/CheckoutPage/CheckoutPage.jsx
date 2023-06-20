@@ -285,10 +285,10 @@ const CheckoutPage = () => {
                     <div className="flex justify-between items-center mt-40">
                         <div className="text-black text-sm">
                             <h3>Nhấp vào liên kết để hiển thị các điều khoản GreenEco</h3>
-                        </div>
-                        <button className="bg-primaryColor hover:bg-blue-300 text-white font-semibold py-2 px-6 rounded-lg focus:outline-none">
-                           Đặt hàng
-                        </button>
+                        </div>                       
+                            <button className="bg-primaryColor hover:bg-blue-300 text-white font-semibold py-2 px-6 rounded-lg focus:outline-none">
+                                Đặt hàng
+                            </button>
                     </div>
                 </div>
             </div>
