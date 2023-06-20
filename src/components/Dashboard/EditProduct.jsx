@@ -54,7 +54,7 @@ const EditProduct = () => {
             setCategory(product.category);
             setLoading(false);
         }
-    }, []);
+    }, [productsList]);
     const handleEdit = (e) => {
         e.preventDefault();
         Swal.fire({
