@@ -5,15 +5,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react';
 import ProductsContext from '../../context/productsProvider';
 import { faPenToSquare, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AuthContext from '../../context/authProvider';
 import { Spinner } from '@material-tailwind/react';
 import * as adminServices from '../../services/adminServices';
 import { ToastContainer, toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import vnStr from 'vn-str';
 
-document.title = 'Dashboard';
 const ProductList = () => {
+    document.title = 'Danh sách sản phẩm | Dashboard';
     const { productsList } = useContext(ProductsContext);
     const [listProd, setListProd] = useState([]);
     const [loading, setLoading] = useState([]);
@@ -33,10 +34,10 @@ const ProductList = () => {
         });
     };
     const handleChangeSearch = (e) => {
-        const searchValue = e.target.value;
+        const searchValue = vnStr.rmVnTones(e.target.value).toLowerCase();
         const searchItem =
             searchValue !== ''
-                ? listProd.filter((item) => item.title.toLowerCase().includes(searchValue))
+                ? productsList.filter((item) => vnStr.rmVnTones(item.title.toLowerCase()).includes(searchValue))
                 : productsList;
         setListProd(searchItem);
     };
@@ -53,19 +54,19 @@ const ProductList = () => {
     const handleDelete = (e) => {
         Swal.fire({
             title: 'Bạn có chắc không ?',
-            text: "Bạn sẽ không thể hoàn nguyên điều này !",
+            text: 'Bạn sẽ không thể hoàn nguyên điều này !',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33', 
-            cancelButtonColor: '#3085d6', 
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
             confirmButtonText: 'Có, xóa nó đi !',
             cancelButtonText: 'Hủy',
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
-              setLoading(true)
-              deleteEvent(); 
+                setLoading(true);
+                deleteEvent();
             }
-          })
+        });
 
         const deleteEvent = async () => {
             const prodId = e.target.closest('tr').getAttribute('data-id');
@@ -74,23 +75,14 @@ const ProductList = () => {
             const deleteProduct = await adminServices.deleteProduct(auth.accessToken, prodId, fileName);
             console.log(deleteProduct);
             if (deleteProduct.statusCode === 200) {
-                Swal.fire(
-                    'Thành công !',
-                    'Sản phẩm đã được xóa.',
-                    'success'
-                ).then(result => {
-                    result.isConfirmed && setListProd(productsList.filter((product) => product.id !== prodId)); 
+                Swal.fire('Thành công !', 'Sản phẩm đã được xóa.', 'success').then((result) => {
+                    result.isConfirmed && setListProd(productsList.filter((product) => product.id !== prodId));
                     setLoading(false);
-                })
+                });
             } else {
-                Swal.fire(
-                    'Lỗi !',
-                    'Có lỗi khi xóa sản phẩm.',
-                    'error'
-                )
+                Swal.fire('Lỗi !', 'Có lỗi khi xóa sản phẩm.', 'error');
             }
-        }
-        
+        };
     };
 
     return (
@@ -116,7 +108,7 @@ const ProductList = () => {
                             <input
                                 className="bg-gray-100 outline-none"
                                 type="text"
-                                placeholder="Nhập từ khóa..."
+                                placeholder="Nhập từ khóa tiêu đề..."
                                 onChange={handleChangeSearch}
                             />
                         </div>
@@ -168,7 +160,10 @@ const ProductList = () => {
                                         >
                                             <FontAwesomeIcon icon={faPenToSquare} />
                                         </Link>
-                                        <button className="px-2 text-primaryColor hover:text-deep-orange-900" onClick={handleDelete}>
+                                        <button
+                                            className="px-2 text-primaryColor hover:text-deep-orange-900"
+                                            onClick={handleDelete}
+                                        >
                                             <FontAwesomeIcon icon={faTrashAlt} />
                                         </button>
                                     </td>
