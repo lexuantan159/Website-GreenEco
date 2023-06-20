@@ -71,15 +71,27 @@ const Header = () => {
                         </Link>
                     </li>
                     <li className="block ">
-                        <Link to="/cart">
-                            <p
-                                className={`mr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
-                                    router.pathname === '/cart' ? 'text-primaryColor' : 'text-black'
-                                }`}
-                            >
-                                Giỏ Hàng
-                            </p>
-                        </Link>
+                        {auth.accessToken === undefined ? (
+                            <Link to="/login">
+                                <p
+                                    className={`mr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
+                                        router.pathname === '/cart' ? 'text-primaryColor' : 'text-black'
+                                    }`}
+                                >
+                                    Giỏ Hàng
+                                </p>
+                            </Link>
+                        ) : (
+                            <Link to="/cart">
+                                <p
+                                    className={`mr-14 text-lg font-bold hover:text-primaryColor transition duration-300 linear ${
+                                        router.pathname === '/cart' ? 'text-primaryColor' : 'text-black'
+                                    }`}
+                                >
+                                    Giỏ Hàng
+                                </p>
+                            </Link>
+                        )}
                     </li>
 
                     <li className="block ">
@@ -116,18 +128,28 @@ const Header = () => {
                                     className="rotate-90 group-hover:rotate-0 transition-all"
                                     icon={faCaretDown}
                                 />
-                                <div className="absolute top-7 left-0 right-0 hidden group-hover:block transition-all bg-white shadow rounded py-2 z-10">
-                                    <ul className="">
+                                <div className="absolute top-7 left-0 w-[200px] hidden group-hover:block transition-all bg-white shadow rounded z-10">
+                                <ul className="">
+                                    <li
+                                        onClick={() => navigate('/userinformation')}
+                                        className="my-2 px-2 py-2 text-start mx-3 hover:text-primaryColor "
+                                    >
+                                        <FontAwesomeIcon className="mr-2" icon={faUser} />
+                                        <span className="text-textColor font-medium hover:text-primaryColor">
+                                            Thông Tin Cá Nhân
+                                        </span>
+                                    </li>
+                                    {auth.role === 'Admin' && (
                                         <li
-                                            onClick={() => navigate('/userinformation')}
-                                            className="my-1 text-textColor font-medium "
+                                            onClick={() => navigate('/dashboard')}
+                                            className="my-2 px-2 py-2 text-start mx-3 hover:text-primaryColor "
                                         >
                                             <FontAwesomeIcon className="mr-2" icon={faChartSimple} />
                                             <span className="text-textColor font-medium hover:text-primaryColor">
                                                 Bảng Điều Khiển
                                             </span>
                                         </li>
-                                    
+                                    )}
                                     <li
                                         onClick={handleLogOut}
                                         className="my-2 px-2 py-2 text-start mx-3 hover:text-primaryColor "

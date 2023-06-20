@@ -19,6 +19,7 @@ export const postProduct = async (endPoints, body = {}, header = {}) => {
     return response;
 };
 
+
 export const get = async (endPoints, option = {}) => {
     const response = await request.get(endPoints, option);
     return response;

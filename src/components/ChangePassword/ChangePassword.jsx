@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 import AuthContext from '../../context/authProvider';
 import { updateUserPassword } from '../../services/userServices';
 
@@ -41,7 +40,7 @@ const ChangePassword = () => {
     };
     return (
         <form>
-            <div className="flex flex-col ">
+            <div className="flex flex-col h-96 ">
                 <label className="font-medium text-left text-lg mb-2 " htmlFor="">
                     Old Password
                 </label>
@@ -58,13 +57,13 @@ const ChangePassword = () => {
                     {hiddenPass ? (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-14"
+                            className="absolute top-5 right-20"
                             icon={faEyeSlash}
                         />
                     ) : (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-14"
+                            className="absolute top-5 right-20"
                             icon={faEye}
                         />
                     )}
@@ -86,13 +85,13 @@ const ChangePassword = () => {
                     {hiddenPass ? (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-14"
+                            className="absolute top-5 right-20"
                             icon={faEyeSlash}
                         />
                     ) : (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-14"
+                            className="absolute top-5 right-20"
                             icon={faEye}
                         />
                     )}
@@ -114,26 +113,29 @@ const ChangePassword = () => {
                     {hiddenPass ? (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-14"
+                            className="absolute top-5 right-20"
                             icon={faEyeSlash}
                         />
                     ) : (
                         <FontAwesomeIcon
                             onClick={handleHiddenPassword}
-                            className="absolute top-5 right-14"
+                            className="absolute top-5 right-20"
                             icon={faEye}
                         />
                     )}
                 </div>
+
+                {errorMessage && <div className="text-red-500 mt-4">{errorMessage}</div>}
+                <div>
+                    <button
+                        className="border px-4 py-2 my-10 rounded-lg bg-primaryColor text-white absolute right-16 "
+                        type="submit"
+                        onClick={handleChangePassword}
+                    >
+                        Change Password
+                    </button>
+                </div>
             </div>
-            {errorMessage && <div className="text-red-500 mt-4">{errorMessage}</div>}
-            <button
-                className="border px-4 py-2 ml-96 rounded-lg bg-primaryColor text-white mt-4 "
-                type="submit"
-                onClick={handleChangePassword}
-            >
-                Change Password
-            </button>
         </form>
     );
 };

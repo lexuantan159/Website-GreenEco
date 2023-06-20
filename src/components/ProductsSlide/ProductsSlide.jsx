@@ -109,9 +109,9 @@ const ProductsSlide = ({ title, products, numOfProducts = 6, category = 'All' })
                                 <div className="text-center mt-2">
                                     <h3 className=" text-xl font-bold">
                                         {
-                                            <h4 className="text-lg font-medium px-2">
+                                            <p className="text-lg font-medium px-2">
                                                 {truncatedString(product.title, 23)}
-                                            </h4>
+                                            </p>
                                         }
                                     </h3>
                                     <p className="text-lg text-primaryColor font-bold mt-3">
