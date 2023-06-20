@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faUser } from '@fortawesome/free-solid-svg-icons';
 import ChangePassword from './ChangePassword/ChangePassword';
-import { useLocation, useNavigate} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as order from '../../services/Order';
 import Xanh2 from '../../img/Xanh2.jpg';
 import moment from 'moment/moment';
@@ -10,6 +10,8 @@ import * as userServer from '../../services/userServices';
 import AuthContext from '../../context/authProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import { updateUserProfile } from '../../services/userServices';
+import OrderDetail from './OrderDetail/OrderDetail';
+import { Spinner } from '@material-tailwind/react';
 
 const UserInfomation = () => {
     const [activeButton, setActiveButton] = useState(1);
@@ -21,32 +23,61 @@ const UserInfomation = () => {
     const navigate = useNavigate();
     const [submit, setSubmit] = useState(false);
     const location = useLocation();
-    const { auth } = useContext(AuthContext); 
+    const { auth, setAuth } = useContext(AuthContext);
     const [isEditing, setIsEditing] = useState(false);
-   
-
- 
+    const [displayOrderDetail, setDisplayOrderDetail] = useState(false);
+    const [dataOrder, setDataOrder] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const formattedNumber = (num) => {
         return num.toLocaleString('en-US').replace(/,/g, '.');
-    }
+    };
 
     const handleButtonClick = (buttonId) => {
         setActiveButton(buttonId);
+        setDisplayOrderDetail(false);
     };
 
     const handleSaveChanges1 = async (even) => {
         even.preventDefault();
         handleCheckInput();
         if (submit) {
-            const response = await updateUserProfile(auth.accessToken, email, fullname, phoneNumber, address);
+            setLoading(true);
+            const response = await updateUserProfile(
+                auth.accessToken,
+                email,
+                fullname.replace(/\s\s+/g, ' '),
+                phoneNumber,
+                address.replace(/\s\s+/g, ' '),
+            );
+            console.log(typeof address);
             if (response.statusCode === 200) {
+                setAuth({
+                    ...auth,
+                    fullName: fullname.replace(/\s\s+/g, ' '),
+                    email: email,
+                    address: address.replace(/\s\s+/g, ' '),
+                    phoneNumber: phoneNumber,
+                });
+                // update localStorage
+                localStorage.setItem(
+                    'auth',
+                    JSON.stringify({
+                        ...auth,
+                        fullName: fullname.replace(/\s\s+/g, ' '),
+                        email: email,
+                        address: address.replace(/\s\s+/g, ' '),
+                        phoneNumber: phoneNumber,
+                    }),
+                );
                 notify(response.message);
             } else {
                 notify(response.errorMessage);
             }
             setIsEditing(false);
+            setLoading(false);
         }
+        setDisplayOrderDetail(false);
     };
 
     const handleCheckInput = () => {
@@ -59,11 +90,15 @@ const UserInfomation = () => {
         } else {
             // email is not valid or does not end with "@gmail.com"
             setSubmit(false);
-            notify('Email is not valid with "@gmail.com"');
+            notify('Email Phải Có Đuôi "@gmail.com"');
         }
     };
 
     const handleCancelChanges = () => {
+        setAddress(auth.address);
+        setEmail(auth.email);
+        setFullname(auth.fullName);
+        setPhoneNumber(auth.phoneNumber);
         setIsEditing(false);
     };
 
@@ -88,7 +123,6 @@ const UserInfomation = () => {
 
     useEffect(() => {
         if (auth.accessToken !== undefined) {
-            console.log(auth.accessToken);
             const fetchCart = async () => {
                 const response = await order.getOrder(auth.accessToken);
                 if (response.statusCode === 200) {
@@ -115,6 +149,11 @@ const UserInfomation = () => {
         fetchData();
     }, [auth]);
 
+    const handleViewDetail = (order) => {
+        setDisplayOrderDetail(true);
+        setDataOrder(order);
+    };
+
     return (
         <>
             <ToastContainer />
@@ -127,7 +166,7 @@ const UserInfomation = () => {
                     <div className="border-b border-solid border-green-800">
                         <div className="flex items-center my-3 ml-10 ">
                             <div>
-                                <span className="ml-2 text-2xl">{fullname}</span>
+                                <span className="ml-2 text-2xl">{auth.fullName}</span>
                                 <div>
                                     <span className="ml-6 text-xs text-gray-900">
                                         <FontAwesomeIcon icon={faPen} className="mr-2" />
@@ -143,7 +182,7 @@ const UserInfomation = () => {
                     <div className="h-80 mt-6 ml-14 ">
                         <span className="">
                             <FontAwesomeIcon icon={faUser} className="mr-4" />
-                            Tài khoản
+                            Tài Khoản
                         </span>
                         <br />
                         <button
@@ -152,7 +191,7 @@ const UserInfomation = () => {
                             } ml-9 mt-3`}
                             onClick={() => handleButtonClick(1)}
                         >
-                            Hồ sơ cá nhân
+                            Hồ Sơ Cá Nhân
                         </button>
                         <br />
                         <button
@@ -161,7 +200,7 @@ const UserInfomation = () => {
                             } ml-9 mt-3`}
                             onClick={() => handleButtonClick(2)}
                         >
-                            Đơn hàng
+                            Đơn Hàng
                         </button>
                         <br />
                         <button
@@ -170,7 +209,7 @@ const UserInfomation = () => {
                             } ml-9 mt-3`}
                             onClick={() => handleButtonClick(3)}
                         >
-                            Thay đổi mật khẩu
+                            Thay Đổi Mật Khẩu
                         </button>
                     </div>
                 </div>
@@ -226,6 +265,7 @@ const UserInfomation = () => {
                                                     </div>
                                                     <div className="w-3/4">
                                                         <input
+                                                            id="input-email"
                                                             required
                                                             type="email"
                                                             autoComplete="email"
@@ -243,6 +283,7 @@ const UserInfomation = () => {
                                                     </div>
                                                     <div className="w-3/4">
                                                         <input
+                                                            id="input-fullName"
                                                             type="text"
                                                             value={fullname}
                                                             onChange={(e) => setFullname(e.target.value)}
@@ -258,6 +299,7 @@ const UserInfomation = () => {
                                                     </div>
                                                     <div className="w-3/4">
                                                         <input
+                                                            id="input-phoneNumber"
                                                             type="text"
                                                             value={phoneNumber}
                                                             onChange={(e) => setPhoneNumber(e.target.value)}
@@ -273,6 +315,7 @@ const UserInfomation = () => {
                                                     </div>
                                                     <div className="w-3/4">
                                                         <input
+                                                            id="input-address"
                                                             type="text"
                                                             value={address}
                                                             onChange={(e) => setAddress(e.target.value)}
@@ -283,10 +326,17 @@ const UserInfomation = () => {
                                                 </div>
                                                 <div className="flex mt-8 absolute right-14">
                                                     <button
-                                                        className="bg-primaryColor hover:bg-green-300 text-white font-semibold py-2 px-6 rounded-lg"
+                                                        className="bg-primaryColor hover:opacity-80 text-white font-semibold py-2 px-6 rounded-lg"
                                                         onClick={handleSaveChanges1}
                                                     >
-                                                        Lưu
+                                                        {loading ? (
+                                                            <div className="flex items-center justify-center">
+                                                                <Spinner className="h-6 w-6 mr-4" />{' '}
+                                                                <span>Đang lưu...</span>
+                                                            </div>
+                                                        ) : (
+                                                            <span>Lưu</span>
+                                                        )}
                                                     </button>
                                                     <button
                                                         className="ml-2 text-red-500 hover:text-red-600 font-semibold"
@@ -301,35 +351,34 @@ const UserInfomation = () => {
                                         <div>
                                             <div className="flex items-center mb-9">
                                                 <div className="w-1/4">
-                                                    <h1>Email :</h1>
+                                                    <h1>Email: </h1>
                                                 </div>
                                                 <div className="w-3/4">
-                                                    <h3 className="">{email}</h3>
+                                                    <h3 className="">{auth.email}</h3>
                                                 </div>
                                             </div>
 
                                             <div className="flex items-center mb-9">
                                                 <div className="w-1/4">
-                                                    <h1 className="">Họ và Tên :</h1>
+                                                    <h1 className="">Họ và Tên: </h1>
                                                 </div>
                                                 <div className="w-3/4">
-                                                    <h3 className="">{fullname}</h3>
+                                                    <h3 className="">{auth.fullName}</h3>
                                                 </div>
                                             </div>
 
                                             <div className="flex items-center mb-9">
-                                                <div className="w-1/4">
-                                                className                                                </div>
+                                                <div className="w-1/4">Số Điện Thoại: </div>
                                                 <div className="w-3/4">
-                                                    <h3 className="">{phoneNumber}</h3>
+                                                    <h3 className="">{auth.phoneNumber}</h3>
                                                 </div>
                                             </div>
                                             <div className="flex items-center mb-9">
                                                 <div className="w-1/4">
-                                                    <h1>Địa chỉ :</h1>
+                                                    <h1>Địa chỉ: </h1>
                                                 </div>
                                                 <div className="w-3/4">
-                                                    <h3 className="">{address}</h3>
+                                                    <h3 className="">{auth.address}</h3>
                                                 </div>
                                             </div>
 
@@ -376,60 +425,41 @@ const UserInfomation = () => {
 
                                         {orderList.length > 0 ? (
                                             orderList.map((order) => (
-                                                <React.Fragment key={order.id}>
-                                                    
-                                                    <div className="w-full flex">
-                                                        <div className="py-4 w-[10%] text-center text-blue-gray-900 font-extrabold">
-                                                            {order.id}
-                                                        </div>
-
-                                                        <div className="w-[35%] py-4 truncate inline-block text-center">
-                                                            {order.address}
-                                                        </div>
-
-                                                        <div className="py-4 pl-2 w-[20%] text-center">
-                                                            <span>{formattedNumber(order.totalAmount)} đ</span>
-                                                        </div>
-
-                                                        <div className="py-4 w-[20%] text-center">
-                                                            {moment(order.createdAt).format('DD/MM/YYYY')}
-                                                        </div>
-
-                                                        <div
-                                                            className={`py-4 px-1 w-[15%] text-center text-base font-bold ${
-                                                                order.status === 'Đã đặt'
-                                                                    ? 'text-primaryColor'
-                                                                    : 'text-red-700'
-                                                            }`}
-                                                        >
-                                                            {order.status}
-                                                            {/* <div>
-                                                                {!showDetails ? (
-                                                                    <button
-                                                                        className="px-2 text-primaryColor hover:text-light-blue-900"
-                                                                        onClick={() => handleClick(order.id)}
-                                                                        title="Chi tiết"
-                                                                    >
-                                                                        <FontAwesomeIcon icon={faInfoCircle} />
-                                                                    </button>
-                                                                ) : (
-                                                                    <DetalOrder orderId={order.id}
-                                                                                dateofbuy={moment(order.createdAt).format('DD/MM/YYYY')}
-                                                                                address={order.address}
-                                                                                name={order.name}
-                                                                                phone={order.phone}
-                                                                                total ={formattedNumber(order.totalAmount)}
-                                                                                status={order.status}
-                                                                                product={ProductList} />
-                                                                  )}
-                                                            </div> */}
-                                                        </div>
+                                                <div
+                                                    key={order.id}
+                                                    className="w-full flex mb-4 hover:cursor-pointer shadow"
+                                                    onClick={() => handleViewDetail(order)}
+                                                >
+                                                    <div className="py-4 w-[10%] text-center text-blue-gray-900 font-extrabold">
+                                                        {order.id}
                                                     </div>
-                                                </React.Fragment>
+
+                                                    <div className="w-[35%] py-4 truncate inline-block text-center">
+                                                        {order.address}
+                                                    </div>
+
+                                                    <div className="py-4 pl-2 w-[20%] text-center">
+                                                        <span>{formattedNumber(order.totalAmount)} đ</span>
+                                                    </div>
+
+                                                    <div className="py-4 w-[20%] text-center">
+                                                        {moment(order.createdAt).format('DD/MM/YYYY')}
+                                                    </div>
+
+                                                    <div
+                                                        className={`py-4 px-1 w-[15%] text-center text-base font-bold ${
+                                                            order.status === 'Đã đặt'
+                                                                ? 'text-primaryColor'
+                                                                : 'text-red-700'
+                                                        }`}
+                                                    >
+                                                        {order.status}
+                                                    </div>
+                                                </div>
                                             ))
                                         ) : (
                                             <h3 className="text-xl font-bold leading-relaxed text-gray-800">
-                                                Không có đơn hàng nào
+                                                Không Có Đơn Hàng Nào
                                             </h3>
                                         )}
                                     </div>
@@ -449,6 +479,11 @@ const UserInfomation = () => {
                 </div>
                 {/* -------------------------column 3------------------ */}
             </div>
+            {displayOrderDetail && (
+                <div className="">
+                    <OrderDetail order={dataOrder} />
+                </div>
+            )}
         </>
     );
 };
