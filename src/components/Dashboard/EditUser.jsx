@@ -68,9 +68,9 @@ const EditUser = () => {
 
     useEffect(() => {
         const fetchEdit = async () => {
-            fullName !== user.fullname && (data.fullname = fullName);
+            fullName.replace(/\s\s+/g, ' ') !== user.fullname && (data.fullname = fullName.replace(/\s\s+/g, ' '));
             email !== user.email && (data.email = email);
-            address !== user.address && (data.address = address);
+            address.replace(/\s\s+/g, ' ') !== user.address && (data.address = address.replace(/\s\s+/g, ' '));
             phone !== user.phone && (data.phone = phone);
             role !== user.Role.value && (role === 'Admin' ? (data.roleId = 1) : (data.roleId = 2));
             if (Object.keys(data).length === 0) {

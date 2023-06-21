@@ -16,11 +16,12 @@ const CheckoutPage = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [hasUser, setHasUser] = useState(false);
-    const { auth } = useContext(AuthContext);
+    const { auth, setAuth } = useContext(AuthContext);
     const [cartList, setCartList] = useState([]);
     const [totalAmount, setTotalAmount] = useState('');
     const [paymentMethod, setPaymentMethod] = useState(''); // Biến state cho phương thức thanh toán
     const [loading, setLoading] = useState(false);
+    const [infoLoading, setInfoLoading] = useState(false);
     const TransportFee = 25000;
 
     const formattedNumber = (num) => {
@@ -29,17 +30,43 @@ const CheckoutPage = () => {
 
     const handleSaveChanges = async (even) => {
         even.preventDefault();
-        const response = await userServer.updateUserProfileCheckout(auth.accessToken, address, fullname, phoneNumber);
+        setInfoLoading(true)
+        const response = await userServer.updateUserProfileCheckout(
+            auth.accessToken,
+            address.replace(/\s\s+/g, ' '),
+            fullname.replace(/\s\s+/g, ' '),
+            phoneNumber,
+        );
         if (response.statusCode === 200) {
-            notify(response.message);
+            setAuth({
+                ...auth,
+                fullName: fullname.replace(/\s\s+/g, ' '),
+                address: address.replace(/\s\s+/g, ' '),
+                phoneNumber: phoneNumber,
+            });
+            // update localStorage
+            localStorage.setItem(
+                'auth',
+                JSON.stringify({
+                    ...auth,
+                    fullName: fullname.replace(/\s\s+/g, ' '),
+                    address: address.replace(/\s\s+/g, ' '),
+                    phoneNumber: phoneNumber,
+                }),
+            );
+            notify(response.message, 'success');
         } else {
             notify(response.errorMessage);
         }
+        setInfoLoading(false)
         setIsEditing(false);
     };
 
     const handleCancelChanges = () => {
         // Hủy bỏ các thay đổi và đóng form chỉnh sửa
+        setAddress(auth.address);
+        setFullName(auth.fullName);
+        setPhoneNumber(auth.phoneNumber);
         setIsEditing(false);
     };
 
@@ -48,7 +75,7 @@ const CheckoutPage = () => {
     };
 
     const notify = (message, type) => {
-        const toastType = type === "success" ? toast.success : toast.error
+        const toastType = type === 'success' ? toast.success : toast.error;
         return toastType(message, {
             position: 'top-center',
             autoClose: 1500,
@@ -59,7 +86,7 @@ const CheckoutPage = () => {
             progress: undefined,
             theme: 'colored',
         });
-    }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -93,14 +120,18 @@ const CheckoutPage = () => {
     }, [auth.accessToken]);
 
     const handleCheckout = async () => {
-        setLoading(true);
-        const response = await orders.createOrders(auth.accessToken, 'Tiền mặt');
-        if (response.statusCode === 201) {
-            setLoading(false);
-            navigation('/userinformation', { state: { toastMessage: "Thanh Toán Thành Công!" } });
+        if (auth.fullName === '' || auth.address === '' || auth.phoneNumber === '') {
+            notify("Vui lòng điền đầy đủ thông tin giao hàng")
         } else {
-            notify(response.error, "error");
-            setLoading(false);
+            setLoading(true);
+            const response = await orders.createOrders(auth.accessToken, 'Tiền mặt');
+            if (response.statusCode === 201) {
+                setLoading(false);
+                navigation('/userinformation', { state: { toastMessage: 'Thanh Toán Thành Công!' } });
+            } else {
+                notify(response.error, 'error');
+                setLoading(false);
+            }
         }
     };
 
@@ -136,12 +167,14 @@ const CheckoutPage = () => {
                                     <div className="w-full md:w-1/2 px-4 mt-2">
                                         <div className="mb-5 flex items-center">
                                             <div>
-                                                <span className="text-lg text-primaryColor font-bold">Tên Đầy Đủ : </span>
+                                                <span className="text-lg text-primaryColor font-bold">
+                                                    Tên Đầy Đủ :{' '}
+                                                </span>
                                                 <input
                                                     type="text"
                                                     value={fullname}
                                                     onChange={(e) => setFullName(e.target.value)}
-                                                    placeholder="Name"
+                                                    placeholder="Tên Đầy Đủ của bạn"
                                                     className="mt-2 ml-4 w-60 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
                                                 />
                                             </div>
@@ -154,7 +187,7 @@ const CheckoutPage = () => {
                                                     type="text"
                                                     value={address}
                                                     onChange={(e) => setAddress(e.target.value)}
-                                                    placeholder="Name"
+                                                    placeholder="Địa Chỉ của bạn"
                                                     className="mb-32 ml-6 w-80 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
                                                 />
                                             </div>
@@ -163,12 +196,14 @@ const CheckoutPage = () => {
                                     <div className="w-full md:w-1/2 px-4 mt-2">
                                         <div className="mb-5 flex items-center">
                                             <div>
-                                                <span className="text-lg text-primaryColor font-bold">Số Điện Thoại : </span>
+                                                <span className="text-lg text-primaryColor font-bold">
+                                                    Số Điện Thoại :{' '}
+                                                </span>
                                                 <input
                                                     type="text"
                                                     value={phoneNumber}
                                                     onChange={(e) => setPhoneNumber(e.target.value)}
-                                                    placeholder="Name"
+                                                    placeholder="Số Điện Thoại của bạn"
                                                     className="mt-2 ml-4 w-60 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primaryColor"
                                                 />
                                             </div>
@@ -179,8 +214,15 @@ const CheckoutPage = () => {
                                                     className="bg-primaryColor hover:opacity-80 text-white font-bold py-2 px-6 rounded-lg"
                                                     onClick={handleSaveChanges}
                                                 >
-                                                    Lưu
-                                                </button>
+                                                {infoLoading ? (
+                                                    <div className="flex items-center justify-center">
+                                                        <Spinner className="h-6 w-6 mr-4 font-bold" />
+                                                        <span>Đang lưu....</span>
+                                                    </div>
+                                                ) : (
+                                                        <span>Lưu</span>
+                                                        )}
+                                                        </button>
                                                 <button
                                                     className="ml-2 shadow text-red-500 hover:text-red-600 font-bold py-2 px-6 rounded-lg"
                                                     onClick={handleCancelChanges}
@@ -197,17 +239,17 @@ const CheckoutPage = () => {
                                 <div className="w-full md:w-1/2 px-4 mt-2">
                                     <div className="mb-5 flex items-center">
                                         <h1 className="text-lg text-primaryColor font-bold">Tên Đầy Đủ:</h1>
-                                        <h3 className="ml-2 text-black">{fullname}</h3>
+                                        <h3 className="ml-2 text-black">{auth.fullName}</h3>
                                     </div>
                                     <div className="mb-9 flex flex-wrap items-center mt-8">
                                         <h1 className="text-lg text-primaryColor font-bold">Địa Chỉ:</h1>
-                                        <span className="ml-4 h-auto min-h-8 w-64 text-black">{address}</span>
+                                        <span className="ml-4 h-auto min-h-8 w-64 text-black">{auth.address}</span>
                                     </div>
                                 </div>
                                 <div className="w-full md:w-1/2 px-4 mt-2">
                                     <div className="mb-5 flex items-center">
                                         <h1 className="text-lg text-primaryColor font-bold">Số Điện Thoại:</h1>
-                                        <h3 className="ml-2 text-black">{phoneNumber}</h3>
+                                        <h3 className="ml-2 text-black">{auth.phoneNumber}</h3>
                                     </div>
                                     <div className="flex ml-auto items-center justify-center mt-16">
                                         <div
@@ -253,7 +295,9 @@ const CheckoutPage = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="py-2 px-4 text-lg font-medium text-center text-textColor">{product.category}</td>
+                                        <td className="py-2 px-4 text-lg font-medium text-center text-textColor">
+                                            {product.category}
+                                        </td>
                                         <td className="py-2 px-4 text-lg font-medium text-center text-textColor">
                                             {formattedNumber(product.price)} vnđ
                                         </td>
@@ -332,7 +376,7 @@ const CheckoutPage = () => {
                                     <Spinner className="h-6 w-6 mr-4 font-bold" /> <span>Đang Thanh Toán....</span>
                                 </div>
                             ) : (
-                                <span className='font-bold'>Thanh Toán</span>
+                                <span className="font-bold">Thanh Toán</span>
                             )}
                         </button>
                     </div>

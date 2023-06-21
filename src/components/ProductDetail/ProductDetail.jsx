@@ -75,7 +75,7 @@ const ProductDetailForm = () => {
     }, [auth.fullName, param.id, productsList]);
 
     const addProduct = async (token, id, quantity) => {
-        notify('Add product successfully');
+        notify('Thêm vào giỏ  thành công');
         const response = await addProductServices.addProduct(token, id, quantity);
         response.statusCode !== 200 && notify(response.error);
     };
