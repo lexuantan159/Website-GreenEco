@@ -433,7 +433,7 @@ const UserInfomation = () => {
                                                     </div>
 
                                                     <div className="py-4 pl-2 w-[20%] text-center">
-                                                        <span>{formattedNumber(order.totalAmount)} đ</span>
+                                                        <span>{formattedNumber(order.totalAmount + 25000)} đ</span>
                                                     </div>
 
                                                     <div className="py-4 w-[20%] text-center">
