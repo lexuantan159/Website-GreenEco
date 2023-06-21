@@ -131,7 +131,7 @@ const OrderList = () => {
                                             {order.address}
                                         </td>
                                         <td className="ml-6 py-4 px-4 text-center">
-                                            <span>{formattedNumber(order.totalAmount)} đ</span>
+                                            <span>{formattedNumber(order.totalAmount + 25000)} đ</span>
                                         </td>
                                         <td className="py-1 text-center">
                                             {moment(order.createdAt).format('DD/MM/YYYY')}
