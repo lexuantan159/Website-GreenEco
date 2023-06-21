@@ -241,7 +241,10 @@ const ShoppingCart = () => {
                                 <span className="text-[18px] font-bold">{formatPrice(calculateTotal())} VNĐ</span>
                             </div>
                             <Link to="/checkout">
-                                <button className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">
+                                <button
+                                    className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full"
+                                    disabled={cartList.length === 0} 
+                                >
                                     Thanh Toán
                                 </button>
                             </Link>
