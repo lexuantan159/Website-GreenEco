@@ -54,7 +54,7 @@ const ContactPage = () => {
             // email is not valid or does not end with "@gmail.com"
             setSubmit(false);
             setLoading(false);
-            notify('Email is not valid with "@gmail.com"');
+            notify('Email phải bao gồm đuôi "@gmail.com"');
         }
     };
     return (
@@ -130,7 +130,6 @@ const ContactPage = () => {
                         <button
                             className="bg-[#7fad39] hover:bg-[#7dc413] text-white  text-[20px] font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             type="submit"
-                            onClick={handleSubmit}
                         >
                             {loading ? (
                                 <div className="flex items-center justify-center">
