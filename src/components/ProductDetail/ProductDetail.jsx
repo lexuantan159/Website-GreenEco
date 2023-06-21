@@ -239,15 +239,15 @@ const ProductDetailForm = () => {
                             <div className="mt-14">
                                 <div className="flex mb-2">
                                     <p className="text-lg font-bold">
-                                        Ngày Sẩn Xuất:{' '}
+                                        Năm Sản Xuất:{' '}
                                         <span className="font-medium"> {product.dateOfManufacture} </span>
                                     </p>
                                 </div>
 
                                 <div className="flex mb-2">
                                     <p className="text-lg font-bold">
-                                        Số Lượng: <span className="font-medium"> {product.available} </span>
-                                        <span className="font-medium"> Pieces</span>
+                                        Số Lượng Còn Lại: <span className="font-medium"> {product.available} </span>
+                                        <span className="font-medium"> Sản Phẩm</span>
                                     </p>
                                 </div>
 
