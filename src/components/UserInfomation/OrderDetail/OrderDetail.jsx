@@ -116,6 +116,18 @@ const OrderDetail = ({ order }) => {
                                         {formattedNumber(order.totalAmount)} đ
                                     </span>
                                 </div>
+                                <div className="flex justify-end mt-4 items-center">
+                                    <span className="block text-lg font-bold text-primaryColor">Phí vận chuyển:</span>
+                                    <span className="block font-bold text-gray-900 ml-6">
+                                        {formattedNumber(25000)} đ
+                                    </span>
+                                </div>
+                                <div className="flex justify-end mt-4 items-center">
+                                    <span className="block text-lg font-bold text-primaryColor">Số tiền phải trả:</span>
+                                    <span className="block font-bold text-gray-900 ml-6">
+                                        {formattedNumber(order.totalAmount + 25000)} đ
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
