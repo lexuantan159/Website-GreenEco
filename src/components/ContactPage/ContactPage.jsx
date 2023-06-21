@@ -54,7 +54,7 @@ const ContactPage = () => {
             // email is not valid or does not end with "@gmail.com"
             setSubmit(false);
             setLoading(false);
-            notify('Email is not valid with "@gmail.com"');
+            notify('Đuôi Email Không Phù Hợp "@gmail.com"');
         }
     };
     return (

@@ -111,12 +111,16 @@ const ProductDetailForm = () => {
                 notify('Đánh Giá Không Được Để Trống');
             } else firstSubmitFeedback();
         } else if (feedbackAgain === 'Edit') {
-            // handle render feedback edit
-            setFeedbackList(updateCommentByName(auth.fullName, inputRef.current.value.trim()));
-            // call api
-            editFeedback(auth.accessToken, inputRef.current.value, param.id);
-            // set has feedback
-            setFeedbackAgain('Posted');
+            if(inputRef.current.value.trim() === "") {
+                notify('Đánh Giá Của Bạn Đang Trống')
+            }else {
+                // handle render feedback edit
+                setFeedbackList(updateCommentByName(auth.fullName, inputRef.current.value.trim()));
+                // call api
+                editFeedback(auth.accessToken, inputRef.current.value, param.id);
+                // set has feedback
+                setFeedbackAgain('Posted');
+            }
         } else notify('Bạn Chỉ Được Đánh Giá 1 Lần!');
 
         inputRef.current.value = '';
@@ -306,15 +310,15 @@ const ProductDetailForm = () => {
                                 </button>
                             </div>
 
-                            <ul className="max-w-[450px] lg:max-w-[800px] max-h-[350px] overflow-y-auto my-8 mx-auto shadow rounded">
+                            <ul className="max-w-[450px] lg:max-w-[800px] max-h-[350px] overflow-y-scroll my-8 mx-auto shadow rounded">
                                 {feedbackList.length > 0 ? (
                                     feedbackList.map((feedback, index) => {
                                         return (
                                             <li
                                                 key={index}
-                                                className="my-4 grid grid-cols-2 gap-8 items-center lg:gap-80"
+                                                className="my-4 grid grid-cols-10 gap-8 items-center lg:gap-2"
                                             >
-                                                <div className="pl-4">
+                                                <div className="col-span-9 pl-4">
                                                     <p className="font-bold text-lg"> {feedback.name}</p>
                                                     <p className="font-bold text-lg">
                                                         Nội Dung:
@@ -322,7 +326,7 @@ const ProductDetailForm = () => {
                                                     </p>
                                                 </div>
                                                 {feedback.name === auth.fullName ? (
-                                                    <div className="relative bg-white  ">
+                                                    <div className="col-span-1 relative bg-white  ">
                                                         <FontAwesomeIcon
                                                             id="three-dots"
                                                             className="px-2 hover:cursor-pointer"
@@ -331,7 +335,7 @@ const ProductDetailForm = () => {
                                                         />
                                                         <div
                                                             id="menu-feedback"
-                                                            className="hidden absolute top-[-25px] left-6 z-10 shadow rounded "
+                                                            className="hidden absolute top-[-70px] left-[-20px] z-10 shadow rounded "
                                                         >
                                                             <p
                                                                 onClick={handleDeleteFeedback}
@@ -347,11 +351,7 @@ const ProductDetailForm = () => {
                                                             </p>
                                                         </div>
                                                     </div>
-                                                ) : // <FontAwesomeIcon
-                                                //     className="text-xl text-textColor hover:text-red-700"
-                                                //     onClick={handleDeleteFeedback}
-                                                //     icon={faXmark}
-                                                // />
+                                                ) :
                                                 null}
                                             </li>
                                         );

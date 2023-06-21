@@ -43,9 +43,12 @@ const ProductsSlide = ({ title, products, numOfProducts = 6, category = 'All' })
     const lowProducts = (passProducts, numOfProducts) => {
         const products =
             category === 'All' ? passProducts : passProducts.filter((product) => product.category === category);
+            console.log(products);
+        if(products.length === 2) return 2;
         if (products.length < numOfProducts) return 3;
         return 4;
     };
+    console.log(lowProducts (products, numOfProducts));
 
     var settings = {
         dots: true,
